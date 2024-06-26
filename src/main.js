@@ -1,4 +1,9 @@
 import "./assets/main.scss";
+import "./assets/dark.css";
+import "./assets/light.css";
+import "material/typography/md-typescale-styles.js";
+
+import "material-symbols";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
