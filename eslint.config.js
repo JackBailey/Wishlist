@@ -1,7 +1,12 @@
+import globals from "globals";
+import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
 
 export default [
-    ...pluginVue.configs["vue3-strongly-recommended"],
+    { files: ["**/*.{js,mjs,cjs,vue}"] },
+    { languageOptions: { globals: globals.browser } },
+    pluginJs.configs.recommended,
+    ...pluginVue.configs["flat/essential"],
     {
         rules: {
             indent: ["error", 4],
@@ -22,10 +27,15 @@ export default [
                 "error",
                 {
                     singleline: 3,
-                    multiline: {
-                        max: 1,
-                        allowFirstLine: false
-                    }
+                    multiline: 1
+                }
+            ],
+            "sort-imports": [
+                "error",
+                {
+                    memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
+                    allowSeparatedGroups: true,
+                    ignoreCase: true
                 }
             ]
         }

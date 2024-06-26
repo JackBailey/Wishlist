@@ -2,17 +2,35 @@
     <main>
         <dialog ref="newListDialog">
             <h2>Create new item</h2>
-            <form @submit.prevent="createItem"> 
+            <form @submit.prevent="createItem">
                 <label for="title">Title</label>
-                <input type="text" id="title" name="title" required v-model="newItem.title">
+                <input type="text"
+                       id="title"
+                       name="title"
+                       required
+                       v-model="newItem.title" />
                 <label for="description">Description</label>
-                <textarea id="description" name="description" v-model="newItem.description"></textarea>
+                <textarea
+                    id="description"
+                    name="description"
+                    v-model="newItem.description"
+                ></textarea>
                 <label for="url">URL</label>
-                <input type="url" id="url" name="url" v-model="newItem.url">
+                <input type="url"
+                       id="url"
+                       name="url"
+                       v-model="newItem.url" />
                 <label for="image">Image</label>
-                <input type="url" id="image" name="image" v-model="newItem.image">
+                <input type="url"
+                       id="image"
+                       name="image"
+                       v-model="newItem.image" />
                 <label for="price">Price</label>
-                <input type="number" id="price" name="price" v-model="newItem.price" min="0">
+                <input type="number"
+                       id="price"
+                       name="price"
+                       v-model="newItem.price"
+                       min="0" />
                 <label for="priority">Priority</label>
                 <select name="priority" id="priority" v-model="newItem.priority">
                     <option value="none">None</option>
@@ -32,7 +50,7 @@
             </h1>
             <vue-markdown v-if="list.description" :source="list.description" class="description" />
         </md-elevated-card>
-        <md-divider style="margin: 1rem 0;" />
+        <md-divider style="margin: 1rem 0" />
         <div class="items">
             <md-elevated-card class="item" v-for="item in list.items" :key="item.$id">
                 <div class="item-header">
@@ -40,11 +58,21 @@
                     <div class="item-actions">
                         <md-filled-button has-icon>
                             Fulfill
-                            <md-icon slot="icon">featured_seasonal_and_gifts</md-icon>
+                            <template v-slot:icon>
+                                <md-icon>featured_seasonal_and_gifts</md-icon>
+                            </template>
                         </md-filled-button>
-                        <md-outlined-button has-icon trailing-icon :href="item.url" target="_blank" v-if="item.url">
+                        <md-outlined-button
+                            has-icon
+                            trailing-icon
+                            :href="item.url"
+                            target="_blank"
+                            v-if="item.url"
+                        >
                             Open Website
-                            <md-icon slot="icon">open_in_new</md-icon>
+                            <template v-slot:icon>
+                                <md-icon>open_in_new</md-icon>
+                            </template>
                         </md-outlined-button>
                         <md-outlined-icon-button>
                             <md-icon>edit</md-icon>
@@ -57,28 +85,30 @@
                         <div class="chip-indicators">
                             <div class="chip fulfilled" v-if="item.fulfilledBy">
                                 <md-icon>featured_seasonal_and_gifts</md-icon>
-                                <span>
-                                    Fulfilled by {{ item.fulfilledBy }}
-                                </span>
-                                <md-elevation></md-elevation>
+                                <span> Fulfilled by {{ item.fulfilledBy }} </span>
+                                <md-elevation />
                             </div>
                             <div class="chip price" v-if="item.price !== 0">
                                 <span>
-                                    {{formatCurrency(item.price)}}
+                                    {{ formatCurrency(item.price) }}
                                 </span>
-                                <md-elevation></md-elevation>
+                                <md-elevation />
                             </div>
-                            <div class="chip priority" :data-priority="item.priority" v-if="item.priority !== 'none'">
+                            <div
+                                class="chip priority"
+                                :data-priority="item.priority"
+                                v-if="item.priority !== 'none'"
+                            >
                                 <md-icon>{{ convertPriority(item.priority).icon }}</md-icon>
                                 <span>
                                     {{ convertPriority(item.priority).text }}
                                 </span>
-                                <md-elevation></md-elevation>
+                                <md-elevation />
                             </div>
                         </div>
                     </div>
                     <div class="item-image">
-                        <img v-if="item.image" :src="item.image" alt="">
+                        <img v-if="item.image" :src="item.image" alt="" />
                         <div v-else class="image-fallback"></div>
                     </div>
                 </div>
@@ -88,12 +118,7 @@
 </template>
 
 <script>
-import { ID } from "appwrite";
-import VueMarkdown from "vue-markdown-render";
-import { useAuthStore } from "@/stores/auth";
-import { databases } from "@/appwrite";
-import { convertPriority } from "@/utils";
-import 'material/button/filled-button.js';
+import "material/button/filled-button.js";
 import "material/card/elevated-card";
 import "material/iconbutton/filled-icon-button";
 import "material/iconbutton/icon-button";
@@ -106,6 +131,11 @@ import "material/chips/chip-set";
 import "material/chips/suggestion-chip";
 import "material/chips/assist-chip";
 import "material/elevation/elevation";
+import { convertPriority } from "@/utils";
+import { databases } from "@/appwrite";
+import { ID } from "appwrite";
+import { useAuthStore } from "@/stores/auth";
+import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
         VueMarkdown
@@ -124,13 +154,13 @@ export default {
                 price: 0,
                 priority: "none"
             }
-        }
+        };
     },
     methods: {
         formatCurrency(value) {
-            let formatter = new Intl.NumberFormat('en-GB', {
+            let formatter = new Intl.NumberFormat("en-GB", {
                 style: "currency",
-                currency: import.meta.env.VITE_CURRENCY,
+                currency: import.meta.env.VITE_CURRENCY
             });
 
             return formatter.format(value);
@@ -139,7 +169,7 @@ export default {
             this.$refs.newListDialog.showModal();
         },
         async createItem() {
-            console.log({...this.newItem, list: this.listId})
+            console.log({ ...this.newItem, list: this.listId });
             const document = await databases.createDocument(
                 import.meta.env.VITE_APPWRITE_DB,
                 import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
@@ -147,10 +177,10 @@ export default {
                 {
                     ...this.newItem,
                     list: this.listId,
-                    url: this.newItem.url || null,
+                    url: this.newItem.url || null
                 }
             );
-            
+
             this.$refs.newListDialog.close();
         }
     },
@@ -162,7 +192,7 @@ export default {
             []
         );
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -184,7 +214,6 @@ main {
             }
         }
     }
-
 
     .items {
         display: flex;
