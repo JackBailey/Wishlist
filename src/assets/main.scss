@@ -1,0 +1,222 @@
+/* color palette from <https://github.com/vuejs/theme> */
+// :root {
+//     --vt-c-white: #ffffff;
+//     --vt-c-white-soft: #f8f8f8;
+//     --vt-c-white-mute: #f2f2f2;
+
+//     --vt-c-black: #181818;
+//     --vt-c-black-soft: #222222;
+//     --vt-c-black-mute: #282828;
+
+//     --vt-c-indigo: #2c3e50;
+
+//     --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+//     --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
+//     --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+//     --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+//     --vt-c-text-light-1: var(--vt-c-indigo);
+//     --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+//     --vt-c-text-dark-1: var(--vt-c-white);
+//     --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+// }
+
+// /* semantic color variables for this project */
+// :root {
+//     --color-background: var(--vt-c-white);
+//     --color-background-soft: var(--vt-c-white-soft);
+//     --color-background-mute: var(--vt-c-white-mute);
+
+//     --color-border: var(--vt-c-divider-light-2);
+//     --color-border-hover: var(--vt-c-divider-light-1);
+
+//     --color-heading: var(--vt-c-text-light-1);
+//     --color-text: var(--vt-c-text-light-1);
+
+//     --section-gap: 160px;
+// }
+
+// @media (prefers-color-scheme: dark) {
+//     :root {
+//         --color-background: var(--vt-c-black);
+//         --color-background-soft: var(--vt-c-black-soft);
+//         --color-background-mute: var(--vt-c-black-mute);
+
+//         --color-border: var(--vt-c-divider-dark-2);
+//         --color-border-hover: var(--vt-c-divider-dark-1);
+
+//         --color-heading: var(--vt-c-text-dark-1);
+//         --color-text: var(--vt-c-text-dark-2);
+//     }
+// }
+
+// *,
+// *::before,
+// *::after {
+//     box-sizing: border-box;
+//     margin: 0;
+//     font-weight: normal;
+// }
+
+// body {
+//     min-height: 100vh;
+//     color: var(--color-text);
+//     background: var(--color-background);
+//     transition:
+//         color 0.5s,
+//         background-color 0.5s;
+//     line-height: 1.6;
+//     font-family:
+//         Inter,
+//         -apple-system,
+//         BlinkMacSystemFont,
+//         "Segoe UI",
+//         Roboto,
+//         Oxygen,
+//         Ubuntu,
+//         Cantarell,
+//         "Fira Sans",
+//         "Droid Sans",
+//         "Helvetica Neue",
+//         sans-serif;
+//     font-size: 15px;
+//     text-rendering: optimizeLegibility;
+//     -webkit-font-smoothing: antialiased;
+//     -moz-osx-font-smoothing: grayscale;
+// }
+
+// dialog::backdrop {
+//     background-color: red;
+//     width: 100%;
+//     height: 100%;
+// }
+
+@font-face {
+    font-family: "Quicksand";
+    font-weight: 400;
+    src: url("/fonts/Quicksand/Quicksand-Regular.woff2") format("woff2"),
+        url("/fonts/Quicksand/Quicksand-Regular.woff") format("woff"),
+        url("/fonts/Quicksand/Quicksand-Regular.ttf") format("ttf");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Quicksand";
+    font-weight: 600;
+    src: url("/fonts/Quicksand/Quicksand-SemiBold.woff2") format("woff2"),
+        url("/fonts/Quicksand/Quicksand-SemiBold.woff") format("woff"),
+        url("/fonts/Quicksand/Quicksand-SemiBold.ttf") format("ttf");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Poppins";
+    font-weight: 600;
+    src: url("/fonts/Poppins/Poppins-SemiBold.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-SemiBold.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-SemiBold.ttf") format("ttf");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Poppins";
+    font-weight: 800;
+    src: url("/fonts/Poppins/Poppins-Extrabold.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-Extrabold.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-Extrabold.ttf") format("ttf");
+    font-display: swap;
+}
+
+:root {
+    --accent: #5b42f5;
+    --accent-muted: #5c51d6;
+    --accent-foreground: white;
+    --background-1: #fdfdfd;
+    --background-2: #f2f2f2;
+    --foreground-1: #0d0a20;
+    --foreground-2: #aeb2ba;
+
+    --section-width: clamp(16rem, 90vw, 1600px);
+    --blog-width: clamp(16rem, 90vw, 1000px);
+}
+
+html {
+    font-size: 100%;
+}
+
+:root:not([dark-mode]) {
+    // When JS not enabled, for noscript JS and mitigating "flashbangs"
+    @media (prefers-color-scheme: dark) {
+        --accent: #5b42f5;
+        --accent-muted: #5c51d6;
+        --accent-foreground: white;
+        --background-1: #0d0a20;
+        --background-2: #262534;
+        --foreground-1: #e6edf3;
+        --foreground-2: #cfd6dd;
+    }
+}
+
+:root[dark-mode="true"] {
+    --accent: #5b42f5;
+    --accent-muted: #5c51d6;
+    --accent-foreground: white;
+    --background-1: #0d0a20;
+    --background-2: #262534;
+    --foreground-1: #e6edf3;
+    --foreground-2: #cfd6dd;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+    scroll-behavior: smooth;
+}
+
+:root,
+html,
+body {
+    color: var(--foreground-1);
+}
+
+body {
+    background-color: var(--background-1);
+    display: flex;
+    flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Poppins", sans-serif;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+p {
+    font-family: "Quicksand", Arial, Helvetica, sans-serif;
+}
+
+main {
+    padding-top: 4rem;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+dialog {
+    border: none;
+    border-radius: 1rem;
+
+    &::backdrop {
+        background-color: rgba(0, 0, 0, 0.25);
+    } 
+}
