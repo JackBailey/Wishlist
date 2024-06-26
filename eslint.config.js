@@ -37,6 +37,12 @@ export default [
                     allowSeparatedGroups: true,
                     ignoreCase: true
                 }
+            ],
+            "vue/no-deprecated-slot-attribute": [
+                "error",
+                {
+                    ignore: "md-icon"
+                }
             ]
         }
     }

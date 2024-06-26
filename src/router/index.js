@@ -18,9 +18,17 @@ const router = createRouter({
             }
         },
         {
+            path: "/dash/list/:id",
+            name: "dashlist",
+            component: () => import("../views/WishList.vue"),
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
             path: "/list/:id",
             name: "list",
-            component: () => import("../views/list.vue")
+            component: () => import("../views/WishList.vue")
         },
         {
             path: "/dash/login",
