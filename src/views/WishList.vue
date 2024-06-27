@@ -32,6 +32,8 @@
                 v-for="item in list.items"
                 :key="item.$id"
                 :item="item"
+                @removeItem="removeItem(item.$id)"
+                @editItem="editItem($event)"
             />
         </div>
     </main>
@@ -41,7 +43,6 @@
 import CreateItem from "@/components/CreateItem.vue";
 import { databases } from "@/appwrite";
 import EditList from "@/components/EditList.vue";
-import { ID } from "appwrite";
 import ListItem from "@/components/ListItem.vue";
 import VueMarkdown from "vue-markdown-render";
 export default {
@@ -73,7 +74,18 @@ export default {
         },
         addItem(data) {
             this.list.items.push(data.item);
-        } 
+        },
+        editItem(data) {
+            this.list.items = this.list.items.map((item) => {
+                if (item.$id === data.item.$id) {
+                    return data.item;
+                }
+                return item;
+            });
+        },
+        removeItem(id) {
+            this.list.items = this.list.items.filter((item) => item.$id !== id);
+        }
     },
     async mounted() {
         this.list = await databases.getDocument(

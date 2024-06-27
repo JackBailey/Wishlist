@@ -45,8 +45,7 @@ $title-font-family: "Poppins";
 $body-font-family: "Quicksand";
 
 :root {
-    --section-width: clamp(16rem, 90vw, 1600px);
-    --blog-width: clamp(16rem, 90vw, 1000px);
+    --section-width: clamp(16rem, 90vw, 1000px);
     // --md-ref-typeface-brand: "Poppins";
     // --md-ref-typeface-plain: "Quicksand";
     // --md-icon-font: "Material Symbols Rounded";

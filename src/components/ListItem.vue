@@ -16,16 +16,17 @@
                     variant="outlined"
                     size="small"
                 >Open Website</v-btn>
-                <v-btn
-                    icon="edit"
-                    v-if="privateView"
+                <EditItem
                     variant="outlined"
+                    :item="item"
+                    @editItem="$emit('editItem', $event)"
+                    v-if="privateView"
                 />
-                <v-btn
-                    icon="delete"
-                    v-if="privateView"
+                <DeleteItem
                     variant="outlined"
-                    color="error"
+                    :item="item"
+                    @removeItem="$emit('removeItem', $event)"
+                    v-if="privateView"
                 />
             </v-btn-group>
         </div>
@@ -73,6 +74,8 @@
 
 <script>
 import { convertPriority } from "@/utils";
+import DeleteItem from "./DeleteItem.vue";
+import EditItem from "./EditItem.vue";
 import VueMarkdown from "vue-markdown-render";
 export default {
     props: {
@@ -82,6 +85,8 @@ export default {
         }
     },
     components: {
+        DeleteItem,
+        EditItem,
         VueMarkdown
     },
     data() {
@@ -138,7 +143,7 @@ export default {
             img {
                 max-width: 100%;
                 max-height: 100%;
-                object-fit: cover;
+                object-fit: contain;
                 border-radius: 1rem;
                 aspect-ratio: 1/1;
             }

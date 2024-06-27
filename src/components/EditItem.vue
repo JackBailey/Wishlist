@@ -3,7 +3,7 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                icon="add"
+                icon="edit"
                 base-color="primary"
                 size="small"
                 :variant="variant"
@@ -11,40 +11,40 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-            <v-card title="Create Item">
+            <v-card title="Edit Item">
                 <v-card-text>
                     <v-text-field
                         label="Title"
-                        v-model="newItem.title"
+                        v-model="editedItem.title"
                     />
                     <v-textarea
                         label="Description"
-                        v-model="newItem.description"
+                        v-model="editedItem.description"
                     />
                     <v-text-field
                         type="url"
                         label="Website"
-                        v-model="newItem.url"
+                        v-model="editedItem.url"
                         prepend-icon="link"
                     />
                     <v-text-field
                         type="url"
                         label="Image"
-                        v-model="newItem.image"
+                        v-model="editedItem.image"
                         prepend-icon="image"
                     />
                     <v-text-field
                         type="number"
                         label="Price"
-                        step="0.01"
-                        v-model="newItem.price"
+                        v-model="editedItem.price"
                         :prefix="getCurrencyPrefix()"
                         prepend-icon="wallet"
+                        step="0.01"
                     />
                     <v-select
                         label="Priority"
                         :items="Object.entries(priorityMap).map((priority) => ({title: priority[1].text, value: priority[0]}))"
-                        v-model="newItem.priority"
+                        v-model="editedItem.priority"
                     />
                 </v-card-text>
                 <v-card-actions>
@@ -52,7 +52,7 @@
                     <v-btn
                         color="primary"
                         text="Save"
-                        @click="createItem"
+                        @click="editItem"
                         variant="elevated"
                     />
                 </v-card-actions>
@@ -63,12 +63,11 @@
 
 <script>
 import { databases } from "@/appwrite";
-import { ID } from "appwrite";
 import { priorityMap } from "@/utils";
 export default {
     title: "ListDialog",
     props: {
-        list: {
+        item: {
             type: Object,
             default: () => ({})
         },
@@ -79,10 +78,9 @@ export default {
     },
     data() {
         return {
-            listId: null,
             dialogOpen: false,
             priorityMap,
-            newItem: {
+            editedItem: {
                 title: "",
                 description: "",
                 url: "",
@@ -95,7 +93,14 @@ export default {
     watch: {
         dialogOpen(open) {
             if (open === true) {
-                this.listId = this.list.$id;
+                this.editedItem = {
+                    title: this.item.title,
+                    description: this.item.description,
+                    url: this.item.url,
+                    image: this.item.image,
+                    price: this.item.price,
+                    priority: this.item.priority
+                };
             }
         }
     },
@@ -108,23 +113,23 @@ export default {
 
             return formatter.formatToParts(0)[0].value;
         },
-        async createItem() {
-            const result = await databases.createDocument(
+        async editItem() {
+            const result = await databases.updateDocument(
                 import.meta.env.VITE_APPWRITE_DB,
                 import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
-                ID.unique(),
+                this.item.$id,
                 {
-                    title: this.newItem.title,
-                    description: this.newItem.description || null,
-                    url: this.newItem.url || null,
-                    image: this.newItem.image || null,
-                    price: parseFloat(this.newItem.price) || 0,
-                    priority: this.newItem.priority,
+                    title: this.editedItem.title,
+                    description: this.editedItem.description || null,
+                    url: this.editedItem.url || null,
+                    image: this.editedItem.image || null,
+                    price: parseFloat(this.editedItem.price) || 0,
+                    priority: this.editedItem.priority,
                     list: this.listId,
                 }
             );
 
-            this.$emit("newItem", {
+            this.$emit("editItem", {
                 item: result
             })
 

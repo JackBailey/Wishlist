@@ -70,14 +70,12 @@ export default {
     },
     methods: {
         async updateList() {
-            const result = await databases.updateDocument(
+            await databases.updateDocument(
                 import.meta.env.VITE_APPWRITE_DB,
                 import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
                 this.listId,
                 this.editedList
             );
-
-            console.log(result);
 
             this.$emit("updateList", {
                 listId: this.listId,
