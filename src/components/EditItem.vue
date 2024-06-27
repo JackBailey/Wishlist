@@ -25,21 +25,27 @@
                         type="url"
                         label="Website"
                         v-model="editedItem.url"
-                        prepend-icon="link"
+                        :prepend-icon="mdiLink"
                     />
                     <v-text-field
                         type="url"
                         label="Image"
                         v-model="editedItem.image"
-                        prepend-icon="image"
+                        :prepend-icon="mdiImage"
                     />
                     <v-text-field
                         type="number"
                         label="Price"
                         v-model="editedItem.price"
                         :prefix="getCurrencyPrefix()"
-                        prepend-icon="wallet"
+                        :prepend-icon="mdiCash"
                         step="0.01"
+                    />
+                    <v-switch
+                        label="Show Price"
+                        v-model="editedItem.displayPrice"
+                        color="primary"
+                        inset
                     />
                     <v-select
                         label="Priority"
@@ -62,8 +68,8 @@
 </template>
 
 <script>
+import { mdiCash, mdiImage, mdiLink, mdiPencil } from "@mdi/js";
 import { databases } from "@/appwrite";
-import { mdiPencil } from "@mdi/js";
 import { priorityMap } from "@/utils";
 export default {
     title: "ListDialog",
@@ -87,9 +93,13 @@ export default {
                 url: "",
                 image: "",
                 price: 0,
+                displayPrice: false,
                 priority: "none"
             },
-            mdiPencil
+            mdiPencil,
+            mdiLink,
+            mdiImage,
+            mdiCash
         };
     },
     watch: {
@@ -101,6 +111,7 @@ export default {
                     url: this.item.url,
                     image: this.item.image,
                     price: this.item.price,
+                    displayPrice: this.item.displayPrice,
                     priority: this.item.priority
                 };
             }
@@ -126,6 +137,7 @@ export default {
                     url: this.editedItem.url || null,
                     image: this.editedItem.image || null,
                     price: parseFloat(this.editedItem.price) || 0,
+                    displayPrice: this.editedItem.displayPrice,
                     priority: this.editedItem.priority,
                     list: this.listId,
                 }

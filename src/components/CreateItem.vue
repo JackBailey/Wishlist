@@ -25,13 +25,13 @@
                         type="url"
                         label="Website"
                         v-model="newItem.url"
-                        prepend-icon="link"
+                        :prepend-icon="mdiLink"
                     />
                     <v-text-field
                         type="url"
                         label="Image"
                         v-model="newItem.image"
-                        prepend-icon="image"
+                        :prepend-icon="mdiImage"
                     />
                     <v-text-field
                         type="number"
@@ -39,7 +39,13 @@
                         step="0.01"
                         v-model="newItem.price"
                         :prefix="getCurrencyPrefix()"
-                        prepend-icon="wallet"
+                        :prepend-icon="mdiCash"
+                    />
+                    <v-switch
+                        label="Show Price"
+                        v-model="newItem.displayPrice"
+                        color="primary"
+                        inset
                     />
                     <v-select
                         label="Priority"
@@ -62,9 +68,9 @@
 </template>
 
 <script>
+import { mdiCash, mdiImage, mdiLink, mdiPlus } from "@mdi/js";
 import { databases } from "@/appwrite";
 import { ID } from "appwrite";
-import { mdiPlus } from "@mdi/js";
 import { priorityMap } from "@/utils";
 export default {
     title: "ListDialog",
@@ -89,9 +95,13 @@ export default {
                 url: "",
                 image: "",
                 price: 0,
+                displayPrice: false,
                 priority: "none"
             },
-            mdiPlus
+            mdiPlus,
+            mdiImage,
+            mdiLink,
+            mdiCash
         };
     },
     watch: {
@@ -121,6 +131,7 @@ export default {
                     url: this.newItem.url || null,
                     image: this.newItem.image || null,
                     price: parseFloat(this.newItem.price) || 0,
+                    displayPrice: this.newItem.displayPrice,
                     priority: this.newItem.priority,
                     list: this.listId,
                 }

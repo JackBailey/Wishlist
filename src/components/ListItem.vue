@@ -51,7 +51,7 @@
                         <span> Fulfilled by {{ item.fulfilledBy }} </span>
                     </v-chip>
                     <v-chip
-                        v-if="item.price"
+                        v-if="item.price && item.displayPrice"
                         color="primary"
                     >
                         <span>{{ formatCurrency(item.price) }}</span>
