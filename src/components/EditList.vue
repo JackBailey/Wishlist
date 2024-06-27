@@ -3,7 +3,7 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                icon="edit"
+                :icon="mdiPencil"
                 base-color="primary"
                 size="small"
                 :variant="variant"
@@ -38,6 +38,7 @@
 
 <script>
 import { databases } from "@/appwrite";
+import { mdiPencil } from "@mdi/js";
 export default {
     title: "ListDialog",
     props: {
@@ -54,7 +55,8 @@ export default {
         return {
             editedList: {},
             listId: null,
-            dialogOpen: false
+            dialogOpen: false,
+            mdiPencil
         };
     },
     watch: {

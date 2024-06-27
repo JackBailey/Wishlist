@@ -3,7 +3,7 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                icon="edit"
+                :icon="mdiPencil"
                 base-color="primary"
                 size="small"
                 :variant="variant"
@@ -63,6 +63,7 @@
 
 <script>
 import { databases } from "@/appwrite";
+import { mdiPencil } from "@mdi/js";
 import { priorityMap } from "@/utils";
 export default {
     title: "ListDialog",
@@ -87,7 +88,8 @@ export default {
                 image: "",
                 price: 0,
                 priority: "none"
-            }
+            },
+            mdiPencil
         };
     },
     watch: {

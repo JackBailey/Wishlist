@@ -1,6 +1,6 @@
 import "vuetify/styles";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
-import { aliases, md } from "vuetify/iconsets/md";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 import { createVuetify } from "vuetify";
 
 const lightTheme = {
@@ -115,10 +115,10 @@ const darkTheme = {
 
 export default createVuetify({
     icons: {
-        defaultSet: "md",
+        defaultSet: "mdi",
         aliases,
         sets: {
-            md
+            mdi
         }
     },
     theme: {

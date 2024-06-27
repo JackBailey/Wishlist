@@ -4,7 +4,7 @@
             <v-btn
                 v-bind="activatorProps"
                 color="error"
-                icon="delete"
+                :icon="mdiDelete"
                 :variant="variant"
             />
         </template>
@@ -30,6 +30,7 @@
 
 <script>
 import { databases } from "@/appwrite";
+import { mdiDelete } from "@mdi/js";
 export default {
     title: "ListDialog",
     props: {
@@ -46,6 +47,7 @@ export default {
         return {
             listId: null,
             dialogOpen: false,
+            mdiDelete
         };
     },
     methods: {

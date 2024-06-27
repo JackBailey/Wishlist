@@ -7,9 +7,9 @@
                 divided
                 rounded="pill"
             >
-                <v-btn prepend-icon="card_giftcard"> Fulfill </v-btn>
+                <v-btn :prepend-icon="mdiGift"> Fulfill </v-btn>
                 <v-btn
-                    append-icon="open_in_new"
+                    :append-icon="mdiOpenInNew"
                     :href="item.url"
                     target="_blank"
                     v-if="item.url"
@@ -39,7 +39,7 @@
                 />
                 <div class="chips">
                     <v-chip
-                        prepend-icon="card_giftcard"
+                        :prepend-icon="mdiGift"
                         v-if="item.fulfilledBy"
                         color="primary"
                     >
@@ -51,13 +51,13 @@
                     >
                         <span>{{ formatCurrency(item.price) }}</span>
                     </v-chip>
-                    <v-chip
+                    <!-- <v-chip
                         v-if="item.priority !== 'none' && item.priority"
                         :prepend-icon="convertPriority(item.priority).icon"
                         color="primary"
                     >
                         {{ convertPriority(item.priority).text }}
-                    </v-chip>
+                    </v-chip> -->
                 </div>
             </div>
             <div class="item-image">
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { mdiGift, mdiOpenInNew } from "@mdi/js";
 import { convertPriority } from "@/utils";
 import DeleteItem from "./DeleteItem.vue";
 import EditItem from "./EditItem.vue";
@@ -92,6 +93,8 @@ export default {
     data() {
         return {
             convertPriority,
+            mdiGift,
+            mdiOpenInNew,
             privateView: this.$route.meta?.requiresAuth || false
         };
     },
