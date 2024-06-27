@@ -1,3 +1,5 @@
+import { mdiEmoticon, mdiEmoticonConfused, mdiHeart } from "@mdi/js";
+
 export const priorityMap = {
     none: {
         text: "None",
@@ -5,15 +7,15 @@ export const priorityMap = {
     },
     low: {
         text: "Unsure",
-        icon: "sentiment_content"
+        icon: mdiEmoticonConfused
     },
     medium: {
         text: "Would be nice",
-        icon: "sentiment_very_satisfied"
+        icon: mdiEmoticon
     },
     high: {
         text: "Would love it",
-        icon: "favourite"
+        icon: mdiHeart
     }
 };
 

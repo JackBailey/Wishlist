@@ -34,6 +34,8 @@
                 :item="item"
                 @removeItem="removeItem(item.$id)"
                 @editItem="editItem($event)"
+                @fulfillItem="fulfillItem($event)"
+                @unfulfillItem="unfulfillItem($event)"
             />
         </div>
     </main>
@@ -85,7 +87,23 @@ export default {
         },
         removeItem(id) {
             this.list.items = this.list.items.filter((item) => item.$id !== id);
-        }
+        },
+        fulfillItem(data) {
+            this.list.items = this.list.items.map((item) => {
+                if (item.$id === data.item.$id) {
+                    item.fulfillment = data;
+                }
+                return item;
+            });
+        },
+        unfulfillItem(itemId) {
+            this.list.items = this.list.items.map((item) => {
+                if (item.$id === itemId) {
+                    item.fulfillment = null;
+                }
+                return item;
+            });
+        },
     },
     async mounted() {
         this.list = await databases.getDocument(

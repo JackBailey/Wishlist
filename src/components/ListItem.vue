@@ -1,5 +1,5 @@
 <template>
-    <v-card class="item">
+    <v-card class="item" :data-fulfilled="!!item.fulfillment && !privateView">
         <div class="item-header">
             <h2>{{ item.title }}</h2>
             <v-btn-group
@@ -7,7 +7,12 @@
                 divided
                 rounded="pill"
             >
-                <v-btn :prepend-icon="mdiGift"> Fulfill </v-btn>
+                <FulfillItem
+                    v-if="!privateView"
+                    :item="item"
+                    @fulfillItem="$emit('fulfillItem', $event)"
+                    @unfulfillItem="$emit('unfulfillItem', item.$id)"
+                />
                 <v-btn
                     :append-icon="mdiOpenInNew"
                     :href="item.url"
@@ -51,13 +56,13 @@
                     >
                         <span>{{ formatCurrency(item.price) }}</span>
                     </v-chip>
-                    <!-- <v-chip
+                    <v-chip
                         v-if="item.priority !== 'none' && item.priority"
                         :prepend-icon="convertPriority(item.priority).icon"
                         color="primary"
                     >
                         {{ convertPriority(item.priority).text }}
-                    </v-chip> -->
+                    </v-chip>
                 </div>
             </div>
             <div class="item-image">
@@ -77,6 +82,7 @@ import { mdiGift, mdiOpenInNew } from "@mdi/js";
 import { convertPriority } from "@/utils";
 import DeleteItem from "./DeleteItem.vue";
 import EditItem from "./EditItem.vue";
+import FulfillItem from "./FulfillItem.vue";
 import VueMarkdown from "vue-markdown-render";
 export default {
     props: {
@@ -88,6 +94,7 @@ export default {
     components: {
         DeleteItem,
         EditItem,
+        FulfillItem,
         VueMarkdown
     },
     data() {
@@ -151,6 +158,9 @@ export default {
                 aspect-ratio: 1/1;
             }
         }
+    }
+    &[data-fulfilled="true"] {
+        opacity: 0.5;
     }
 }
 </style>
