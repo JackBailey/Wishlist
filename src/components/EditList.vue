@@ -11,7 +11,6 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-            {{ listId }}
             <v-card title="Edit List">
                 <v-card-text>
                     <v-text-field

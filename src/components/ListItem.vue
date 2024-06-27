@@ -51,7 +51,7 @@
                         <span>{{ formatCurrency(item.price) }}</span>
                     </v-chip>
                     <v-chip
-                        v-if="item.priority !== 'none'"
+                        v-if="item.priority !== 'none' && item.priority"
                         :prepend-icon="convertPriority(item.priority).icon"
                         color="primary"
                     >
