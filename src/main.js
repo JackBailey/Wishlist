@@ -1,9 +1,9 @@
 import "./assets/main.scss";
-import "./assets/dark.css";
-import "./assets/light.css";
-import "material/typography/md-typescale-styles.js";
+// import "./assets/dark.css";
+// import "./assets/light.css";
+// import "material/typography/md-typescale-styles.js";
 
-import "material-symbols";
+// import "material-symbols";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
@@ -11,6 +11,8 @@ import { useAuthStore } from "@/stores/auth";
 
 import App from "./App.vue";
 import router from "./router";
+
+import vuetify from "../plugins/vuetify";
 
 const app = createApp(App);
 app.use(createPinia());
@@ -26,5 +28,6 @@ auth.init().then(() => {
         }
     });
     app.use(router);
+    app.use(vuetify);
     app.mount("#app");
 });

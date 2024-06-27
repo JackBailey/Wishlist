@@ -26,8 +26,12 @@ export default [
             "vue/max-attributes-per-line": [
                 "error",
                 {
-                    singleline: 3,
-                    multiline: 1
+                    singleline: {
+                        max: 2
+                    },
+                    multiline: {
+                        max: 1
+                    }
                 }
             ],
             "sort-imports": [
@@ -41,7 +45,25 @@ export default [
             "vue/no-deprecated-slot-attribute": [
                 "error",
                 {
-                    ignore: "md-icon"
+                    ignore: ["md-icon"]
+                }
+            ],
+            "vue/first-attribute-linebreak": [
+                "error",
+                {
+                    multiline: "below",
+                    singleline: "ignore"
+                }
+            ],
+            "vue/html-closing-bracket-newline": [
+                "error",
+                {
+                    singleline: "never",
+                    multiline: "always",
+                    selfClosingTag: {
+                        singleline: "never",
+                        multiline: "always"
+                    }
                 }
             ]
         }

@@ -23,6 +23,9 @@ importers:
       sass:
         specifier: ^1.77.6
         version: 1.77.6
+      vite-plugin-vuetify:
+        specifier: ^2.0.3
+        version: 2.0.3(vite@5.3.1(sass@1.77.6))(vue@3.4.30)(vuetify@3.6.10)
       vue:
         specifier: ^3.4.29
         version: 3.4.30
@@ -32,6 +35,9 @@ importers:
       vue-router:
         specifier: ^4.3.3
         version: 4.4.0(vue@3.4.30)
+      vuetify:
+        specifier: ^3.6.10
+        version: 3.6.10(vite-plugin-vuetify@2.0.3)(vue@3.4.30)
     devDependencies:
       '@eslint/js':
         specifier: ^9.5.0
@@ -57,6 +63,9 @@ importers:
       globals:
         specifier: ^15.6.0
         version: 15.6.0
+      material-design-icons-iconfont:
+        specifier: ^6.7.0
+        version: 6.7.0
       prettier:
         specifier: ^3.2.5
         version: 3.3.2
@@ -416,6 +425,12 @@ packages:
 
   '@vue/shared@3.4.30':
     resolution: {integrity: sha512-CLg+f8RQCHQnKvuHY9adMsMaQOcqclh6Z5V9TaoMgy0ut0tz848joZ7/CYFFyF/yZ5i2yaw7Fn498C+CNZVHIg==}
+
+  '@vuetify/loader-shared@2.0.3':
+    resolution: {integrity: sha512-Ss3GC7eJYkp2SF6xVzsT7FAruEmdihmn4OCk2+UocREerlXKWgOKKzTN5PN3ZVN5q05jHHrsNhTuWbhN61Bpdg==}
+    peerDependencies:
+      vue: ^3.0.0
+      vuetify: ^3.0.0
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -996,6 +1011,9 @@ packages:
     resolution: {integrity: sha512-FtwnEuuK+2yVU7goGn/MJ0WBZMM9ZPgU9spqlFs7/A/pDIUNSOQZhUgOqYCficIuR2QaFnrt8LHqBWsbTAoI5w==}
     hasBin: true
 
+  material-design-icons-iconfont@6.7.0:
+    resolution: {integrity: sha512-lSj71DgVv20kO0kGbs42icDzbRot61gEDBLQACzkUuznRQBUYmbxzEkGU6dNBb5fRWHMaScYlAXX96HQ4/cJWA==}
+
   material-symbols@0.20.0:
     resolution: {integrity: sha512-bTxLbVDimYqe1+iY0qcWXJSqoxKfQhzfdVLlvi8DegHAuSJ93oXhMjHY95zOVcgKUsLjszR2heIYhLWjobE1BQ==}
 
@@ -1288,11 +1306,23 @@ packages:
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
 
+  upath@2.0.1:
+    resolution: {integrity: sha512-1uEe95xksV1O0CYKXo8vQvN1JEbtJp7lb7C5U9HMsIp6IVwntkH/oNUzyVNQSd4S1sYk2FpSSW44FqMc8qee5w==}
+    engines: {node: '>=4'}
+
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  vite-plugin-vuetify@2.0.3:
+    resolution: {integrity: sha512-HbYajgGgb/noaVKNRhnnXIiQZrNXfNIeanUGAwXgOxL6h/KULS40Uf51Kyz8hNmdegF+DwjgXXI/8J1PNS83xw==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      vite: '>=5'
+      vue: ^3.0.0
+      vuetify: ^3.0.0
 
   vite@5.3.1:
     resolution: {integrity: sha512-XBmSKRLXLxiaPYamLv3/hnP/KXDai1NDexN0FpkTaZXTfycHvkRHoenpgl/fvuK/kPbB6xAgoyiryAhQNxYmAQ==}
@@ -1355,6 +1385,25 @@ packages:
       typescript: '*'
     peerDependenciesMeta:
       typescript:
+        optional: true
+
+  vuetify@3.6.10:
+    resolution: {integrity: sha512-Myd9+EFq4Gmu61yKPNVS0QdGQkcZ9cHom27wuvRw7jgDxM+X4MT9BwQRk/Dt1q3G3JlK8oh+ZYyq5Ps/Z73cMg==}
+    engines: {node: ^12.20 || >=14.13}
+    peerDependencies:
+      typescript: '>=4.7'
+      vite-plugin-vuetify: '>=1.0.0'
+      vue: ^3.3.0
+      vue-i18n: ^9.0.0
+      webpack-plugin-vuetify: '>=2.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+      vite-plugin-vuetify:
+        optional: true
+      vue-i18n:
+        optional: true
+      webpack-plugin-vuetify:
         optional: true
 
   which-boxed-primitive@1.0.2:
@@ -1650,6 +1699,12 @@ snapshots:
       vue: 3.4.30
 
   '@vue/shared@3.4.30': {}
+
+  '@vuetify/loader-shared@2.0.3(vue@3.4.30)(vuetify@3.6.10(vite-plugin-vuetify@2.0.3)(vue@3.4.30))':
+    dependencies:
+      upath: 2.0.1
+      vue: 3.4.30
+      vuetify: 3.6.10(vite-plugin-vuetify@2.0.3)(vue@3.4.30)
 
   acorn-jsx@5.3.2(acorn@8.12.0):
     dependencies:
@@ -2356,6 +2411,8 @@ snapshots:
       mdurl: 1.0.1
       uc.micro: 1.0.6
 
+  material-design-icons-iconfont@6.7.0: {}
+
   material-symbols@0.20.0: {}
 
   material@https://codeload.github.com/treeder/material/tar.gz/176d651b002a854751abc4d7096de40d7f8dac36:
@@ -2678,11 +2735,24 @@ snapshots:
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
 
+  upath@2.0.1: {}
+
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
 
   util-deprecate@1.0.2: {}
+
+  vite-plugin-vuetify@2.0.3(vite@5.3.1(sass@1.77.6))(vue@3.4.30)(vuetify@3.6.10):
+    dependencies:
+      '@vuetify/loader-shared': 2.0.3(vue@3.4.30)(vuetify@3.6.10(vite-plugin-vuetify@2.0.3)(vue@3.4.30))
+      debug: 4.3.5
+      upath: 2.0.1
+      vite: 5.3.1(sass@1.77.6)
+      vue: 3.4.30
+      vuetify: 3.6.10(vite-plugin-vuetify@2.0.3)(vue@3.4.30)
+    transitivePeerDependencies:
+      - supports-color
 
   vite@5.3.1(sass@1.77.6):
     dependencies:
@@ -2727,6 +2797,12 @@ snapshots:
       '@vue/runtime-dom': 3.4.30
       '@vue/server-renderer': 3.4.30(vue@3.4.30)
       '@vue/shared': 3.4.30
+
+  vuetify@3.6.10(vite-plugin-vuetify@2.0.3)(vue@3.4.30):
+    dependencies:
+      vue: 3.4.30
+    optionalDependencies:
+      vite-plugin-vuetify: 2.0.3(vite@5.3.1(sass@1.77.6))(vue@3.4.30)(vuetify@3.6.10)
 
   which-boxed-primitive@1.0.2:
     dependencies:
