@@ -1,5 +1,10 @@
 <template>
-    <main>
+    <main v-if="!list">
+        <v-skeleton-loader type="card" />
+        <v-skeleton-loader type="card" />
+        <v-skeleton-loader type="card" />
+    </main>
+    <main v-else>
         <v-card class="list-header">
             <h1>
                 {{ list.title }}
@@ -10,7 +15,7 @@
                     v-if="privateView"
                 >
                     <CreateItem
-                        :list="list"    
+                        :list="list"
                         @newItem="addItem"
                     />
                     <EditList
@@ -26,23 +31,33 @@
                 class="description user-item-markdown"
             />
         </v-card>
-        <v-divider style="margin: 1rem 0;"/>
         <div class="items">
-            <ListItem
-                v-for="item in list.items"
-                :key="item.$id"
-                :item="item"
-                @removeItem="removeItem(item.$id)"
-                @editItem="editItem($event)"
-                @fulfillItem="fulfillItem($event)"
-                @unfulfillItem="unfulfillItem($event)"
-            />
+            <div
+                class="item-price-group"
+                v-for="priceGroup in itemsByPriceGroups"
+                :key="priceGroup.price"
+            >
+                <h3>{{ priceGroup.title }}</h3>
+                <v-divider/>
+                <div class="item-price-group-items">
+                    <ListItem
+                        v-for="item in priceGroup.items"
+                        :key="item.$id"
+                        :item="item"
+                        @removeItem="removeItem(item.$id)"
+                        @editItem="editItem($event)"
+                        @fulfillItem="fulfillItem($event)"
+                        @unfulfillItem="unfulfillItem($event)"
+                    />
+                </div>
+            </div>
         </div>
     </main>
 </template>
 
 <script>
 import CreateItem from "@/components/CreateItem.vue";
+import { currencyFormatter } from "@/utils";
 import { databases } from "@/appwrite";
 import EditList from "@/components/EditList.vue";
 import ListItem from "@/components/ListItem.vue";
@@ -56,7 +71,7 @@ export default {
     },
     data() {
         return {
-            list: [],
+            list: false,
             listId: this.$route.params.id,
             newItem: {
                 title: "",
@@ -66,8 +81,34 @@ export default {
                 price: 0,
                 priority: "none"
             },
-            privateView: this.$route.meta?.requiresAuth || false
+            privateView: this.$route.meta?.requiresAuth || false,
+            sort: "price",
+            priceGroups: [
+                10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000
+            ]
         };
+    },
+    computed: {
+        itemsByPriceGroups() {
+            if (!this.list || this.list.items.length === 0) return;
+
+            const priceGroupItems = this.priceGroups.map((price, index) => {
+                const lowerBound = index === 0 ? 0 : this.priceGroups[index - 1];
+                const upperBound = price;
+
+                return {
+                    price,
+                    title: currencyFormatter.format(lowerBound).split(".")[0] + " - " + currencyFormatter.format(upperBound).split(".")[0],
+                    items: this.list.items.filter((item) => {
+                        if (item.price >= lowerBound && item.price <= upperBound) {
+                            return item;
+                        }
+                    })
+                };
+            }).filter((priceGroup) => priceGroup.items.length);
+            console.log(priceGroupItems);
+            return priceGroupItems;
+        }
     },
     methods: {
         updateList(data) {
@@ -106,12 +147,20 @@ export default {
         },
     },
     async mounted() {
-        this.list = await databases.getDocument(
+        let list = await databases.getDocument(
             import.meta.env.VITE_APPWRITE_DB,
             import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-            this.listId,
-            []
+            this.listId
         );
+
+        list.items = list.items.sort((a, b) => {
+            if (this.sort === "price") {
+                return a.price - b.price;
+            }
+            return a.title.localeCompare(b.title);
+        });
+
+        this.list = list;
     }
 };
 </script>
@@ -140,9 +189,21 @@ main {
     }
 
     .items {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+        margin-top: 1rem;
+        .item-price-group {
+            h3 {
+                font-size: 2rem;
+                margin-top: 2rem;
+            }
+            hr {
+                margin: 0.5rem 0 1rem;
+            }
+            .item-price-group-items {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
     }
 }
 </style>

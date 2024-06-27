@@ -37,7 +37,7 @@
                         type="number"
                         label="Price"
                         v-model="editedItem.price"
-                        :prefix="getCurrencyPrefix()"
+                        :prefix="currencySymbol"
                         :prepend-icon="mdiCash"
                         step="0.01"
                     />
@@ -68,9 +68,9 @@
 </template>
 
 <script>
+import { currencySymbol, priorityMap } from "@/utils";
 import { mdiCash, mdiImage, mdiLink, mdiPencil } from "@mdi/js";
 import { databases } from "@/appwrite";
-import { priorityMap } from "@/utils";
 export default {
     title: "ListDialog",
     props: {
@@ -85,6 +85,7 @@ export default {
     },
     data() {
         return {
+            currencySymbol,
             dialogOpen: false,
             priorityMap,
             editedItem: {
@@ -118,14 +119,6 @@ export default {
         }
     },
     methods: {
-        getCurrencyPrefix() {
-            let formatter = new Intl.NumberFormat("en-GB", {
-                style: "currency",
-                currency: import.meta.env.VITE_CURRENCY
-            });
-
-            return formatter.formatToParts(0)[0].value;
-        },
         async editItem() {
             const result = await databases.updateDocument(
                 import.meta.env.VITE_APPWRITE_DB,

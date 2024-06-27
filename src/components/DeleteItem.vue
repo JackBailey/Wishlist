@@ -51,14 +51,6 @@ export default {
         };
     },
     methods: {
-        getCurrencyPrefix() {
-            let formatter = new Intl.NumberFormat("en-GB", {
-                style: "currency",
-                currency: import.meta.env.VITE_CURRENCY
-            });
-
-            return formatter.formatToParts(0)[0].value;
-        },
         async deleteItem() {
             await databases.deleteDocument(
                 import.meta.env.VITE_APPWRITE_DB,

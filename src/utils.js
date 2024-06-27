@@ -22,3 +22,10 @@ export const priorityMap = {
 export const convertPriority = (priority) => {
     return priorityMap[priority];
 };
+
+export const currencyFormatter = new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: import.meta.env.VITE_CURRENCY
+});
+
+export const currencySymbol = currencyFormatter.formatToParts(0)[0].value;

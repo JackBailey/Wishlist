@@ -54,7 +54,7 @@
                         v-if="item.price && item.displayPrice"
                         color="primary"
                     >
-                        <span>{{ formatCurrency(item.price) }}</span>
+                        <span>{{ currencyFormatter.format(item.price) }}</span>
                     </v-chip>
                     <v-chip
                         v-if="item.priority !== 'none' && item.priority"
@@ -78,8 +78,8 @@
 </template>
 
 <script>
+import { convertPriority, currencyFormatter } from "@/utils";
 import { mdiGift, mdiOpenInNew } from "@mdi/js";
-import { convertPriority } from "@/utils";
 import DeleteItem from "./DeleteItem.vue";
 import EditItem from "./EditItem.vue";
 import FulfillItem from "./FulfillItem.vue";
@@ -100,20 +100,11 @@ export default {
     data() {
         return {
             convertPriority,
+            currencyFormatter,
             mdiGift,
             mdiOpenInNew,
             privateView: this.$route.meta?.requiresAuth || false
         };
-    },
-    methods: {
-        formatCurrency(value) {
-            let formatter = new Intl.NumberFormat("en-GB", {
-                style: "currency",
-                currency: import.meta.env.VITE_CURRENCY
-            });
-
-            return formatter.format(value);
-        }
     }
 };
 </script>
