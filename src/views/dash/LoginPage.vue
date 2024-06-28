@@ -28,8 +28,8 @@ export default {
         githubLogin() {
             account.createOAuth2Session(
                 OAuthProvider.Github,
-                this.$route.meta.requiresAuth ? window.location.href : "http://localhost:5173/dash/lists",
-                "http://localhost:5173/dash/error",
+                this.$route.meta.requiresAuth ? window.location.href : window.location.origin + "/dash/lists",
+                window.location.origin + "/dash/error",
                 ["user"]
             );
         }

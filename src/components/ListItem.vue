@@ -71,12 +71,11 @@
             </div>
         </div>
         <div class="item-image" v-if="item.image">
-            <img
-                v-if="item.image"
+            <v-img
                 :src="item.image"
                 alt=""
+                width="200"
             />
-            <div v-else class="image-fallback"></div>
         </div>
     </v-card>
 </template>

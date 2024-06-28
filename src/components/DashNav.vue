@@ -127,7 +127,7 @@ export default {
             account.createOAuth2Session(
                 OAuthProvider.Github,
                 window.location.href,
-                "http://localhost:5173/dash/error",
+                window.location.origin + "/dash/error",
                 ["user"]
             );
         },

@@ -1,5 +1,5 @@
 import "vuetify/styles";
-import "material-design-icons-iconfont/dist/material-design-icons.css";
+// import "material-design-icons-iconfont/dist/material-design-icons.css";
 import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 import { createVuetify } from "vuetify";
 

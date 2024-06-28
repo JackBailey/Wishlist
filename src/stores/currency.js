@@ -16,7 +16,6 @@ export const useCurrencyStore = defineStore({
         },
         formatter(code) {
             const currency = this.getCurrency(code);
-            console.log({ code, currency });
             return new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: currency.code,

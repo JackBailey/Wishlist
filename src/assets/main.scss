@@ -32,15 +32,6 @@
     font-display: swap;
 }
 
-@font-face {
-    font-family: "Poppins";
-    font-weight: 800;
-    src: url("/fonts/Poppins/Poppins-Extrabold.woff2") format("woff2"),
-        url("/fonts/Poppins/Poppins-Extrabold.woff") format("woff"),
-        url("/fonts/Poppins/Poppins-Extrabold.ttf") format("ttf");
-    font-display: swap;
-}
-
 $title-font-family: "Poppins";
 $body-font-family: "Quicksand";
 
