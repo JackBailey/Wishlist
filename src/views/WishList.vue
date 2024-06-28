@@ -100,13 +100,19 @@ export default {
                     price,
                     title: currencyFormatter.format(lowerBound).split(".")[0] + " - " + currencyFormatter.format(upperBound).split(".")[0],
                     items: this.list.items.filter((item) => {
-                        if (item.price >= lowerBound && item.price <= upperBound) {
+                        if (item.price >= lowerBound && item.price < upperBound) {
                             return item;
                         }
+                    }).sort((a, b) => {
+                        if (!this.privateView) {
+                            if (a.fulfillment && !b.fulfillment) return 1;
+                            if (!a.fulfillment && b.fulfillment) return -1;
+                        }
+
+                        return true;
                     })
                 };
             }).filter((priceGroup) => priceGroup.items.length);
-            console.log(priceGroupItems);
             return priceGroupItems;
         }
     },

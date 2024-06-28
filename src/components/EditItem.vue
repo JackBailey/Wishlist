@@ -16,6 +16,7 @@
                     <v-text-field
                         label="Title"
                         v-model="editedItem.title"
+                        maxlength="64"
                     />
                     <v-textarea
                         label="Description"

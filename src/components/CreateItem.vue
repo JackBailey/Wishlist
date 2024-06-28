@@ -96,7 +96,7 @@ export default {
                 url: "",
                 image: "",
                 price: 0,
-                displayPrice: false,
+                displayPrice: true,
                 priority: "none"
             },
             mdiPlus,
@@ -133,6 +133,16 @@ export default {
             this.$emit("newItem", {
                 item: result
             })
+
+            this.newItem = {
+                title: "",
+                description: "",
+                url: "",
+                image: "",
+                price: 0,
+                displayPrice: true,
+                priority: "none"
+            };
 
             this.dialogOpen = false;
         }

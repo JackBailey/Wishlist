@@ -10,7 +10,7 @@ export const priorityMap = {
         icon: mdiEmoticonConfused
     },
     medium: {
-        text: "Would be nice",
+        text: "Nice to have",
         icon: mdiEmoticon
     },
     high: {

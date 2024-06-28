@@ -12,14 +12,14 @@
             <v-card title="Fulfill Item" v-if="!item.fulfillment">
                 <v-card-text>
                     <v-text-field
-                        label="Name"
+                        label="Your name"
                         v-model="name"
                     />
 
                     <b>Thank you!</b>
 
-                    This will only be shown to other viewers of this list.<br/>
-                    It will <span class="text-error" style="font-weight: bold; text-decoration: underline;">not be shown</span> to the owner of the list.
+                    This will only be shown to other viewers of this list to help prevent duplicates.<br/>
+                    It will <span class="text-error" style="font-weight: bold; text-decoration: underline;">not be shown</span> to the owner of this list.
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
