@@ -86,6 +86,13 @@
                 </v-card-actions>
             </v-card>
         </v-menu>
+        <v-progress-linear
+            :active="loading"
+            indeterminate
+            color="primary"
+            absolute
+            bottom
+        />
     </v-app-bar>
 </template>
 
@@ -95,6 +102,12 @@ import { account } from "@/appwrite";
 import { OAuthProvider } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 export default {
+    props: {
+        loading: {
+            type: Boolean,
+            default: true
+        }
+    },
     data() {
         return {
             mdiMenu,

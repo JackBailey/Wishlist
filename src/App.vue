@@ -1,8 +1,8 @@
 <template>
     <v-app :theme="auth.userPrefs.darkMode ? 'dark' : 'light'">
-        <DashNav />
-        <RouterView v-if="auth.user || $route.meta.requiresAuth !== true" />
-        <LoginPage v-else />
+        <DashNav :loading="loading" />
+        <RouterView v-if="!loading && (auth.user || $route.meta.requiresAuth !== true)" />
+        <LoginPage v-else-if="!loading" />
     </v-app>
 </template>
 
@@ -11,6 +11,7 @@ import DashNav from "@/components/DashNav.vue";
 import LoginPage from "@/views/dash/LoginPage.vue";
 import { RouterView } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { useCurrencyStore } from "@/stores/currency";
 export default {
     components: {
         DashNav,
@@ -19,8 +20,15 @@ export default {
     },
     data() {
         return {
-            auth: useAuthStore()
+            auth: useAuthStore(),
+            currencyStore: useCurrencyStore(),
+            loading: true
         };
+    },
+    async mounted() {
+        await this.auth.init();
+        await this.currencyStore.init();
+        this.loading = false;
     }
 };
 </script>

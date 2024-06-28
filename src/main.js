@@ -16,10 +16,11 @@ app.use(createPinia());
 const auth = useAuthStore();
 const currency = useCurrencyStore();
 
-auth.init().then(() => {
-    currency.init().then(() => {
-        app.use(router);
-        app.use(vuetify);
-        app.mount("#app");
-    });
-});
+// auth.init().then(() => {
+//     currency.init().then(() => {
+//     });
+// });
+
+app.use(router);
+app.use(vuetify);
+app.mount("#app");
