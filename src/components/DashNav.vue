@@ -143,6 +143,7 @@ export default {
         logout() {
             account.deleteSession("current");
             this.auth.user = null;
+            this.menu = false;
         }
     }
 };

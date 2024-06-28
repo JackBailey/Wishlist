@@ -1,7 +1,6 @@
 <template>
     <v-dialog
-        :max-width="$vuetify.display.mobile ? '100%' : '500px'"
-        :fullscreen="$vuetify.display.mobile ? true : false"
+        max-width="90%"
         v-model="dialogOpen"
     >
         <template v-slot:activator="{ props: activatorProps }">
@@ -18,6 +17,8 @@
                     <v-text-field
                         label="Your name"
                         v-model="name"
+                        autofocus
+                        @keyup.enter="fulfillItem"
                     />
 
                     <b>Thank you!</b>

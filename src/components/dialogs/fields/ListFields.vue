@@ -4,6 +4,7 @@
         v-model="list.title"
         maxlength="64"
         counter
+        autofocus
     />
     <v-textarea
         label="Description"
