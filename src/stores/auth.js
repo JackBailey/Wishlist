@@ -9,11 +9,14 @@ export const useAuthStore = defineStore({
         userPrefs: {
             darkMode: false,
             spoilSurprises: false
+        },
+        newUserPrefs: {
+            darkMode: false,
+            spoilSurprises: false
         }
     }),
     actions: {
         async init() {
-            const localPrefs = localStorage.getItem("userPrefs");
             try {
                 this.user = await account.get();
 
@@ -23,9 +26,7 @@ export const useAuthStore = defineStore({
                 }
             } catch {
                 this.user = null;
-            }
-
-            if (!this.user || !this.user.prefs) {
+                const localPrefs = localStorage.getItem("userPrefs");
                 if (localPrefs) {
                     this.userPrefs = JSON.parse(localPrefs);
                 } else {
@@ -37,6 +38,8 @@ export const useAuthStore = defineStore({
                     };
                 }
             }
+
+            this.newUserPrefs = { ...this.userPrefs };
         }
     },
     getters: {

@@ -46,7 +46,7 @@
                 <v-list>
                     <v-list-item>
                         <v-switch
-                            v-model="userPrefs.darkMode"
+                            v-model="auth.newUserPrefs.darkMode"
                             label="Dark Mode"
                             hide-details
                             inset
@@ -55,7 +55,7 @@
                     </v-list-item>
                     <v-list-item v-if="!!auth.user">
                         <v-switch
-                            v-model="userPrefs.spoilSurprises"
+                            v-model="auth.newUserPrefs.spoilSurprises"
                             label="Spoil Surprises"
                             hide-details
                             inset
@@ -116,22 +116,18 @@ export default {
             mdiGift,
             mdiGithub,
             auth: useAuthStore(),
-            menu: false,
-            userPrefs: {
-                darkMode: false,
-                spoilSurprises: false
-            }
+            menu: false
         };
     },
     methods: {
         async updatePrefs() {
             if (this.auth.user) {
-                await account.updatePrefs(this.userPrefs);
+                await account.updatePrefs(this.auth.newUserPrefs);
             } else {
-                localStorage.setItem("userPrefs", JSON.stringify(this.userPrefs));
+                localStorage.setItem("userPrefs", JSON.stringify(this.auth.newUserPrefs));
             }
 
-            this.auth.userPrefs = { ...this.userPrefs };
+            this.auth.userPrefs = { ...this.auth.newUserPrefs };
 
             this.menu = false;
         },
@@ -148,9 +144,6 @@ export default {
             account.deleteSession("current");
             this.auth.user = null;
         }
-    },
-    mounted() {
-        this.userPrefs = { ...this.auth.userPrefs };
     }
 };
 </script>
