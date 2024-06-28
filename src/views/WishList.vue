@@ -23,6 +23,7 @@
                             @updateList="updateList"
                             variant="outlined"
                         />
+                        <DeleteList :list="list" variant="outlined" />
                     </v-btn-group>
                 </h1>
                 <vue-markdown
@@ -31,7 +32,7 @@
                     class="description user-item-markdown"
                 />
             </v-card>
-            <div class="items">
+            <div class="items" v-if="list.items.length">
                 <div
                     class="item-price-group"
                     v-for="priceGroup in itemsByPriceGroups"
@@ -52,6 +53,16 @@
                     </div>
                 </div>
             </div>
+            <div class="no-items" v-else>
+                <v-spacer height="20" />
+                <v-alert
+                    type="info"
+                    :icon="mdiInformation"
+                    elevation="2"
+                    class="mt-5"
+                    text="No items currently exist in this list. Add some!"
+                />
+            </div>
         </div>
     </v-main>
 </template>
@@ -60,14 +71,17 @@
 import CreateItem from "@/components/dialogs/CreateItem.vue";
 import { currencyFormatter } from "@/utils";
 import { databases } from "@/appwrite";
+import DeleteList from "@/components/dialogs/DeleteList.vue";
 import EditList from "@/components/dialogs/EditList.vue";
 import ListItem from "@/components/ListItem.vue";
+import { mdiInformation } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
 import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
         CreateItem,
         EditList,
+        DeleteList,
         ListItem,
         VueMarkdown
     },
@@ -86,6 +100,7 @@ export default {
                 priority: "none"
             },
             sort: "price",
+            mdiInformation,
             priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]
         };
     },

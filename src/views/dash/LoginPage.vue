@@ -28,7 +28,7 @@ export default {
         githubLogin() {
             account.createOAuth2Session(
                 OAuthProvider.Github,
-                "http://localhost:5173/dash",
+                this.$route.meta.requiresAuth ? window.location.href : "http://localhost:5173/dash/lists",
                 "http://localhost:5173/dash/error",
                 ["user"]
             );

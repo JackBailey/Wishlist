@@ -10,26 +10,17 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-            <v-card title="Delete Item">
+            <v-card title="Delete List">
                 <v-card-text>
-                    Are you sure you want to delete this item?
-                    <v-alert
-                        v-if="item.fulfillment"
-                        :icon="mdiAlert"
-                        text="Please unfulfill this item before deleting it."
-                        title="Item is fulfilled"
-                        class="mt-4"
-                        color="primary"
-                    />
+                    Are you sure you want to delete this list?
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
                     <v-btn
                         color="error"
                         text="Delete"
-                        @click="deleteItem"
+                        @click="deleteList"
                         variant="elevated"
-                        :disabled="item.fulfillment"
                     />
                 </v-card-actions>
             </v-card>
@@ -43,7 +34,7 @@ import { databases } from "@/appwrite";
 export default {
     title: "ListDialog",
     props: {
-        item: {
+        list: {
             type: Object,
             default: () => ({})
         },
@@ -62,16 +53,14 @@ export default {
         };
     },
     methods: {
-        async deleteItem() {
+        async deleteList() {
             await databases.deleteDocument(
                 import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
-                this.item.$id
+                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                this.list.$id
             );
 
-            this.$emit("removeItem", {
-                item: this.item.$id
-            });
+            this.$router.push("/dash/lists");
 
             this.dialogOpen = false;
         }

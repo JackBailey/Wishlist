@@ -1,70 +1,47 @@
 <template>
     <v-main>
-        <dialog ref="newListDialog">
-            <h2>Create new list</h2>
-            <form @submit.prevent="createList"> 
-                <label for="title">Title</label>
-                <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    required
-                    v-model="newList.title"
-                />
-                <label for="description">Description</label>
-                <textarea
-                    id="description"
-                    name="description"
-                    v-model="newList.description"
-                ></textarea>
-                <button type="submit">Create</button>
-            </form>
-        </dialog>
-        <h1>Lists <button @click="openDialog">New</button></h1>
-
-        <p>{{ lists }}</p>
-        <div class="lists">
-            <a
-                class="list"
-                v-for="list in lists.documents"
-                :key="list.$id"
-                :href="`/list/${list.$id}`"
-            >
-                <h2>{{ list.title }}</h2>
-                <p>{{ list.description }}</p>
-            </a>
+        <div class="page-content">
+            <h1>Lists <CreateList @createList="createList" /></h1>
+            <v-divider />
+            <v-list>
+                <v-list-item
+                    v-for="list in lists.documents"
+                    :key="list.$id"
+                    :href="`/list/${list.$id}`"
+                    :title="list.title"
+                    :lines="list.description ? 'two' : 'one'"
+                    :prepend-icon="mdiFormatListBulleted"
+                >
+                    <template v-slot:subtitle v-if="list.description">
+                        <VueMarkdown :source="list.description"/>
+                    </template>
+                </v-list-item>
+            </v-list>
         </div>
     </v-main>
 </template>
 
 <script>
+import CreateList from "@/components/dialogs/CreateList.vue";
 import { databases } from "@/appwrite";
-import { ID } from "appwrite";
+import { mdiFormatListBulleted } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
+import VueMarkdown from "vue-markdown-render";
 export default {
+    components: {
+        CreateList,
+        VueMarkdown
+    },
     data() {
         return {
             auth: useAuthStore(),
-            lists: [],
-            newList: {
-                title: "",
-                description: ""
-            }
+            mdiFormatListBulleted,
+            lists: []
         };
     },
     methods: {
-        openDialog() {
-            this.$refs.newListDialog.showModal();
-        },
-        async createList() {
-            const document = await databases.createDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                ID.unique(),
-                { ...this.newList, author: this.auth.user.$id }
-            );
-
-            this.$router.push("/list/" + document.$id);
+        createList(data) {
+            this.lists.documents.push(data.list);
         }
     },
     async mounted() {
@@ -79,10 +56,16 @@ export default {
 
 <style lang="scss" scoped>
 main {
-    dialog {
-        form {
+    .page-content {
+        width: var(--section-width);
+        margin: 0 auto;
+        padding: 2rem 0;
+
+        h1 {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 0.5rem;
         }
     }
 }

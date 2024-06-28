@@ -3,7 +3,7 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                :icon="mdiPencil"
+                :icon="mdiPlus"
                 base-color="primary"
                 size="small"
                 :variant="variant"
@@ -11,23 +11,23 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-            <v-card title="Edit List">
+            <v-card title="New List">
                 <v-card-text>
                     <v-text-field
                         label="Title"
-                        v-model="editedList.title"
+                        v-model="newList.title"
                     />
                     <v-textarea
                         label="Description"
-                        v-model="editedList.description"
+                        v-model="newList.description"
                     />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
                     <v-btn
                         color="primary"
-                        text="Save"
-                        @click="updateList"
+                        text="Create"
+                        @click="createList"
                         variant="elevated"
                     />
                 </v-card-actions>
@@ -38,7 +38,9 @@
 
 <script>
 import { databases } from "@/appwrite";
-import { mdiPencil } from "@mdi/js";
+import { ID } from "appwrite";
+import { mdiPlus } from "@mdi/js";
+import { useAuthStore } from "@/stores/auth";
 export default {
     title: "ListDialog",
     props: {
@@ -53,10 +55,14 @@ export default {
     },
     data() {
         return {
-            editedList: {},
+            newList: {
+                title: "",
+                description: ""
+            },
             listId: null,
             dialogOpen: false,
-            mdiPencil
+            mdiPlus,
+            auth: useAuthStore()
         };
     },
     watch: {
@@ -71,18 +77,22 @@ export default {
         }
     },
     methods: {
-        async updateList() {
-            await databases.updateDocument(
+        async createList() {
+            const list = await databases.createDocument(
                 import.meta.env.VITE_APPWRITE_DB,
                 import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                this.listId,
-                this.editedList
+                ID.unique(),
+                { ...this.newList, author: this.auth.user.$id }
             );
 
-            this.$emit("updateList", {
-                listId: this.listId,
-                list: this.editedList
+            this.$emit("createList", {
+                list
             });
+
+            this.newList = {
+                title: "",
+                description: ""
+            };
 
             this.dialogOpen = false;
         }

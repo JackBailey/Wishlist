@@ -4,15 +4,19 @@
             <v-list>
                 <v-list-item
                     :prepend-icon="mdiGift"
-                    href="https://github.com/JackBailey/Wishlist"
-                    target="_blank"
+                    to="/dash/lists"
+                    v-if="auth.user"
                 >
-                    Wishlist
+                    Wishlists
                 </v-list-item>
             </v-list>
         </template>
 
-        <v-btn to="/dash/lists" v-if="auth.user">Wishlists</v-btn>
+        <v-btn
+            href="https://github.com/JackBailey/Wishlist"
+            target="_blank"
+            :icon="mdiGithub"
+        />
         <v-menu :close-on-content-click="false" v-model="menu">
             <template v-slot:activator="{props}">
                 <v-btn
@@ -86,7 +90,7 @@
 </template>
 
 <script>
-import { mdiAccountCircle, mdiCog, mdiGift, mdiMenu } from "@mdi/js";
+import { mdiAccountCircle, mdiCog, mdiGift, mdiGithub, mdiMenu } from "@mdi/js";
 import { account } from "@/appwrite";
 import { OAuthProvider } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
@@ -97,6 +101,7 @@ export default {
             mdiAccountCircle,
             mdiCog,
             mdiGift,
+            mdiGithub,
             auth: useAuthStore(),
             menu: false,
             userPrefs: {
