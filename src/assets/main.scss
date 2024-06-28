@@ -107,6 +107,12 @@ h6,
     font-family: "Quicksand", Arial, Helvetica, sans-serif;
 }
 
+@media screen and (max-width: 768px) {
+    .user-item-markdown {
+        font-size: 0.9rem;
+    }
+}
+
 .user-item-markdown .octicon {
     display: inline-block;
     fill: currentColor;
