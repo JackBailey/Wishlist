@@ -133,16 +133,16 @@ export default {
                     price: parseFloat(this.editedItem.price) || 0,
                     displayPrice: this.editedItem.displayPrice,
                     priority: this.editedItem.priority,
-                    list: this.listId,
+                    list: this.listId
                 }
             );
 
             this.$emit("editItem", {
                 item: result
-            })
+            });
 
             this.dialogOpen = false;
         }
     }
-}
+};
 </script>

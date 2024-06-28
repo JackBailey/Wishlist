@@ -126,13 +126,13 @@ export default {
                     price: parseFloat(this.newItem.price) || 0,
                     displayPrice: this.newItem.displayPrice,
                     priority: this.newItem.priority,
-                    list: this.listId,
+                    list: this.listId
                 }
             );
 
             this.$emit("newItem", {
                 item: result
-            })
+            });
 
             this.newItem = {
                 title: "",
@@ -147,5 +147,5 @@ export default {
             this.dialogOpen = false;
         }
     }
-}
+};
 </script>

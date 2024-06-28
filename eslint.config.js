@@ -65,7 +65,11 @@ export default [
                         multiline: "always"
                     }
                 }
-            ]
+            ],
+            semi: ["error", "always"],
+            "comma-dangle": ["error", "never"],
+            "object-curly-spacing": ["error", "always"],
+            "array-bracket-spacing": ["error", "never"]
         }
     }
 ];

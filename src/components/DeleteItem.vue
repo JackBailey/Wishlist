@@ -55,15 +55,15 @@ export default {
             await databases.deleteDocument(
                 import.meta.env.VITE_APPWRITE_DB,
                 import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
-                this.item.$id,
+                this.item.$id
             );
 
             this.$emit("removeItem", {
                 item: this.item.$id
-            })
+            });
 
             this.dialogOpen = false;
         }
     }
-}
+};
 </script>

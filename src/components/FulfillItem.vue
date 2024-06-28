@@ -101,5 +101,5 @@ export default {
             this.dialogOpen = false;
         }
     }
-}
+};
 </script>

@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import { account } from "@/appwrite";
+import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore({
     id: "auth",
@@ -10,7 +10,7 @@ export const useAuthStore = defineStore({
         async init() {
             try {
                 this.user = await account.get();
-            } catch (error) {
+            } catch {
                 this.user = null;
             }
         }

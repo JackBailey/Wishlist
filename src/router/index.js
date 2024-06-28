@@ -12,7 +12,7 @@ const router = createRouter({
         {
             path: "/dash/lists",
             name: "lists",
-            component: () => import("../views/dash/lists.vue"),
+            component: () => import("../views/dash/UserLists.vue"),
             meta: {
                 requiresAuth: true
             }
@@ -33,7 +33,7 @@ const router = createRouter({
         {
             path: "/dash/login",
             name: "login",
-            component: () => import("../views/dash/login.vue")
+            component: () => import("../views/dash/LoginPage.vue")
         }
     ]
 });

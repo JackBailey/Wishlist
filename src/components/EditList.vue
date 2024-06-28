@@ -87,7 +87,7 @@ export default {
             this.dialogOpen = false;
         }
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

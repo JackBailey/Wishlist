@@ -150,7 +150,7 @@ export default {
                 }
                 return item;
             });
-        },
+        }
     },
     async mounted() {
         let list = await databases.getDocument(

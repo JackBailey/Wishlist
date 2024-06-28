@@ -167,7 +167,6 @@ export default {
     @media screen and (max-width: 480px) {
         grid-template-columns: 1fr;
         .v-btn-group {
-            // grid-row: 5;
             justify-self: center;
         }
         .item-content {
