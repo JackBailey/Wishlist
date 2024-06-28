@@ -56,10 +56,10 @@
 </template>
 
 <script>
-import CreateItem from "@/components/CreateItem.vue";
+import CreateItem from "@/components/dialogs/CreateItem.vue";
 import { currencyFormatter } from "@/utils";
 import { databases } from "@/appwrite";
-import EditList from "@/components/EditList.vue";
+import EditList from "@/components/dialogs/EditList.vue";
 import ListItem from "@/components/ListItem.vue";
 import VueMarkdown from "vue-markdown-render";
 export default {
