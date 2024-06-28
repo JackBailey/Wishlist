@@ -31,7 +31,7 @@
 
 <script>
 import { databases } from "@/appwrite";
-import ItemFields from "./fields/ItemFields.vue";
+import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
 import { mdiPencil } from "@mdi/js";
 export default {
     title: "ListDialog",

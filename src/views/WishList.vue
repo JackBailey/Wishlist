@@ -88,7 +88,7 @@ export default {
     data() {
         return {
             list: false,
-            fullfilledItems: [],
+            fulfilledItems: [],
             listId: this.$route.params.id,
             auth: useAuthStore(),
             newItem: {
@@ -188,7 +188,7 @@ export default {
             this.listId
         );
 
-        this.fullfilledItems = await databases.listDocuments(
+        this.fulfilledItems = await databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DB,
             import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION
         );
@@ -201,7 +201,7 @@ export default {
                 return a.title.localeCompare(b.title);
             })
             .map((item) => {
-                item.fulfillment = this.fullfilledItems.documents.find(
+                item.fulfillment = this.fulfilledItems.documents.find(
                     (fulfillment) => fulfillment.item.$id === item.$id
                 );
                 return item;

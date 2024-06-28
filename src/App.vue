@@ -8,9 +8,9 @@
 
 <script>
 import DashNav from "@/components/DashNav.vue";
-import LoginPage from "./views/dash/LoginPage.vue";
+import LoginPage from "@/views/dash/LoginPage.vue";
 import { RouterView } from "vue-router";
-import { useAuthStore } from "./stores/auth";
+import { useAuthStore } from "@/stores/auth";
 export default {
     components: {
         DashNav,

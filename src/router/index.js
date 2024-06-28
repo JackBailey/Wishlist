@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "@/views/HomeView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +12,7 @@ const router = createRouter({
         {
             path: "/dash/lists",
             name: "lists",
-            component: () => import("../views/dash/UserLists.vue"),
+            component: () => import("@/views/dash/UserLists.vue"),
             meta: {
                 requiresAuth: true
             }
@@ -20,7 +20,7 @@ const router = createRouter({
         {
             path: "/dash/list/:id",
             name: "dashlist",
-            component: () => import("../views/WishList.vue"),
+            component: () => import("@/views/WishList.vue"),
             meta: {
                 requiresAuth: true
             }
@@ -28,12 +28,12 @@ const router = createRouter({
         {
             path: "/list/:id",
             name: "list",
-            component: () => import("../views/WishList.vue")
+            component: () => import("@/views/WishList.vue")
         },
         {
             path: "/dash/login",
             name: "login",
-            component: () => import("../views/dash/LoginPage.vue")
+            component: () => import("@/views/dash/LoginPage.vue")
         }
     ]
 });

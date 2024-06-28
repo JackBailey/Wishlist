@@ -83,9 +83,9 @@
 <script>
 import { convertPriority, currencyFormatter } from "@/utils";
 import { mdiGift, mdiOpenInNew } from "@mdi/js";
-import DeleteItem from "./dialogs/DeleteItem.vue";
-import EditItem from "./dialogs/EditItem.vue";
-import FulfillItem from "./dialogs/FulfillItem.vue";
+import DeleteItem from "@/components/dialogs/DeleteItem.vue";
+import EditItem from "@/components/dialogs/EditItem.vue";
+import FulfillItem from "@/components/dialogs/FulfillItem.vue";
 import { useAuthStore } from "@/stores/auth";
 import VueMarkdown from "vue-markdown-render";
 export default {

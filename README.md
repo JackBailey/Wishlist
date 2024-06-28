@@ -9,8 +9,8 @@ This template should help get you started developing with Vue 3 in Vite.
 ## TODO
 
 - [ ] Error handling
-- [ ] Fix spelling inconsistencies, fulfillment vs fullfillment
-- [ ] Consistent path
+- [x] Fix spelling inconsistencies, fulfillment vs fullfillment
+- [x] Consistent path
 
 ## Customize configuration
 
