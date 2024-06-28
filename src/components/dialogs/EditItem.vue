@@ -14,6 +14,16 @@
             <v-card title="Edit Item">
                 <v-card-text>
                     <ItemFields v-model:item="editedItem" />
+                    <v-alert 
+                        v-if="alert" 
+                        type="error"
+                        border="left" 
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                        class="mt-4"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -22,6 +32,7 @@
                         text="Save"
                         @click="editItem"
                         variant="elevated"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
@@ -30,9 +41,10 @@
 </template>
 
 <script>
+import { mdiAlert, mdiPencil } from "@mdi/js";
+import { AppwriteException } from "appwrite";
 import { databases } from "@/appwrite";
 import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
-import { mdiPencil } from "@mdi/js";
 export default {
     title: "ListDialog",
     props: {
@@ -60,7 +72,10 @@ export default {
                 displayPrice: false,
                 priority: "none"
             },
-            mdiPencil
+            mdiPencil,
+            mdiAlert,
+            alert: false,
+            loading: false
         };
     },
     watch: {
@@ -80,27 +95,48 @@ export default {
     },
     methods: {
         async editItem() {
-            const result = await databases.updateDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
-                this.item.$id,
-                {
-                    title: this.editedItem.title,
-                    description: this.editedItem.description || null,
-                    url: this.editedItem.url || null,
-                    image: this.editedItem.image || null,
-                    price: parseFloat(this.editedItem.price) || 0,
-                    displayPrice: this.editedItem.displayPrice,
-                    priority: this.editedItem.priority,
-                    list: this.listId
+            let result;
+            this.alert = false;
+            this.loading = true;
+            
+            try {
+                result = await databases.updateDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
+                    this.item.$id,
+                    {
+                        title: this.editedItem.title,
+                        description: this.editedItem.description || null,
+                        url: this.editedItem.url || null,
+                        image: this.editedItem.image || null,
+                        price: parseFloat(this.editedItem.price) || 0,
+                        displayPrice: this.editedItem.displayPrice,
+                        priority: this.editedItem.priority,
+                        list: this.listId
+                    }
+                );
+            }  catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
                 }
-            );
+                this.loading = false;
+                return;
+            }
 
             this.$emit("editItem", {
                 item: result
             });
 
             this.dialogOpen = false;
+            this.loading = false;
         }
     }
 };

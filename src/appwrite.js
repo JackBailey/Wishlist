@@ -1,8 +1,8 @@
 import { Account, Avatars, Client, Databases } from "appwrite";
 
-const client = new Client()
-    .setEndpoint("https://cloud.appwrite.io/v1")
-    .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
+const host = import.meta.env.VITE_APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1";
+
+const client = new Client().setEndpoint(host).setProject(import.meta.env.VITE_APPWRITE_PROJECT);
 
 const account = new Account(client);
 

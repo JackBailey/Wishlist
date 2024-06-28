@@ -20,6 +20,17 @@
 
                     This will only be shown to other viewers of this list to help prevent duplicates.<br/>
                     It will <span class="text-error" style="font-weight: bold; text-decoration: underline;">not be shown</span> to the owner of this list.
+
+                    <v-alert 
+                        v-if="alert" 
+                        type="error"
+                        border="left" 
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                        class="mt-4"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -28,12 +39,24 @@
                         text="Fulfill"
                         @click="fulfillItem"
                         variant="elevated"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
             <v-card title="Unfulfill Item" v-else>
                 <v-card-text>
                     Are you sure you want to do this? It can be undone at any time
+
+                    <v-alert 
+                        v-if="alert" 
+                        type="error"
+                        border="left" 
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                        class="mt-4"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -42,6 +65,7 @@
                         text="Unfulfill"
                         @click="unfulfillItem"
                         variant="elevated"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
@@ -50,9 +74,9 @@
 </template>
 
 <script>
-import { mdiGift, mdiGiftOff } from "@mdi/js";
+import { AppwriteException, ID } from "appwrite";
+import { mdiAlert, mdiGift, mdiGiftOff } from "@mdi/js";
 import { databases } from "@/appwrite";
-import { ID } from "appwrite";
 export default {
     title: "ListDialog",
     props: {
@@ -70,35 +94,77 @@ export default {
             name: "",
             dialogOpen: false,
             mdiGift,
-            mdiGiftOff
+            mdiGiftOff,
+            mdiAlert,
+            alert: false,
+            loading: false
         };
     },
     methods: {
         async fulfillItem() {
-            const result = await databases.createDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
-                ID.unique(),
-                {
-                    name: this.name,
-                    item: this.item.$id
+            this.loading = true;
+            this.alert = false;
+            let result;
+            try {
+                result = await databases.createDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
+                    ID.unique(),
+                    {
+                        name: this.name !== "" ? this.name : null,
+                        item: this.item.$id
+                    }
+                );
+            }  catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
                 }
-            );
+                this.loading = false;
+                return;
+            }
 
             this.$emit("fulfillItem", result);
 
             this.dialogOpen = false;
+            this.loading = false;
         },
         async unfulfillItem() {
-            await databases.deleteDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
-                this.item.fulfillment.$id
-            );
+            this.loading = true;
+            this.alert = false;
+            try {
+                await databases.deleteDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
+                    this.item.fulfillment.$id
+                );
+            } catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
+                }
+                this.loading = false;
+                return;
+            }
 
             this.$emit("unfulfillItem");
 
             this.dialogOpen = false;
+            this.loading = false;
         }
     }
 };

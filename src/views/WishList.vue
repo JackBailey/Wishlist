@@ -32,6 +32,15 @@
                     class="description user-item-markdown"
                 />
             </v-card>
+            <v-alert
+                v-if="!loggedIn"
+                type="info"
+                :icon="mdiInformation"
+                elevation="2"
+                class="mt-5"
+                text="Make sure to mark anything as Fulfilled if you've purchased or plan on purchasing any of the items on the list!"
+                color="primary"
+            />
             <div class="items" v-if="list.items.length">
                 <div
                     class="item-price-group"
@@ -244,6 +253,17 @@ main {
                     display: flex;
                     flex-direction: column;
                     gap: 1rem;
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px){
+        .page-content {
+            .list-header {
+                h1 {
+                    flex-direction: column;
+                    align-items: start;
                 }
             }
         }

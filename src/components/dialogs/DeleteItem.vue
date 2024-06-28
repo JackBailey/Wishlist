@@ -21,6 +21,16 @@
                         class="mt-4"
                         color="primary"
                     />
+                    <v-alert 
+                        v-if="alert" 
+                        type="error"
+                        border="left" 
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                        class="mt-4"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -30,6 +40,7 @@
                         @click="deleteItem"
                         variant="elevated"
                         :disabled="item.fulfillment"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
@@ -39,6 +50,7 @@
 
 <script>
 import { mdiAlert, mdiDelete } from "@mdi/js";
+import { AppwriteException } from "appwrite";
 import { databases } from "@/appwrite";
 export default {
     title: "ListDialog",
@@ -58,22 +70,42 @@ export default {
             dialogOpen: false,
             mdiDelete,
             mdiAlert,
-            alert: false
+            alert: false,
+            loading: false
         };
     },
     methods: {
         async deleteItem() {
-            await databases.deleteDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
-                this.item.$id
-            );
+            this.loading = true;
+            this.alert = false;
+            try {
+                await databases.deleteDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
+                    this.item.$id
+                );
+            }  catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
+                }
+                this.loading = false;
+                return;
+            }
 
             this.$emit("removeItem", {
                 item: this.item.$id
             });
 
             this.dialogOpen = false;
+            this.loading = false;
         }
     }
 };

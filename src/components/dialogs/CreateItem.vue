@@ -14,6 +14,16 @@
             <v-card title="Create Item">
                 <v-card-text>
                     <ItemFields v-model:item="newItem" />
+                    <v-alert 
+                        v-if="alert" 
+                        type="error"
+                        border="left" 
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                        class="mt-4"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -22,6 +32,7 @@
                         text="Create"
                         @click="createItem"
                         variant="elevated"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
@@ -30,10 +41,10 @@
 </template>
 
 <script>
+import { AppwriteException, ID } from "appwrite";
+import { mdiAlert, mdiPlus } from "@mdi/js";
 import { databases } from "@/appwrite";
-import { ID } from "appwrite";
 import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
-import { mdiPlus } from "@mdi/js";
 export default {
     title: "ListDialog",
     props: {
@@ -62,7 +73,10 @@ export default {
                 displayPrice: true,
                 priority: "none"
             },
-            mdiPlus
+            mdiPlus,
+            mdiAlert,
+            alert: false,
+            loading: false
         };
     },
     watch: {
@@ -74,21 +88,49 @@ export default {
     },
     methods: {
         async createItem() {
-            const result = await databases.createDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
-                ID.unique(),
-                {
-                    title: this.newItem.title,
-                    description: this.newItem.description || null,
-                    url: this.newItem.url || null,
-                    image: this.newItem.image || null,
-                    price: parseFloat(this.newItem.price) || 0,
-                    displayPrice: this.newItem.displayPrice,
-                    priority: this.newItem.priority,
-                    list: this.listId
+            let result;
+            this.alert = false;
+            this.loading = true;
+
+            if (this.newItem.title === "") {
+                this.alert = {
+                    title: "Error",
+                    text: "Title is required."
+                };
+                this.loading = false;
+                return;
+            }
+            try {
+                result = await databases.createDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
+                    ID.unique(),
+                    {
+                        title: this.newItem.title,
+                        description: this.newItem.description || null,
+                        url: this.newItem.url || null,
+                        image: this.newItem.image || null,
+                        price: parseFloat(this.newItem.price) || 0,
+                        displayPrice: this.newItem.displayPrice,
+                        priority: this.newItem.priority,
+                        list: this.listId
+                    }
+                );
+            } catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
                 }
-            );
+                this.loading = false;
+                return;
+            }
 
             this.$emit("newItem", {
                 item: result
@@ -105,6 +147,7 @@ export default {
             };
 
             this.dialogOpen = false;
+            this.loading = false;
         }
     }
 };

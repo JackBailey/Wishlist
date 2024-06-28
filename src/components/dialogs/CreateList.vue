@@ -14,6 +14,16 @@
             <v-card title="New List">
                 <v-card-text>
                     <ListFields v-model:list="newList" />
+                    <v-alert 
+                        v-if="alert" 
+                        type="error"
+                        border="left" 
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                        class="mt-4"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -22,6 +32,7 @@
                         text="Create"
                         @click="createList"
                         variant="elevated"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
@@ -30,8 +41,8 @@
 </template>
 
 <script>
+import { AppwriteException, ID } from "appwrite";
 import { databases } from "@/appwrite";
-import { ID } from "appwrite";
 import ListFields from "@/components/dialogs/fields/ListFields.vue";
 import { mdiPlus } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
@@ -59,7 +70,9 @@ export default {
             listId: null,
             dialogOpen: false,
             mdiPlus,
-            auth: useAuthStore()
+            auth: useAuthStore(),
+            alert: false,
+            loading: false
         };
     },
     watch: {
@@ -75,12 +88,39 @@ export default {
     },
     methods: {
         async createList() {
-            const list = await databases.createDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                ID.unique(),
-                { ...this.newList, author: this.auth.user.$id }
-            );
+            let list;
+            this.alert = false;
+            this.loading = true;
+            if (this.newList.title === "") {
+                this.alert = {
+                    title: "Error",
+                    text: "Title is required."
+                };
+                this.loading = false;
+                return;
+            }
+            try {
+                list = await databases.createDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                    ID.unique(),
+                    { ...this.newList, author: this.auth.user.$id }
+                );
+            }  catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
+                }
+                this.loading = false;
+                return;
+            }
 
             this.$emit("createList", {
                 list
@@ -92,6 +132,7 @@ export default {
             };
 
             this.dialogOpen = false;
+            this.loading = false;
         }
     }
 };

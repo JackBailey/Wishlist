@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +6,9 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: HomeView
+            redirect: () => {
+                return { name: "lists" };
+            }
         },
         {
             path: "/dash/lists",
@@ -34,6 +35,11 @@ const router = createRouter({
             path: "/dash/login",
             name: "login",
             component: () => import("@/views/dash/LoginPage.vue")
+        },
+        {
+            path: "/dash/error",
+            name: "error",
+            component: () => import("@/views/dash/ErrorPage.vue")
         }
     ]
 });

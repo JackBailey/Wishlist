@@ -13,6 +13,16 @@
             <v-card title="Delete List">
                 <v-card-text>
                     Are you sure you want to delete this list?
+                    <v-alert 
+                        v-if="alert" 
+                        type="error"
+                        border="left" 
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                        class="mt-4"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -21,6 +31,7 @@
                         text="Delete"
                         @click="deleteList"
                         variant="elevated"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
@@ -30,6 +41,7 @@
 
 <script>
 import { mdiAlert, mdiDelete } from "@mdi/js";
+import { AppwriteException } from "appwrite";
 import { databases } from "@/appwrite";
 export default {
     title: "ListDialog",
@@ -49,20 +61,40 @@ export default {
             dialogOpen: false,
             mdiDelete,
             mdiAlert,
-            alert: false
+            alert: false,
+            loading: false
         };
     },
     methods: {
         async deleteList() {
-            await databases.deleteDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                this.list.$id
-            );
+            this.loading = true;
+            this.alert = false;
+            try {
+                await databases.deleteDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                    this.list.$id
+                );
+            }  catch (e) {
+                if (e instanceof AppwriteException){
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
+                }
+                this.loading = false;
+                return;
+            }
 
             this.$router.push("/dash/lists");
 
             this.dialogOpen = false;
+            this.loading = false;
         }
     }
 };

@@ -14,6 +14,16 @@
             <v-card title="Edit List">
                 <v-card-text>
                     <ListFields v-model:list="editedList" />
+                    <v-alert 
+                        v-if="alert" 
+                        type="error" 
+                        dismissible 
+                        border="left"
+                        elevation="2" 
+                        :icon="mdiAlert"
+                        :title="alert.title"
+                        :text="alert.text"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -22,6 +32,7 @@
                         text="Save"
                         @click="updateList"
                         variant="elevated"
+                        :loading="loading"
                     />
                 </v-card-actions>
             </v-card>
@@ -30,9 +41,10 @@
 </template>
 
 <script>
+import { mdiAlert, mdiPencil } from "@mdi/js";
+import { AppwriteException } from "appwrite";
 import { databases } from "@/appwrite";
 import ListFields from "@/components/dialogs/fields/ListFields.vue";
-import { mdiPencil } from "@mdi/js";
 export default {
     title: "ListDialog",
     props: {
@@ -53,7 +65,10 @@ export default {
             editedList: {},
             listId: null,
             dialogOpen: false,
-            mdiPencil
+            mdiPencil,
+            mdiAlert,
+            alert: false,
+            loading: false
         };
     },
     watch: {
@@ -69,18 +84,37 @@ export default {
     },
     methods: {
         async updateList() {
-            await databases.updateDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                this.listId,
-                this.editedList
-            );
+            this.alert = false;
+            this.loading = true;
+            try {
+                await databases.updateDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                    this.listId,
+                    this.editedList
+                );
+            } catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
+                }
+                this.loading = false;
+                return;
+            }
 
             this.$emit("updateList", {
                 listId: this.listId,
                 list: this.editedList
             });
-
+            
+            this.loading = false;
             this.dialogOpen = false;
         }
     }
