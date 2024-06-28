@@ -68,6 +68,14 @@
                 >
                     {{ convertPriority(item.priority).text }}
                 </v-chip>
+                <v-chip
+                    :prepend-icon="mdiWeb"
+                    v-if="item.url"
+                    :href="item.url"
+                    target="_blank"
+                >
+                    {{ getWebsiteHostname(item.url) }}
+                </v-chip>
             </div>
         </div>
         <div class="item-image" v-if="item.image">
@@ -81,7 +89,7 @@
 </template>
 
 <script>
-import { mdiGift, mdiOpenInNew } from "@mdi/js";
+import { mdiGift, mdiOpenInNew, mdiWeb } from "@mdi/js";
 import { convertPriority } from "@/utils";
 import DeleteItem from "@/components/dialogs/DeleteItem.vue";
 import EditItem from "@/components/dialogs/EditItem.vue";
@@ -111,6 +119,7 @@ export default {
             convertPriority,
             mdiGift,
             mdiOpenInNew,
+            mdiWeb,
             auth: useAuthStore(),
             currencyStore: useCurrencyStore()
         };
@@ -121,6 +130,20 @@ export default {
         },
         spoilSurprises() {
             return this.auth.userPrefs.spoilSurprises;
+        }
+    },
+    methods: {
+        getWebsiteHostname(url) {
+            const toTitleCase = (str) => {
+                return str.replace(
+                    /\w\S*/g,
+                    text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+                );
+            };
+            const { hostname } = new URL(url);
+            const parts = hostname.split(".");
+            const website = (parts.length === 2) ? parts[0] : parts[1];
+            return toTitleCase(website);
         }
     }
 };
