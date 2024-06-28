@@ -13,46 +13,7 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Edit Item">
                 <v-card-text>
-                    <v-text-field
-                        label="Title"
-                        v-model="editedItem.title"
-                        maxlength="64"
-                    />
-                    <v-textarea
-                        label="Description"
-                        v-model="editedItem.description"
-                    />
-                    <v-text-field
-                        type="url"
-                        label="Website"
-                        v-model="editedItem.url"
-                        :prepend-icon="mdiLink"
-                    />
-                    <v-text-field
-                        type="url"
-                        label="Image"
-                        v-model="editedItem.image"
-                        :prepend-icon="mdiImage"
-                    />
-                    <v-text-field
-                        type="number"
-                        label="Price"
-                        v-model="editedItem.price"
-                        :prefix="currencySymbol"
-                        :prepend-icon="mdiCash"
-                        step="0.01"
-                    />
-                    <v-switch
-                        label="Show Price"
-                        v-model="editedItem.displayPrice"
-                        color="primary"
-                        inset
-                    />
-                    <v-select
-                        label="Priority"
-                        :items="Object.entries(priorityMap).map((priority) => ({title: priority[1].text, value: priority[0]}))"
-                        v-model="editedItem.priority"
-                    />
+                    <ItemFields v-model:item="editedItem" />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -69,9 +30,9 @@
 </template>
 
 <script>
-import { currencySymbol, priorityMap } from "@/utils";
-import { mdiCash, mdiImage, mdiLink, mdiPencil } from "@mdi/js";
 import { databases } from "@/appwrite";
+import ItemFields from "./fields/ItemFields.vue";
+import { mdiPencil } from "@mdi/js";
 export default {
     title: "ListDialog",
     props: {
@@ -84,11 +45,12 @@ export default {
             default: "elevated"
         }
     },
+    components: {
+        ItemFields
+    },
     data() {
         return {
-            currencySymbol,
             dialogOpen: false,
-            priorityMap,
             editedItem: {
                 title: "",
                 description: "",
@@ -98,10 +60,7 @@ export default {
                 displayPrice: false,
                 priority: "none"
             },
-            mdiPencil,
-            mdiLink,
-            mdiImage,
-            mdiCash
+            mdiPencil
         };
     },
     watch: {

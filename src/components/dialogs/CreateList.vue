@@ -13,14 +13,7 @@
         <template v-slot:default="{ isActive }">
             <v-card title="New List">
                 <v-card-text>
-                    <v-text-field
-                        label="Title"
-                        v-model="newList.title"
-                    />
-                    <v-textarea
-                        label="Description"
-                        v-model="newList.description"
-                    />
+                    <ListFields v-model:list="newList" />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -39,6 +32,7 @@
 <script>
 import { databases } from "@/appwrite";
 import { ID } from "appwrite";
+import ListFields from "@/components/dialogs/fields/ListFields.vue";
 import { mdiPlus } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
 export default {
@@ -52,6 +46,9 @@ export default {
             type: String,
             default: "elevated"
         }
+    },
+    components: {
+        ListFields
     },
     data() {
         return {

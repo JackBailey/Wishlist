@@ -13,14 +13,7 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Edit List">
                 <v-card-text>
-                    <v-text-field
-                        label="Title"
-                        v-model="editedList.title"
-                    />
-                    <v-textarea
-                        label="Description"
-                        v-model="editedList.description"
-                    />
+                    <ListFields v-model:list="editedList" />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
@@ -38,6 +31,7 @@
 
 <script>
 import { databases } from "@/appwrite";
+import ListFields from "./fields/ListFields.vue";
 import { mdiPencil } from "@mdi/js";
 export default {
     title: "ListDialog",
@@ -50,6 +44,9 @@ export default {
             type: String,
             default: "elevated"
         }
+    },
+    components: {
+        ListFields
     },
     data() {
         return {

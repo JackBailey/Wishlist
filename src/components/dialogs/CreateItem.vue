@@ -13,51 +13,13 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Create Item">
                 <v-card-text>
-                    <v-text-field
-                        label="Title"
-                        v-model="newItem.title"
-                    />
-                    <v-textarea
-                        label="Description"
-                        v-model="newItem.description"
-                    />
-                    <v-text-field
-                        type="url"
-                        label="Website"
-                        v-model="newItem.url"
-                        :prepend-icon="mdiLink"
-                    />
-                    <v-text-field
-                        type="url"
-                        label="Image"
-                        v-model="newItem.image"
-                        :prepend-icon="mdiImage"
-                    />
-                    <v-text-field
-                        type="number"
-                        label="Price"
-                        step="0.01"
-                        v-model="newItem.price"
-                        :prefix="currencySymbol"
-                        :prepend-icon="mdiCash"
-                    />
-                    <v-switch
-                        label="Show Price"
-                        v-model="newItem.displayPrice"
-                        color="primary"
-                        inset
-                    />
-                    <v-select
-                        label="Priority"
-                        :items="Object.entries(priorityMap).map((priority) => ({title: priority[1].text, value: priority[0]}))"
-                        v-model="newItem.priority"
-                    />
+                    <ItemFields v-model:item="newItem" />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text="Cancel" @click="isActive.value = false"/>
                     <v-btn
                         color="primary"
-                        text="Save"
+                        text="Create"
                         @click="createItem"
                         variant="elevated"
                     />
@@ -68,10 +30,10 @@
 </template>
 
 <script>
-import { currencySymbol, priorityMap } from "@/utils";
-import { mdiCash, mdiImage, mdiLink, mdiPlus } from "@mdi/js";
 import { databases } from "@/appwrite";
 import { ID } from "appwrite";
+import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
+import { mdiPlus } from "@mdi/js";
 export default {
     title: "ListDialog",
     props: {
@@ -84,12 +46,13 @@ export default {
             default: "elevated"
         }
     },
+    components: {
+        ItemFields
+    },
     data() {
         return {
             listId: null,
             dialogOpen: false,
-            currencySymbol,
-            priorityMap,
             newItem: {
                 title: "",
                 description: "",
@@ -99,10 +62,7 @@ export default {
                 displayPrice: true,
                 priority: "none"
             },
-            mdiPlus,
-            mdiImage,
-            mdiLink,
-            mdiCash
+            mdiPlus
         };
     },
     watch: {
