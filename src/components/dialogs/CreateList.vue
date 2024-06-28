@@ -65,7 +65,8 @@ export default {
         return {
             newList: {
                 title: "",
-                description: ""
+                description: "",
+                currency: "USD"
             },
             listId: null,
             dialogOpen: false,

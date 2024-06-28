@@ -13,7 +13,7 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Edit Item">
                 <v-card-text>
-                    <ItemFields v-model:item="editedItem" />
+                    <ItemFields v-model:item="editedItem" :currency="currency" />
                     <v-alert 
                         v-if="alert" 
                         type="error"
@@ -55,6 +55,10 @@ export default {
         variant: {
             type: String,
             default: "elevated"
+        },
+        currency: {
+            type: String,
+            required: true
         }
     },
     components: {

@@ -29,7 +29,7 @@
         label="Price"
         step="0.01"
         v-model="item.price"
-        :prefix="currencySymbol"
+        :prefix="currencyStore.getCurrency(currency).symbol"
         :prepend-icon="mdiCash"
     />
     <v-switch
@@ -46,8 +46,17 @@
 </template>
 
 <script setup>
-import { currencySymbol, priorityMap } from "@/utils";
 import { mdiCash, mdiImage, mdiLink } from "@mdi/js";
+import { priorityMap } from "@/utils";
+import { useCurrencyStore } from "@/stores/currency";
 
 const item = defineModel("item");
+const currencyStore = useCurrencyStore();
+
+defineProps({
+    currency: {
+        type: String,
+        required: true
+    }
+});
 </script>

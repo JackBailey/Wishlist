@@ -13,7 +13,7 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Edit List">
                 <v-card-text>
-                    <ListFields v-model:list="editedList" />
+                    <ListFields v-model:list="editedList" :currency="currency" />
                     <v-alert 
                         v-if="alert" 
                         type="error" 
@@ -76,7 +76,8 @@ export default {
             if (open === true) {
                 this.editedList = { 
                     title: this.list.title,
-                    description: this.list.description
+                    description: this.list.description,
+                    currency: this.list.currency
                 };
                 this.listId = this.list.$id;
             }

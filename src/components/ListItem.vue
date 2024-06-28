@@ -27,6 +27,7 @@
             <EditItem
                 variant="outlined"
                 :item="item"
+                :currency="currency"
                 @editItem="$emit('editItem', $event)"
                 v-if="loggedIn"
             />
@@ -57,7 +58,7 @@
                     color="primary"
                     variant="elevated"
                 >
-                    <span>{{ currencyFormatter.format(item.price) }}</span>
+                    <span>{{ currencyStore.formatter(this.currency).format(item.price) }}</span>
                 </v-chip>
                 <v-chip
                     v-if="item.priority !== 'none' && item.priority"
@@ -81,17 +82,22 @@
 </template>
 
 <script>
-import { convertPriority, currencyFormatter } from "@/utils";
 import { mdiGift, mdiOpenInNew } from "@mdi/js";
+import { convertPriority } from "@/utils";
 import DeleteItem from "@/components/dialogs/DeleteItem.vue";
 import EditItem from "@/components/dialogs/EditItem.vue";
 import FulfillItem from "@/components/dialogs/FulfillItem.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useCurrencyStore } from "@/stores/currency";
 import VueMarkdown from "vue-markdown-render";
 export default {
     props: {
         item: {
             type: Object,
+            required: true
+        },
+        currency: {
+            type: String,
             required: true
         }
     },
@@ -104,10 +110,10 @@ export default {
     data() {
         return {
             convertPriority,
-            currencyFormatter,
             mdiGift,
             mdiOpenInNew,
-            auth: useAuthStore()
+            auth: useAuthStore(),
+            currencyStore: useCurrencyStore()
         };
     },
     computed: {

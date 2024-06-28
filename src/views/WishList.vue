@@ -54,6 +54,7 @@
                             v-for="item in priceGroup.items"
                             :key="item.$id"
                             :item="item"
+                            :currency="list.currency"
                             @removeItem="removeItem(item.$id)"
                             @editItem="editItem($event)"
                             @fulfillItem="fulfillItem($event)"
@@ -78,13 +79,13 @@
 
 <script>
 import CreateItem from "@/components/dialogs/CreateItem.vue";
-import { currencyFormatter } from "@/utils";
 import { databases } from "@/appwrite";
 import DeleteList from "@/components/dialogs/DeleteList.vue";
 import EditList from "@/components/dialogs/EditList.vue";
 import ListItem from "@/components/ListItem.vue";
 import { mdiInformation } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
+import { useCurrencyStore } from "@/stores/currency";
 import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
@@ -100,6 +101,7 @@ export default {
             fulfilledItems: [],
             listId: this.$route.params.id,
             auth: useAuthStore(),
+            currency: useCurrencyStore(),
             newItem: {
                 title: "",
                 description: "",
@@ -131,9 +133,9 @@ export default {
                     return {
                         price,
                         title:
-                            currencyFormatter.format(lowerBound).split(".")[0] +
+                            this.currency.formatter(this.list.currency).format(lowerBound).split(".")[0] +
                             " - " +
-                            currencyFormatter.format(upperBound).split(".")[0],
+                            this.currency.formatter(this.list.currency).format(upperBound).split(".")[0],
                         items: this.list.items
                             .filter((item) => {
                                 if (item.price >= lowerBound && item.price < upperBound) {
