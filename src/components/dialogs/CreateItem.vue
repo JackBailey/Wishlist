@@ -1,5 +1,9 @@
 <template>
-    <v-dialog max-width="90%" v-model="dialogOpen">
+    <v-dialog
+        v-model="dialogOpen"
+        :max-width="$vuetify.display.mobile ? '100%' : '90%'"
+        :fullscreen="$vuetify.display.mobile ? true : false"
+    >
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
@@ -13,7 +17,7 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Create Item">
                 <v-card-text>
-                    <ItemFields v-model:item="newItem" />
+                    <ItemFields v-model:item="newItem" :currency="list.currency" />
                     <v-alert 
                         v-if="alert" 
                         type="error"

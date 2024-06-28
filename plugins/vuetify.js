@@ -114,6 +114,17 @@ const darkTheme = {
 };
 
 export default createVuetify({
+    display: {
+        mobileBreakpoint: "sm",
+        thresholds: {
+            xs: 0,
+            sm: 768,
+            md: 960,
+            lg: 1280,
+            xl: 1920,
+            xxl: 2560
+        }
+    },
     icons: {
         defaultSet: "mdi",
         aliases,
