@@ -1,8 +1,8 @@
 <template>
-    <main>
+    <v-main>
         <p>hi</p>
         <v-icon :icon="mdiPlus"/>
-    </main>
+    </v-main>
 </template>
 
 <script>

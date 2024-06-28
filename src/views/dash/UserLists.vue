@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <v-main>
         <dialog ref="newListDialog">
             <h2>Create new list</h2>
             <form @submit.prevent="createList"> 
@@ -34,7 +34,7 @@
                 <p>{{ list.description }}</p>
             </a>
         </div>
-    </main>
+    </v-main>
 </template>
 
 <script>
