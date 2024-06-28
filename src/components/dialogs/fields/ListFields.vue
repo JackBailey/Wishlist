@@ -10,6 +10,7 @@
         v-model="list.description"
         maxlength="4096"
         counter
+        hint="This field supports markdown!"
     />
 </template>
 

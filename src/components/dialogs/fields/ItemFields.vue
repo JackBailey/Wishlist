@@ -10,6 +10,7 @@
         v-model="item.description"
         maxlength="256"
         counter
+        hint="This field supports markdown!"
     />
     <v-text-field
         type="url"
