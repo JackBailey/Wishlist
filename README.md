@@ -5,14 +5,29 @@
 
 This is a simple Wishlist app, to keep track of things you'd like. If anyone buys you anything from it, they can mark it down as such, so you don't get duplicates.
 
-Stack:
-- Frontend: Vue + Vite + Vuetify
+## Why did I make this?
+
+- Amazon wishlists are very limited
+- A google doc or notion page lacks a few features, like the author not knowing what has been purchased
+- [Wishthis](https://wishthis.io/) is a good alternative, for this, and this is inspired by it. However, it was a little buggy and I wanted a few things done in a different, more opinionated way.
+
+## Stack
+
+- Frontend: Vue (w/ Vite) + Pinia + Vuetify
     - Familiar, nicely reactive and wanted to try out something like Vuetify - also means I didn't need to design this beforehand.
+    - This isn't the most performant app. I could've gone with a more efficient setup, maybe making use of SSR, but this is a simple app that I'll only use a few times a year. 
 - Backend: Appwrite
     - It's a decent backend that I've wanted to use properly for a while and I didn't want to spend an eternity setting one up myself for this project.
     <br>
     [![wakatime](https://wakatime.com/badge/user/aab4eaf1-e07e-49cd-89d9-234064f91994/project/3ea91771-baff-4b33-b5b5-bb87aca0a66d.svg)](https://wakatime.com/@aab4eaf1-e07e-49cd-89d9-234064f91994/projects/xadijdclth?start=2024-06-29&end=2024-06-29)
 
+## Features
+
+- Multiple users
+- Multiple lists
+- Items can be marked as purchased
+- Author can choose to see what has been purchased or not
+- Multiple currency support (whatever Appwrite supports), can be set per list
 
 
 # Setup
