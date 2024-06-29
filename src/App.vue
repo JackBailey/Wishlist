@@ -40,7 +40,7 @@ export default {
                 script.setAttribute("data-domains", umamiDomains);
             }
             document.head.appendChild(script);
-        };
+        }
     }
 };
 </script>

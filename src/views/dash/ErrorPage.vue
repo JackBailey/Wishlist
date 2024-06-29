@@ -8,7 +8,6 @@
     </v-main>
 </template>
 
-
 <script>
 export default {
     data() {

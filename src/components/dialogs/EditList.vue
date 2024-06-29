@@ -17,20 +17,26 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Edit List">
                 <v-card-text>
-                    <ListFields v-model:list="editedList" :currency="currency" />
-                    <v-alert 
-                        v-if="alert" 
-                        type="error" 
-                        dismissible 
+                    <ListFields
+                        v-model:list="editedList"
+                        :currency="currency"
+                    />
+                    <v-alert
+                        v-if="alert"
+                        type="error"
+                        dismissible
                         border="left"
-                        elevation="2" 
+                        elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text="Cancel" @click="isActive.value = false"/>
+                    <v-btn
+                        text="Cancel"
+                        @click="isActive.value = false"
+                    />
                     <v-btn
                         color="primary"
                         text="Save"
@@ -78,7 +84,7 @@ export default {
     watch: {
         dialogOpen(open) {
             if (open === true) {
-                this.editedList = { 
+                this.editedList = {
                     title: this.list.title,
                     description: this.list.description,
                     currency: this.list.currency
@@ -118,7 +124,7 @@ export default {
                 listId: this.listId,
                 list: this.editedList
             });
-            
+
             this.loading = false;
             this.dialogOpen = false;
         }

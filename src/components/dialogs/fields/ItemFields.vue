@@ -42,7 +42,12 @@
     <v-select
         label="Priority"
         v-model="item.priority"
-        :items="Object.entries(priorityMap).map((priority) => ({title: priority[1].text, value: priority[0]}))"
+        :items="
+            Object.entries(priorityMap).map((priority) => ({
+                title: priority[1].text,
+                value: priority[0]
+            }))
+        "
     />
 </template>
 

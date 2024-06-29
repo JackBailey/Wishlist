@@ -8,11 +8,16 @@
                 v-bind="activatorProps"
                 :prepend-icon="item.fulfillment ? mdiGiftOff : mdiGift"
                 :variant="variant"
-            > {{ item.fulfillment ? item.fulfillment.name : "Fulfill" }} </v-btn>
+            >
+                {{ item.fulfillment ? item.fulfillment.name : "Fulfill" }}
+            </v-btn>
         </template>
-        
+
         <template v-slot:default="{ isActive }">
-            <v-card title="Fulfill Item" v-if="!item.fulfillment">
+            <v-card
+                title="Fulfill Item"
+                v-if="!item.fulfillment"
+            >
                 <v-card-text>
                     <v-text-field
                         label="Your name"
@@ -25,14 +30,20 @@
 
                     <b>Thank you!</b>
 
-                    This will only be shown to other viewers of this list to help prevent duplicates.<br/>
-                    It will <span class="text-error" style="font-weight: bold; text-decoration: underline;">not be shown</span> to the owner of this list.
+                    This will only be shown to other viewers of this list to help prevent
+                    duplicates.<br />
+                    It will
+                    <span
+                        class="text-error"
+                        style="font-weight: bold; text-decoration: underline"
+                    >not be shown</span>
+                    to the owner of this list.
 
-                    <v-alert 
-                        v-if="alert" 
+                    <v-alert
+                        v-if="alert"
                         type="error"
-                        border="left" 
-                        elevation="2" 
+                        border="left"
+                        elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
@@ -40,7 +51,10 @@
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text="Cancel" @click="isActive.value = false"/>
+                    <v-btn
+                        text="Cancel"
+                        @click="isActive.value = false"
+                    />
                     <v-btn
                         color="primary"
                         text="Fulfill"
@@ -50,15 +64,18 @@
                     />
                 </v-card-actions>
             </v-card>
-            <v-card title="Unfulfill Item" v-else>
+            <v-card
+                title="Unfulfill Item"
+                v-else
+            >
                 <v-card-text>
                     Are you sure you want to do this? It can be undone at any time
 
-                    <v-alert 
-                        v-if="alert" 
+                    <v-alert
+                        v-if="alert"
                         type="error"
-                        border="left" 
-                        elevation="2" 
+                        border="left"
+                        elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
@@ -66,7 +83,10 @@
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text="Cancel" @click="isActive.value = false"/>
+                    <v-btn
+                        text="Cancel"
+                        @click="isActive.value = false"
+                    />
                     <v-btn
                         color="primary"
                         text="Unfulfill"
@@ -122,7 +142,7 @@ export default {
                         item: this.item.$id
                     }
                 );
-            }  catch (e) {
+            } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
                         title: "Error",

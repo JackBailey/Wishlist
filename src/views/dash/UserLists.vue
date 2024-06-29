@@ -12,12 +12,18 @@
                     :lines="list.description ? 'two' : 'one'"
                     :prepend-icon="mdiFormatListBulleted"
                 >
-                    <template v-slot:subtitle v-if="list.description">
-                        <VueMarkdown :source="list.description"/>
+                    <template
+                        v-slot:subtitle
+                        v-if="list.description"
+                    >
+                        <VueMarkdown :source="list.description" />
                     </template>
                 </v-list-item>
             </v-list>
-            <div class="no-items" v-else>
+            <div
+                class="no-items"
+                v-else
+            >
                 <v-spacer height="20" />
                 <v-alert
                     type="info"
@@ -32,7 +38,7 @@
 </template>
 
 <script>
-import { mdiFormatListBulleted, mdiInformation  } from "@mdi/js";
+import { mdiFormatListBulleted, mdiInformation } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
 import { databases } from "@/appwrite";
 import { Query } from "appwrite";
@@ -60,9 +66,7 @@ export default {
         this.lists = await databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DB,
             import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-            [
-                Query.equal("author", this.auth.user.$id)
-            ]
+            [Query.equal("author", this.auth.user.$id)]
         );
     }
 };

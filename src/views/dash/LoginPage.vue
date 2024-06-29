@@ -2,7 +2,10 @@
     <v-main>
         <div class="page-content">
             <h1>Log In</h1>
-            <div class="password-login" v-if="methods.includes('password')">
+            <div
+                class="password-login"
+                v-if="methods.includes('password')"
+            >
                 <v-form @submit.prevent="passwordLogin">
                     <v-text-field
                         v-model="passwordLoginDetails.email"
@@ -33,8 +36,8 @@
                     :prepend-icon="methodsData[method].icon"
                     @click="methodsData[method].login()"
                     v-for="method in methods.filter((method) => method !== 'password')"
-                    :key=method
-                >Login with {{methodsData[method].name}}</v-btn>
+                    :key="method"
+                >Login with {{ methodsData[method].name }}</v-btn>
                 <v-alert
                     v-if="methods.length === 0"
                     type="error"
@@ -55,14 +58,18 @@ import { useAuthStore } from "@/stores/auth";
 
 export default {
     data() {
-        const redirectPath = this.$route.query.redirect ? this.$route.query.redirect : "/dash/lists";
+        const redirectPath = this.$route.query.redirect
+            ? this.$route.query.redirect
+            : "/dash/lists";
         const errorRedirect = window.location.origin + "/dash/error";
-        const successRedirect =  window.location.origin + redirectPath;
+        const successRedirect = window.location.origin + redirectPath;
         return {
             auth: useAuthStore(),
             mdiGithub,
             mdiAlert,
-            methods: import.meta.env.VITE_LOGIN_METHODS ? import.meta.env.VITE_LOGIN_METHODS.split(",") : [],
+            methods: import.meta.env.VITE_LOGIN_METHODS
+                ? import.meta.env.VITE_LOGIN_METHODS.split(",")
+                : [],
             redirectPath,
             successRedirect,
             passwordLoginDetails: {

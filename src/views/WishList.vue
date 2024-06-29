@@ -8,7 +8,10 @@
     </v-main>
     <v-main v-else>
         <div class="page-content">
-            <v-card class="list-header" variant="tonal">
+            <v-card
+                class="list-header"
+                variant="tonal"
+            >
                 <h1>
                     {{ list.title }}
                     <v-btn-group
@@ -17,13 +20,19 @@
                         rounded="pill"
                         v-if="wishlistOwner"
                     >
-                        <CreateItem :list="list" @newItem="addItem" />
+                        <CreateItem
+                            :list="list"
+                            @newItem="addItem"
+                        />
                         <EditList
                             :list="list"
                             @updateList="updateList"
                             variant="outlined"
                         />
-                        <DeleteList :list="list" variant="outlined" />
+                        <DeleteList
+                            :list="list"
+                            variant="outlined"
+                        />
                     </v-btn-group>
                 </h1>
                 <vue-markdown
@@ -41,7 +50,10 @@
                 text="Make sure to mark anything as Fulfilled if you've purchased or plan on purchasing any of the items on the list! This will not be shown to the owner of this list."
                 color="primary"
             />
-            <div class="items" v-if="list.items.length">
+            <div
+                class="items"
+                v-if="list.items.length"
+            >
                 <div
                     class="item-price-group"
                     v-for="priceGroup in itemsByPriceGroups"
@@ -64,7 +76,10 @@
                     </div>
                 </div>
             </div>
-            <div class="no-items" v-else>
+            <div
+                class="no-items"
+                v-else
+            >
                 <v-spacer height="20" />
                 <v-alert
                     type="info"
@@ -134,9 +149,15 @@ export default {
                     return {
                         price,
                         title:
-                            this.currency.formatter(this.list.currency).format(lowerBound).split(".")[0] +
+                            this.currency
+                                .formatter(this.list.currency)
+                                .format(lowerBound)
+                                .split(".")[0] +
                             " - " +
-                            this.currency.formatter(this.list.currency).format(upperBound).split(".")[0],
+                            this.currency
+                                .formatter(this.list.currency)
+                                .format(upperBound)
+                                .split(".")[0],
                         items: this.list.items
                             .filter((item) => {
                                 if (item.price >= lowerBound && item.price < upperBound) {
@@ -170,7 +191,7 @@ export default {
             this.$nextTick(() => {
                 const newItem = this.$el.querySelector(`[data-item-id="${data.item.$id}"]`);
                 newItem.scrollIntoView({ behavior: "smooth" });
-            })
+            });
         },
         editItem(data) {
             this.list.items = this.list.items.map((item) => {
@@ -268,7 +289,7 @@ main {
         }
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 768px) {
         .page-content {
             .list-header {
                 h1 {

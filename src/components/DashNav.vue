@@ -17,8 +17,11 @@
             target="_blank"
             :icon="mdiGithub"
         />
-        <v-menu :close-on-content-click="false" v-model="menu">
-            <template v-slot:activator="{props}">
+        <v-menu
+            :close-on-content-click="false"
+            v-model="menu"
+        >
+            <template v-slot:activator="{ props }">
                 <v-btn
                     :prepend-icon="mdiAccountCircle"
                     v-bind="props"
@@ -30,9 +33,7 @@
                     :prepend-icon="mdiCog"
                     v-bind="props"
                     v-else
-                >
-                    Settings
-                </v-btn>
+                > Settings </v-btn>
             </template>
             <v-card>
                 <v-list v-if="auth.user">
@@ -64,13 +65,14 @@
                     </v-list-item>
                 </v-list>
                 <v-card-actions>
-                    <v-spacer/>
+                    <v-spacer />
                     <v-btn
                         @click="logIn"
                         color="primary"
                         v-if="!auth.user"
                         :loading="loadingLoginLogout"
-                    > Log In</v-btn>
+                    >
+                        Log In</v-btn>
 
                     <v-btn
                         @click="logout"
@@ -79,7 +81,7 @@
                         v-else
                     >Logout</v-btn>
                     <v-btn @click="menu = false">Cancel</v-btn>
-                        
+
                     <v-btn
                         @click="updatePrefs"
                         color="primary"

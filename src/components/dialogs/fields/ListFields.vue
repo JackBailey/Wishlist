@@ -16,7 +16,12 @@
     <v-select
         label="Currency"
         v-model="list.currency"
-        :items="currencyStore.currencies.map((currency) => ({title: currency.code, value: currency.code}))"
+        :items="
+            currencyStore.currencies.map((currency) => ({
+                title: currency.code,
+                value: currency.code
+            }))
+        "
     />
 </template>
 

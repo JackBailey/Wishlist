@@ -18,11 +18,11 @@
             <v-card title="New List">
                 <v-card-text>
                     <ListFields v-model:list="newList" />
-                    <v-alert 
-                        v-if="alert" 
+                    <v-alert
+                        v-if="alert"
                         type="error"
-                        border="left" 
-                        elevation="2" 
+                        border="left"
+                        elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
@@ -30,7 +30,10 @@
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text="Cancel" @click="isActive.value = false"/>
+                    <v-btn
+                        text="Cancel"
+                        @click="isActive.value = false"
+                    />
                     <v-btn
                         color="primary"
                         text="Create"
@@ -83,7 +86,7 @@ export default {
     watch: {
         dialogOpen(open) {
             if (open === true) {
-                this.editedList = { 
+                this.editedList = {
                     title: this.list.title,
                     description: this.list.description
                 };
@@ -111,7 +114,7 @@ export default {
                     ID.unique(),
                     { ...this.newList, author: this.auth.user.$id }
                 );
-            }  catch (e) {
+            } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
                         title: "Error",

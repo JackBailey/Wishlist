@@ -4,13 +4,13 @@ import pluginVue from "eslint-plugin-vue";
 
 export default [
     { files: ["**/*.{js,mjs,cjs,vue}"] },
-    { languageOptions: { globals: globals.browser } },
+    { languageOptions: { globals: { ...globals.browser, process: "readonly" } } },
     pluginJs.configs.recommended,
     ...pluginVue.configs["flat/essential"],
     {
-        globals: {
-            process: "readonly"
-        },
+        ignores: ["node_modules/*", "dist/*", ".git/*"]
+    },
+    {
         rules: {
             indent: ["error", 4],
             quotes: ["error", "double"],
@@ -30,7 +30,7 @@ export default [
                 "error",
                 {
                     singleline: {
-                        max: 2
+                        max: 1
                     },
                     multiline: {
                         max: 1

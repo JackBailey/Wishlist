@@ -17,12 +17,15 @@
         <template v-slot:default="{ isActive }">
             <v-card title="Create Item">
                 <v-card-text>
-                    <ItemFields v-model:item="newItem" :currency="list.currency" />
-                    <v-alert 
-                        v-if="alert" 
+                    <ItemFields
+                        v-model:item="newItem"
+                        :currency="list.currency"
+                    />
+                    <v-alert
+                        v-if="alert"
                         type="error"
-                        border="left" 
-                        elevation="2" 
+                        border="left"
+                        elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
@@ -30,7 +33,10 @@
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text="Cancel" @click="isActive.value = false"/>
+                    <v-btn
+                        text="Cancel"
+                        @click="isActive.value = false"
+                    />
                     <v-btn
                         color="primary"
                         text="Create"

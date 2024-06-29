@@ -1,7 +1,9 @@
 <template>
     <v-card
         class="item"
-        :data-fulfilled="!!item.fulfillment && (!wishlistOwner || (wishlistOwner && spoilSurprises))"
+        :data-fulfilled="
+            !!item.fulfillment && (!wishlistOwner || (wishlistOwner && spoilSurprises))
+        "
         variant="tonal"
         :data-item-id="item.$id"
     >
@@ -79,7 +81,10 @@
                 </v-chip>
             </div>
         </div>
-        <div class="item-image" v-if="item.image">
+        <div
+            class="item-image"
+            v-if="item.image"
+        >
             <v-img
                 :src="item.image"
                 alt=""
@@ -142,12 +147,12 @@ export default {
             const toTitleCase = (str) => {
                 return str.replace(
                     /\w\S*/g,
-                    text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+                    (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
                 );
             };
             const { hostname } = new URL(url);
             const parts = hostname.split(".");
-            const website = (parts.length === 2) ? parts[0] : parts[1];
+            const website = parts.length === 2 ? parts[0] : parts[1];
             return toTitleCase(website);
         }
     }
@@ -190,7 +195,7 @@ export default {
         opacity: 0.5;
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 768px) {
         .v-btn-group {
             justify-self: start;
         }
@@ -210,13 +215,13 @@ export default {
             justify-self: center;
         }
         .item-content {
-            grid-row: 2;    
+            grid-row: 2;
         }
         .item-image {
             grid-row: 3;
             grid-column: 1;
             justify-self: center;
-        }        
+        }
     }
 }
 </style>

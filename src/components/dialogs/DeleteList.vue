@@ -17,11 +17,11 @@
             <v-card title="Delete List">
                 <v-card-text>
                     Are you sure you want to delete this list?
-                    <v-alert 
-                        v-if="alert" 
+                    <v-alert
+                        v-if="alert"
                         type="error"
-                        border="left" 
-                        elevation="2" 
+                        border="left"
+                        elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
@@ -29,7 +29,10 @@
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text="Cancel" @click="isActive.value = false"/>
+                    <v-btn
+                        text="Cancel"
+                        @click="isActive.value = false"
+                    />
                     <v-btn
                         color="error"
                         text="Delete"
@@ -79,8 +82,8 @@ export default {
                     import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
                     this.list.$id
                 );
-            }  catch (e) {
-                if (e instanceof AppwriteException){
+            } catch (e) {
+                if (e instanceof AppwriteException) {
                     this.alert = {
                         title: "Error",
                         text: e.message

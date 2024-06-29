@@ -25,11 +25,11 @@
                         class="mt-4"
                         color="primary"
                     />
-                    <v-alert 
-                        v-if="alert" 
+                    <v-alert
+                        v-if="alert"
                         type="error"
-                        border="left" 
-                        elevation="2" 
+                        border="left"
+                        elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
@@ -37,7 +37,10 @@
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text="Cancel" @click="isActive.value = false"/>
+                    <v-btn
+                        text="Cancel"
+                        @click="isActive.value = false"
+                    />
                     <v-btn
                         color="error"
                         text="Delete"
@@ -88,7 +91,7 @@ export default {
                     import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
                     this.item.$id
                 );
-            }  catch (e) {
+            } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
                         title: "Error",
