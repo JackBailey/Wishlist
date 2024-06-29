@@ -3,7 +3,7 @@
         <div class="page-content">
             <h1>Lists <CreateList @createList="createList" /></h1>
             <v-divider />
-            <v-list>
+            <v-list v-if="lists?.documents?.length">
                 <v-list-item
                     v-for="list in lists.documents"
                     :key="list.$id"
@@ -17,14 +17,25 @@
                     </template>
                 </v-list-item>
             </v-list>
+            <div class="no-items" v-else>
+                <v-spacer height="20" />
+                <v-alert
+                    type="info"
+                    :icon="mdiInformation"
+                    elevation="2"
+                    class="mt-5"
+                    text="No lists currently exist. Add some!"
+                />
+            </div>
         </div>
     </v-main>
 </template>
 
 <script>
+import { mdiFormatListBulleted, mdiInformation  } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
 import { databases } from "@/appwrite";
-import { mdiFormatListBulleted } from "@mdi/js";
+import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import VueMarkdown from "vue-markdown-render";
 export default {
@@ -36,6 +47,7 @@ export default {
         return {
             auth: useAuthStore(),
             mdiFormatListBulleted,
+            mdiInformation,
             lists: []
         };
     },
@@ -48,7 +60,9 @@ export default {
         this.lists = await databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DB,
             import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-            []
+            [
+                Query.equal("author", this.auth.user.$id)
+            ]
         );
     }
 };

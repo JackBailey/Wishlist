@@ -1,7 +1,7 @@
 <template>
     <v-card
         class="item"
-        :data-fulfilled="!!item.fulfillment && (!loggedIn || (loggedIn && spoilSurprises))"
+        :data-fulfilled="!!item.fulfillment && (!wishlistOwner || (wishlistOwner && spoilSurprises))"
         variant="tonal"
     >
         <h2>{{ item.title }}</h2>
@@ -11,7 +11,7 @@
             rounded="pill"
         >
             <FulfillItem
-                v-if="!loggedIn || (loggedIn && spoilSurprises && item.fulfillment)"
+                v-if="!wishlistOwner || (wishlistOwner && spoilSurprises && item.fulfillment)"
                 :item="item"
                 @fulfillItem="$emit('fulfillItem', $event)"
                 @unfulfillItem="$emit('unfulfillItem', item.$id)"
@@ -29,13 +29,13 @@
                 :item="item"
                 :currency="currency"
                 @editItem="$emit('editItem', $event)"
-                v-if="loggedIn"
+                v-if="wishlistOwner"
             />
             <DeleteItem
                 variant="outlined"
                 :item="item"
                 @removeItem="$emit('removeItem', $event)"
-                v-if="loggedIn"
+                v-if="wishlistOwner"
             />
         </v-btn-group>
         <div class="item-content">
@@ -106,6 +106,10 @@ export default {
         currency: {
             type: String,
             required: true
+        },
+        wishlistOwner: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
@@ -125,9 +129,6 @@ export default {
         };
     },
     computed: {
-        loggedIn() {
-            return !!this.auth.user;
-        },
         spoilSurprises() {
             return this.auth.userPrefs.spoilSurprises;
         }

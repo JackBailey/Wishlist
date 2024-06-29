@@ -43,7 +43,7 @@
                         text="Delete"
                         @click="deleteItem"
                         variant="elevated"
-                        :disabled="item.fulfillment"
+                        :disabled="!!item.fulfillment"
                         :loading="loading"
                     />
                 </v-card-actions>

@@ -15,7 +15,7 @@
                         base-color="primary"
                         divided
                         rounded="pill"
-                        v-if="loggedIn"
+                        v-if="wishlistOwner"
                     >
                         <CreateItem :list="list" @newItem="addItem" />
                         <EditList
@@ -33,7 +33,7 @@
                 />
             </v-card>
             <v-alert
-                v-if="!loggedIn"
+                v-if="!wishlistOwner"
                 type="info"
                 :icon="mdiInformation"
                 elevation="2"
@@ -54,6 +54,7 @@
                             v-for="item in priceGroup.items"
                             :key="item.$id"
                             :item="item"
+                            :wishlistOwner="wishlistOwner"
                             :currency="list.currency"
                             @removeItem="removeItem(item.$id)"
                             @editItem="editItem($event)"
@@ -116,8 +117,8 @@ export default {
         };
     },
     computed: {
-        loggedIn() {
-            return !!this.auth.user;
+        wishlistOwner() {
+            return this.auth.isLoggedIn && this.auth.user.$id === this.list.author;
         },
         spoilSurprises() {
             return this.auth.userPrefs.spoilSurprises;
@@ -143,7 +144,7 @@ export default {
                                 }
                             })
                             .sort((a, b) => {
-                                if (!this.loggedIn) {
+                                if (!this.wishlistOwner) {
                                     if (a.fulfillment && !b.fulfillment) return 1;
                                     if (!a.fulfillment && b.fulfillment) return -1;
                                 }
