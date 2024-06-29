@@ -32,6 +32,17 @@ client.setEndpoint(endpoint).setProject(project).setKey(apiKey);
 const databases = new sdk.Databases(client);
 
 const prepareDatabases = async () => {
+    console.log("Checking databases");
+
+    const existingDatabases = await databases.list();
+
+    if (existingDatabases.total !== 0) {
+        console.log(
+            "Cancelling: Databases already exist. Please remove before running this script"
+        );
+        return;
+    }
+
     console.log("Setting up databases");
     const database = await databases.create(sdk.ID.unique(), "wishlist");
 
@@ -40,7 +51,9 @@ const prepareDatabases = async () => {
     const itemsCollection = await databases.createCollection(
         database.$id,
         sdk.ID.unique(),
-        "items"
+        "items",
+        [sdk.Permission.read(sdk.Role.any()), sdk.Permission.create(sdk.Role.users())],
+        true
     );
 
     await databases.createStringAttribute(database.$id, itemsCollection.$id, "title", 64, true);
@@ -90,7 +103,9 @@ const prepareDatabases = async () => {
     const listsCollection = await databases.createCollection(
         database.$id,
         sdk.ID.unique(),
-        "lists"
+        "lists",
+        [sdk.Permission.read(sdk.Role.any()), sdk.Permission.create(sdk.Role.users())],
+        true
     );
 
     await databases.createStringAttribute(database.$id, listsCollection.$id, "author", 20, true);
@@ -120,7 +135,8 @@ const prepareDatabases = async () => {
     const fulfillmentsCollection = await databases.createCollection(
         database.$id,
         sdk.ID.unique(),
-        "fulfillments"
+        "fulfillments",
+        [sdk.Permission.read(sdk.Role.any()), sdk.Permission.create(sdk.Role.any())]
     );
 
     await databases.createStringAttribute(
@@ -163,7 +179,8 @@ const prepareDatabases = async () => {
         VITE_APPWRITE_DB: database.$id,
         VITE_APPWRITE_ITEM_COLLECTION: itemsCollection.$id,
         VITE_APPWRITE_LIST_COLLECTION: listsCollection.$id,
-        VITE_APPWRITE_FULFILLMENT_COLLECTION: fulfillmentsCollection.$id
+        VITE_APPWRITE_FULFILLMENT_COLLECTION: fulfillmentsCollection.$id,
+        VITE_LOGIN_METHODS: "github,password"
     };
 
     fs.writeFileSync(

@@ -133,17 +133,21 @@ export default {
         },
         logIn() {
             this.menu = false;
-            account.createOAuth2Session(
-                OAuthProvider.Github,
-                window.location.href,
-                window.location.origin + "/dash/error",
-                ["user"]
-            );
+            this.$router.push({
+                path: "/dash/login",
+                query: {
+                    redirect: this.$route.fullPath
+                }
+            });
         },
-        logout() {
-            account.deleteSession("current");
+        async logout() {
+            await account.deleteSession("current");
             this.auth.user = null;
             this.menu = false;
+            await this.auth.init();
+            if (this.$route.meta && this.$route.meta.requiresAuth) {
+                this.logIn();
+            }
         }
     }
 };

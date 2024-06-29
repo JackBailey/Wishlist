@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +43,20 @@ const router = createRouter({
             component: () => import("@/views/dash/ErrorPage.vue")
         }
     ]
+});
+
+router.beforeEach(async (to, from, next) => {
+    const authStore = useAuthStore();
+    await authStore.init();
+    if (to.meta && to.meta.requiresAuth) {
+        if (!authStore.isLoggedIn) {
+            next({ name: "login", query: { redirect: to.fullPath } });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
 });
 
 export default router;
