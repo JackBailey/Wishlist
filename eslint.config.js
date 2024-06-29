@@ -8,6 +8,9 @@ export default [
     pluginJs.configs.recommended,
     ...pluginVue.configs["flat/essential"],
     {
+        globals: {
+            process: "readonly"
+        },
         rules: {
             indent: ["error", 4],
             quotes: ["error", "double"],

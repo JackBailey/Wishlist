@@ -21,6 +21,11 @@
                     >Login</v-btn>
                 </v-form>
             </div>
+            <v-divider
+                v-if="methods.includes('password') && methods.length > 1"
+                color="border"
+                :thickness="3"
+            />
             <div class="buttons">
                 <v-btn
                     variant="tonal"
@@ -29,14 +34,21 @@
                     v-for="method in methods.filter((method) => method !== 'password')"
                     :key=method
                 >Login with {{methodsData[method].name}}</v-btn>
+                <v-alert
+                    v-if="methods.length === 0"
+                    type="error"
+                    :icon="mdiAlert"
+                    class="mt-4"
+                    text="No login methods are enabled. Please contact the site administrator."
+                />
             </div>
         </div>
     </v-main>
 </template>
 
 <script>
+import { mdiAlert, mdiGithub } from "@mdi/js";
 import { account } from "@/appwrite";
-import { mdiGithub } from "@mdi/js";
 import { OAuthProvider } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 
@@ -48,6 +60,7 @@ export default {
         return {
             auth: useAuthStore(),
             mdiGithub,
+            mdiAlert,
             methods: import.meta.env.VITE_LOGIN_METHODS ? import.meta.env.VITE_LOGIN_METHODS.split(",") : [],
             redirectPath,
             successRedirect,
@@ -116,14 +129,15 @@ export default {
     width: max-content;
     margin: auto;
     .password-login {
-        border-bottom: 1px solid rgba(var(--v-border-color), 0.5);
-        padding-bottom: 1rem;
         width: 100%;
         form {
             button {
                 width: 100%;
             }
         }
+    }
+    hr {
+        width: 100%;
     }
     .buttons {
         width: 100%;
