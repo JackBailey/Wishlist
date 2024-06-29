@@ -38,7 +38,7 @@
                 :icon="mdiInformation"
                 elevation="2"
                 class="mt-5"
-                text="Make sure to mark anything as Fulfilled if you've purchased or plan on purchasing any of the items on the list!"
+                text="Make sure to mark anything as Fulfilled if you've purchased or plan on purchasing any of the items on the list! This will not be shown to the owner of this list."
                 color="primary"
             />
             <div class="items" v-if="list.items.length">
