@@ -25,6 +25,22 @@ export default {
     async mounted() {
         await this.currencyStore.init();
         this.loading = false;
+
+        const {
+            VITE_UMAMI_URL: umamiURL,
+            VITE_UMAMI_ID: umamiID,
+            VITE_UMAMI_DOMAINS: umamiDomains
+        } = import.meta.env;
+
+        if (umamiURL && umamiID) {
+            const script = document.createElement("script");
+            script.src = `${umamiURL}`;
+            script.setAttribute("data-website-id", umamiID);
+            if (umamiDomains) {
+                script.setAttribute("data-domains", umamiDomains);
+            }
+            document.head.appendChild(script);
+        };
     }
 };
 </script>
