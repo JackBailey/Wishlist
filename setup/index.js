@@ -4,6 +4,7 @@ import fs from "fs";
 let apiKey = false;
 let endpoint = "https://cloud.appwrite.io/v1";
 let project = false;
+let overwrite = false;
 
 process.argv.map((arg) => {
     if (arg.startsWith("--key=")) {
@@ -12,6 +13,8 @@ process.argv.map((arg) => {
         endpoint = arg.replace("--endpoint=", "");
     } else if (arg.startsWith("--project=")) {
         project = arg.replace("--project=", "");
+    } else if (arg === "--overwrite") {
+        overwrite = true;
     }
 });
 
@@ -37,10 +40,18 @@ const prepareDatabases = async () => {
     const existingDatabases = await databases.list();
 
     if (existingDatabases.total !== 0) {
-        console.log(
-            "Cancelling: Databases already exist. Please remove before running this script"
-        );
-        return;
+        if (!overwrite) {
+            console.log("Databases already exist. Use --overwrite to delete them");
+            process.exit(1);
+        } else {
+            console.log("Deleting existing databases");
+            await Promise.all(
+                existingDatabases.databases.map(async (database) => {
+                    await databases.delete(database.$id);
+                })
+            );
+            console.log(`${existingDatabases.total} previous databases deleted`);
+        }
     }
 
     console.log("Setting up databases");
