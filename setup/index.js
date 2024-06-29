@@ -200,6 +200,8 @@ const prepareDatabases = async () => {
             .map((key) => `${key}="${config[key]}"`)
             .join("\n")
     );
+
+    console.log("Environment variables written to output.env, please copy them to your .env file");
 };
 
 prepareDatabases();
