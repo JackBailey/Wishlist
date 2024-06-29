@@ -19,6 +19,8 @@
                         v-model="name"
                         autofocus
                         @keyup.enter="fulfillItem"
+                        maxlength="32"
+                        counter
                     />
 
                     <b>Thank you!</b>
