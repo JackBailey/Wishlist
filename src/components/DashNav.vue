@@ -152,6 +152,8 @@ export default {
             await this.auth.init();
             if (this.$route.meta && this.$route.meta.requiresAuth) {
                 this.logIn();
+            } else {
+                this.loadingLoginLogout = false;
             }
         }
     }

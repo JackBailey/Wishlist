@@ -149,7 +149,10 @@ export default {
                                     if (!a.fulfillment && b.fulfillment) return -1;
                                 }
 
-                                return true;
+                                if (this.sort === "price") {
+                                    return a.price - b.price;
+                                }
+                                return a.title.localeCompare(b.title);
                             })
                     };
                 })
@@ -164,6 +167,10 @@ export default {
         },
         addItem(data) {
             this.list.items.push(data.item);
+            this.$nextTick(() => {
+                const newItem = this.$el.querySelector(`[data-item-id="${data.item.$id}"]`);
+                newItem.scrollIntoView({ behavior: "smooth" });
+            })
         },
         editItem(data) {
             this.list.items = this.list.items.map((item) => {

@@ -3,6 +3,7 @@
         class="item"
         :data-fulfilled="!!item.fulfillment && (!wishlistOwner || (wishlistOwner && spoilSurprises))"
         variant="tonal"
+        :data-item-id="item.$id"
     >
         <h2>{{ item.title }}</h2>
         <v-btn-group
@@ -82,7 +83,10 @@
             <v-img
                 :src="item.image"
                 alt=""
-                width="200"
+                height="200"
+                width="auto"
+                max-width="300"
+                position="center right"
             />
         </div>
     </v-card>
@@ -180,15 +184,6 @@ export default {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-        }
-    }
-    .item-image {
-        justify-self: end;
-        img {
-            max-width: 12rem;
-            max-height: 12rem;
-            object-fit: contain;
-            border-radius: 1rem;
         }
     }
     &[data-fulfilled="true"] {

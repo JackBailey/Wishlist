@@ -8,6 +8,7 @@
                         v-model="passwordLoginDetails.email"
                         label="Email"
                         type="email"
+                        autofocus
                     />
                     <v-text-field
                         v-model="passwordLoginDetails.password"
