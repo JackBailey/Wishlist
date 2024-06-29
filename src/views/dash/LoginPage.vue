@@ -2,7 +2,6 @@
     <v-main>
         <div class="page-content">
             <h1>Log In</h1>
-            <p>This page requires you to be logged in</p>
             <div class="password-login" v-if="methods.includes('password')">
                 <v-form @submit.prevent="passwordLogin">
                     <v-text-field

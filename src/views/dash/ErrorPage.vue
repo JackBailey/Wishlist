@@ -3,6 +3,7 @@
         <div class="page-content">
             <h1>Error {{ error.code }} - {{ error.type }}</h1>
             <p>{{ error.message }}</p>
+            <v-btn to="/dash/login">Try again</v-btn>
         </div>
     </v-main>
 </template>
