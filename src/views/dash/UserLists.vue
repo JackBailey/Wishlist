@@ -3,7 +3,15 @@
         <div class="page-content">
             <h1>Lists <CreateList @createList="createList" /></h1>
             <v-divider />
-            <v-list v-if="lists?.documents?.length">
+            <div
+                class="loaders"
+                v-if="loading"
+            >
+                <v-skeleton-loader type="list-item-two-line"/>
+                <v-skeleton-loader type="list-item-two-line"/>
+                <v-skeleton-loader type="list-item-two-line"/>
+            </div>
+            <v-list v-else-if="lists?.documents?.length">
                 <v-list-item
                     v-for="list in lists.documents"
                     :key="list.$id"
@@ -54,7 +62,8 @@ export default {
             auth: useAuthStore(),
             mdiFormatListBulleted,
             mdiInformation,
-            lists: []
+            lists: [],
+            loading: true
         };
     },
     methods: {
@@ -68,6 +77,7 @@ export default {
             import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
             [Query.equal("author", this.auth.user.$id)]
         );
+        this.loading = false;
     }
 };
 </script>
