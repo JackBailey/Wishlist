@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-        max-width="90%"
+        max-width="500px"
         v-model="dialogOpen"
     >
         <template v-slot:activator="{ props: activatorProps }">
