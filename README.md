@@ -1,22 +1,8 @@
-# wishlist
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## TODO
-
-- [ ] Appwrite setup
-    - [ ] Appwrite perms
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+# Wishlist
 
 # Setup
 
-This project uses Appwrite as a backend. This is because it's a decent backend that I've wanted to use and I didn't want to spend an eternity setting one up myself for this project.
+This project uses Appwrite as a backend. This is because it's a decent backend that I've wanted to use properly for a while and I didn't want to spend an eternity setting one up myself for this project.
 <br><br>
 [![wakatime](https://wakatime.com/badge/user/aab4eaf1-e07e-49cd-89d9-234064f91994/project/3ea91771-baff-4b33-b5b5-bb87aca0a66d.svg)](https://wakatime.com/badge/user/aab4eaf1-e07e-49cd-89d9-234064f91994/project/3ea91771-baff-4b33-b5b5-bb87aca0a66d)
 
@@ -42,12 +28,24 @@ pnpm run setup --key=YOUR-API-KEY --project=YOUR-PROJECT-ID --endpoint=https://c
 
 This will then go through and set up the collections you need. You then need to set up the authentication settings depending on your preferences.
 
+Then, move the created `output.env` file to `.env`.
 
+You can also set the below options in the `.env` file:
 
+- `VITE_LOGIN_METHODS`: github,password
+    - Currently only supports the above options. Both need to be set up within Appwrite.
+- `VITE_UMAMI_URL`: https://analytics.example.com/script.js
+- `VITE_UMAMI_ID`: f79676da-d2c5-49dd-a35b-f829764b44c5
+- `VITE_UMAMI_DOMAINS`: example.com
 
-## Other notes
+### Appwrite App config
 
-A fair bit of this project uses British English. I'm sorry if this offends you, but I'm British and I'm not going to change it. (Namely, the spelling of fulfillment).
+Then, create a "Web" app within Appwrite, to your liking.
+
+It should then all be set up and ready to go.
+
+Just build it and deploy it to wherever you want. It doesn't need any backup setup (other than Appwrite), but you will need SPA support for vue-router.
+
 
 ## Project Setup
 
@@ -72,3 +70,8 @@ pnpm build
 ```sh
 pnpm lint
 ```
+
+
+## Other notes
+
+A fair bit of this project uses British English (Namely, the spelling of fulfillment). If this offends you, too bad. At least the use of "color" is consistent.
