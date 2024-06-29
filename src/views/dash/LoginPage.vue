@@ -125,8 +125,8 @@ export default {
     gap: 1rem;
     align-items: center;
     text-align: center;
-    min-width: 400px;
-    width: max-content;
+    width: 400px;
+    max-width: 90%;
     margin: auto;
     .password-login {
         width: 100%;
