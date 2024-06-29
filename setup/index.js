@@ -147,7 +147,12 @@ const prepareDatabases = async () => {
         database.$id,
         sdk.ID.unique(),
         "fulfillments",
-        [sdk.Permission.read(sdk.Role.any()), sdk.Permission.create(sdk.Role.any())]
+        [
+            sdk.Permission.read(sdk.Role.any()),
+            sdk.Permission.create(sdk.Role.any()),
+            sdk.Permission.update(sdk.Role.any()),
+            sdk.Permission.delete(sdk.Role.any())
+        ]
     );
 
     await databases.createStringAttribute(

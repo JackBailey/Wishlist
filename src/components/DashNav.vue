@@ -37,8 +37,8 @@
             <v-card>
                 <v-list v-if="auth.user">
                     <v-list-item
-                        :prepend-avatar="auth.avatar.href"
-                        :subtitle="auth.user.name ? auth.user.email : false"
+                        :prepend-avatar="auth.user.name ? auth.avatar.href : null"
+                        :subtitle="auth.user.name ? auth.user.email : null"
                         :title="auth.user.name || auth.user.email"
                     />
                 </v-list>
@@ -69,11 +69,13 @@
                         @click="logIn"
                         color="primary"
                         v-if="!auth.user"
+                        :loading="loadingLoginLogout"
                     > Log In</v-btn>
 
                     <v-btn
                         @click="logout"
                         color="error"
+                        :loading="loadingLoginLogout"
                         v-else
                     >Logout</v-btn>
                     <v-btn @click="menu = false">Cancel</v-btn>
@@ -99,7 +101,6 @@
 <script>
 import { mdiAccountCircle, mdiCog, mdiGift, mdiGithub, mdiMenu } from "@mdi/js";
 import { account } from "@/appwrite";
-import { OAuthProvider } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 export default {
     props: {
@@ -116,7 +117,8 @@ export default {
             mdiGift,
             mdiGithub,
             auth: useAuthStore(),
-            menu: false
+            menu: false,
+            loadingLoginLogout: false
         };
     },
     methods: {
@@ -132,6 +134,7 @@ export default {
             this.menu = false;
         },
         logIn() {
+            this.loadingLoginLogout = true;
             this.menu = false;
             this.$router.push({
                 path: "/dash/login",
@@ -139,8 +142,10 @@ export default {
                     redirect: this.$route.fullPath
                 }
             });
+            this.loadingLoginLogout = false;
         },
         async logout() {
+            this.loadingLoginLogout = true;
             await account.deleteSession("current");
             this.auth.user = null;
             this.menu = false;

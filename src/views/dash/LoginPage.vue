@@ -15,7 +15,11 @@
                         label="Password"
                         type="password"
                     />
-                    <v-btn type="submit" color="primary">Login</v-btn>
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loadingLogin"
+                    >Login</v-btn>
                 </v-form>
             </div>
             <div class="buttons">
@@ -65,17 +69,26 @@ export default {
                         );
                     }
                 }
-            }
+            },
+            loadingLogin: false
         };
     },
     methods: {
         async passwordLogin() {
-            await account.createEmailPasswordSession(
-                this.passwordLoginDetails.email,
-                this.passwordLoginDetails.password
-            );
+            this.loadingLogin = true;
+            try {
+                await account.createEmailPasswordSession(
+                    this.passwordLoginDetails.email,
+                    this.passwordLoginDetails.password
+                );
+            } catch (error) {
+                alert(error);
 
-            this.auth.init();
+                this.loadingLogin = false;
+                return;
+            }
+
+            await this.auth.init();
             this.$router.push({
                 path: this.redirectPath
             });
