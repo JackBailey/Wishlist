@@ -4,7 +4,7 @@
 
 This project uses Appwrite as a backend. This is because it's a decent backend that I've wanted to use properly for a while and I didn't want to spend an eternity setting one up myself for this project.
 <br><br>
-[![wakatime](https://wakatime.com/badge/user/aab4eaf1-e07e-49cd-89d9-234064f91994/project/3ea91771-baff-4b33-b5b5-bb87aca0a66d.svg)](https://wakatime.com/badge/user/aab4eaf1-e07e-49cd-89d9-234064f91994/project/3ea91771-baff-4b33-b5b5-bb87aca0a66d)
+[![wakatime](https://wakatime.com/badge/user/aab4eaf1-e07e-49cd-89d9-234064f91994/project/3ea91771-baff-4b33-b5b5-bb87aca0a66d.svg)](https://wakatime.com/@aab4eaf1-e07e-49cd-89d9-234064f91994/projects/xadijdclth?start=2024-06-29&end=2024-06-29)
 
 ## Appwrite
 
