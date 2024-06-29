@@ -1,34 +1,170 @@
 @font-face {
     font-family: "Quicksand";
-    font-weight: 400;
-    src: url("/fonts/Quicksand/Quicksand-Regular.woff2") format("woff2"),
-        url("/fonts/Quicksand/Quicksand-Regular.woff") format("woff"),
-        url("/fonts/Quicksand/Quicksand-Regular.ttf") format("ttf");
+    font-weight: 300;
+    font-style: normal;
+    src: url("/fonts/quicksand/Quicksand-light.eot");
+    src:
+        url("/fonts/quicksand/Quicksand-light.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/quicksand/Quicksand-light.woff2") format("woff2"),
+        url("/fonts/quicksand/Quicksand-light.woff") format("woff"),
+        url("/fonts/quicksand/Quicksand-light.ttf") format("truetype");
     font-display: swap;
 }
-
+@font-face {
+    font-family: "Quicksand";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/quicksand/Quicksand-Regular.eot");
+    src:
+        url("/fonts/quicksand/Quicksand-Regular.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/quicksand/Quicksand-Regular.woff2") format("woff2"),
+        url("/fonts/quicksand/Quicksand-Regular.woff") format("woff"),
+        url("/fonts/quicksand/Quicksand-Regular.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Quicksand";
+    font-weight: 500;
+    font-style: normal;
+    src: url("/fonts/quicksand/Quicksand-Medium.eot");
+    src:
+        url("/fonts/quicksand/Quicksand-Medium.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/quicksand/Quicksand-Medium.woff2") format("woff2"),
+        url("/fonts/quicksand/Quicksand-Medium.woff") format("woff"),
+        url("/fonts/quicksand/Quicksand-Medium.ttf") format("truetype");
+    font-display: swap;
+}
 @font-face {
     font-family: "Quicksand";
     font-weight: 600;
-    src: url("/fonts/Quicksand/Quicksand-SemiBold.woff2") format("woff2"),
-        url("/fonts/Quicksand/Quicksand-SemiBold.woff") format("woff"),
-        url("/fonts/Quicksand/Quicksand-SemiBold.ttf") format("ttf");
+    font-style: normal;
+    src: url("/fonts/quicksand/Quicksand-SemiBold.eot");
+    src:
+        url("/fonts/quicksand/Quicksand-SemiBold.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/quicksand/Quicksand-SemiBold.woff2") format("woff2"),
+        url("/fonts/quicksand/Quicksand-SemiBold.woff") format("woff"),
+        url("/fonts/quicksand/Quicksand-SemiBold.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Quicksand";
+    font-weight: 700;
+    font-style: normal;
+    src: url("/fonts/quicksand/Quicksand-Bold.eot");
+    src:
+        url("/fonts/quicksand/Quicksand-Bold.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/quicksand/Quicksand-Bold.woff2") format("woff2"),
+        url("/fonts/quicksand/Quicksand-Bold.woff") format("woff"),
+        url("/fonts/quicksand/Quicksand-Bold.ttf") format("truetype");
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Poppins";
+    font-weight: 100;
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-Thin.eot");
+    src:
+        url("/fonts/Poppins/Poppins-Thin.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-Thin.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-Thin.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-Thin.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 200;
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-ExtraLight.eot");
+    src:
+        url("/fonts/Poppins/Poppins-ExtraLight.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-ExtraLight.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-ExtraLight.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-ExtraLight.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 300;
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-Light.eot");
+    src:
+        url("/fonts/Poppins/Poppins-Light.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-Light.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-Light.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-Light.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-Regular.eot");
+    src:
+        url("/fonts/Poppins/Poppins-Regular.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-Regular.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-Regular.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+    font-display: swap;
+}
 @font-face {
     font-family: "Poppins";
     font-weight: 500;
-    src: url("/fonts/Poppins/Poppins-Medium.ttf") format("ttf");
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-Medium.eot");
+    src:
+        url("/fonts/Poppins/Poppins-Medium.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-Medium.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-Medium.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-Medium.ttf") format("truetype");
     font-display: swap;
 }
-
 @font-face {
     font-family: "Poppins";
     font-weight: 600;
-    src: url("/fonts/Poppins/Poppins-SemiBold.woff2") format("woff2"),
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-SemiBold.eot");
+    src:
+        url("/fonts/Poppins/Poppins-SemiBold.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-SemiBold.woff2") format("woff2"),
         url("/fonts/Poppins/Poppins-SemiBold.woff") format("woff"),
-        url("/fonts/Poppins/Poppins-SemiBold.ttf") format("ttf");
+        url("/fonts/Poppins/Poppins-SemiBold.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 700;
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-Bold.eot");
+    src:
+        url("/fonts/Poppins/Poppins-Bold.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-Bold.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-Bold.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-Bold.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 800;
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-ExtraBold.eot");
+    src:
+        url("/fonts/Poppins/Poppins-ExtraBold.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-ExtraBold.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-ExtraBold.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-ExtraBold.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 900;
+    font-style: normal;
+    src: url("/fonts/Poppins/Poppins-Black.eot");
+    src:
+        url("/fonts/Poppins/Poppins-Black.eot?#iefix") format("embedded-opentype"),
+        url("/fonts/Poppins/Poppins-Black.woff2") format("woff2"),
+        url("/fonts/Poppins/Poppins-Black.woff") format("woff"),
+        url("/fonts/Poppins/Poppins-Black.ttf") format("truetype");
     font-display: swap;
 }
 
@@ -128,7 +264,7 @@ h6,
 
 .user-item-markdown a {
     background-color: transparent;
-    color: #5b42f5;
+    color: rgb(var(--v-theme-primary));
     text-decoration: underline;
 }
 
@@ -335,7 +471,14 @@ h6,
 .user-item-markdown kbd {
     display: inline-block;
     padding: 3px 5px;
-    font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    font:
+        11px ui-monospace,
+        SFMono-Regular,
+        SF Mono,
+        Menlo,
+        Consolas,
+        Liberation Mono,
+        monospace;
     line-height: 10px;
     color: #e6edf3;
     vertical-align: middle;
@@ -424,14 +567,28 @@ h6,
 .user-item-markdown tt,
 .user-item-markdown code,
 .user-item-markdown samp {
-    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        SF Mono,
+        Menlo,
+        Consolas,
+        Liberation Mono,
+        monospace;
     font-size: 12px;
 }
 
 .user-item-markdown pre {
     margin-top: 0;
     margin-bottom: 0;
-    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        SF Mono,
+        Menlo,
+        Consolas,
+        Liberation Mono,
+        monospace;
     font-size: 12px;
     word-wrap: normal;
 }
@@ -1102,5 +1259,5 @@ h6,
 }
 
 .expressive-code {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
