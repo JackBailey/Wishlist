@@ -91,7 +91,7 @@
                 height="200"
                 width="auto"
                 max-width="300"
-                "position="`center ${$vuetify.display.mobile ? 'center' : 'right'}`"
+                :position="`center ${$vuetify.display.mobile ? 'center' : 'right'}`"
             />
         </div>
     </v-card>
