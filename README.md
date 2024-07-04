@@ -9,7 +9,7 @@ This is a simple Wishlist app, to keep track of things you'd like. If anyone buy
 
 - Amazon wishlists are very limited
 - A google doc or notion page lacks a few features, like the author not knowing what has been purchased
-- [Wishthis](https://wishthis.io/) is a good alternative, for this, and this is inspired by it. However, it was a little buggy and I wanted a few things done in a different, more opinionated way.
+- [wishthis](https://github.com/wishthis/wishthis) is a good alternative, for this, and this is inspired by it. However, it was a little buggy and I wanted a few things done in a different, more opinionated way.
 
 ## Stack
 
