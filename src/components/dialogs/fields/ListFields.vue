@@ -9,7 +9,7 @@
     <v-textarea
         label="Description"
         v-model="list.description"
-        maxlength="4096"
+        maxlength="4000"
         counter
         hint="This field supports markdown!"
     />

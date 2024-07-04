@@ -73,7 +73,7 @@ const prepareDatabases = async () => {
         database.$id,
         itemsCollection.$id,
         "description",
-        256,
+        4000,
         false,
         null
     );
@@ -127,7 +127,7 @@ const prepareDatabases = async () => {
         database.$id,
         listsCollection.$id,
         "description",
-        4096,
+        4000,
         false,
         null
     );
