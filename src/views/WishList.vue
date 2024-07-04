@@ -190,7 +190,11 @@ export default {
             this.list.items.push(data.item);
             this.$nextTick(() => {
                 const newItem = this.$el.querySelector(`[data-item-id="${data.item.$id}"]`);
-                newItem.scrollIntoView({ behavior: "smooth" });
+                newItem.scrollIntoView({
+                    behavior: "auto",
+                    block: "center",
+                    inline: "center"
+                });
             });
         },
         editItem(data) {
