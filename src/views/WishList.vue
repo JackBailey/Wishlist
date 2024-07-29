@@ -41,6 +41,14 @@
                     class="description user-item-markdown"
                 />
             </v-card>
+            <div class="filters">
+                <v-switch
+                    label="Show Fulfilled"
+                    v-model="showFulfilled"
+                    color="primary"
+                    inset
+                />
+            </div>
             <v-alert
                 v-if="!wishlistOwner"
                 type="info"
@@ -128,7 +136,8 @@ export default {
             },
             sort: "price",
             mdiInformation,
-            priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]
+            priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
+            showFulfilled: localStorage.getItem("showFulfilled") !== "false"
         };
     },
     computed: {
@@ -160,6 +169,7 @@ export default {
                                 .split(".")[0],
                         items: this.list.items
                             .filter((item) => {
+                                if (!this.showFulfilled && item.fulfillment) return false;
                                 if (item.price >= lowerBound && item.price < upperBound) {
                                     return item;
                                 }
@@ -225,6 +235,11 @@ export default {
             });
         }
     },
+    watch: {
+        showFulfilled(val) {
+            localStorage.setItem("showFulfilled", val);
+        }
+    },
     async mounted() {
         let list = await databases.getDocument(
             import.meta.env.VITE_APPWRITE_DB,
@@ -272,6 +287,11 @@ main {
             .description {
                 margin-top: 1rem;
             }
+        }
+
+        .filters {
+            display: flex;
+            justify-content: flex-end;
         }
 
         .items {

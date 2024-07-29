@@ -34,6 +34,12 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-btn
+                        text="Auto-fill"
+                        :prepend-icon="mdiRobot"
+                        variant="tonal"
+                        @click="autoFill"
+                    />
+                    <v-btn
                         text="Cancel"
                         @click="isActive.value = false"
                     />
@@ -52,7 +58,7 @@
 
 <script>
 import { AppwriteException, ID } from "appwrite";
-import { mdiAlert, mdiPlus } from "@mdi/js";
+import { mdiAlert, mdiPlus, mdiRobot } from "@mdi/js";
 import { databases } from "@/appwrite";
 import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
 export default {
@@ -85,6 +91,7 @@ export default {
             },
             mdiPlus,
             mdiAlert,
+            mdiRobot,
             alert: false,
             loading: false
         };
@@ -97,6 +104,17 @@ export default {
         }
     },
     methods: {
+        async autoFill() {
+            const url = this.newItem.url;
+            console.log(url);
+            let response = await fetch(url);
+            let html = await response.text();
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, "text/html");
+            let metaImage = doc.querySelector("meta[property=\"og:image\"]");
+
+            console.log(metaImage);
+        },
         async createItem() {
             let result;
             this.alert = false;
