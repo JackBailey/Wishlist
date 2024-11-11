@@ -38,6 +38,7 @@
                         :prepend-icon="mdiRobot"
                         variant="tonal"
                         @click="autoFill"
+                        :loading="autofillLoading"
                     />
                     <v-btn
                         text="Cancel"
@@ -51,6 +52,10 @@
                         :loading="loading"
                     />
                 </v-card-actions>
+                <v-alert
+                    :text="autofillError"
+                    v-if="autofillError"
+                />
             </v-card>
         </template>
     </v-dialog>
@@ -58,8 +63,8 @@
 
 <script>
 import { AppwriteException, ID } from "appwrite";
+import { databases, functions } from "@/appwrite";
 import { mdiAlert, mdiPlus, mdiRobot } from "@mdi/js";
-import { databases } from "@/appwrite";
 import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
 export default {
     title: "ListDialog",
@@ -93,11 +98,14 @@ export default {
             mdiAlert,
             mdiRobot,
             alert: false,
-            loading: false
+            loading: false,
+            autofillLoading: false,
+            autofillError: false
         };
     },
     watch: {
         dialogOpen(open) {
+            this.autofillError = false;
             if (open === true) {
                 this.listId = this.list.$id;
             }
@@ -106,14 +114,41 @@ export default {
     methods: {
         async autoFill() {
             const url = this.newItem.url;
-            console.log(url);
-            let response = await fetch(url);
-            let html = await response.text();
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(html, "text/html");
-            let metaImage = doc.querySelector("meta[property=\"og:image\"]");
+            if (!url) {
+                this.autofillError = "Please enter a URL to use the auto-fill feature.";
+                return;
+            }
+            this.autofillError = false;
+            this.autofillLoading = true;
 
-            console.log(metaImage);
+            try {
+                const result = await functions.createExecution(
+                    "get-autofill-data",
+                    JSON.stringify({
+                        url
+                    }),
+                    false
+                );
+
+                console.log(result);
+
+                if (result.status === "completed") {
+                    const responseData = JSON.parse(result.responseBody);
+                    if (!responseData.hasOwnProperty("error")) {
+                        this.newItem.title = responseData.title;
+                        this.newItem.description = responseData.description;
+                        this.newItem.image = responseData.image;
+                    } else {
+                        console.error("Error:" , responseData);
+                        this.autofillError = responseData.error;
+                    }
+
+                }
+            } catch (e) {
+                console.error("Error:" , e);
+            }
+
+            this.autofillLoading = false;
         },
         async createItem() {
             let result;

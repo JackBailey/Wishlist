@@ -1,4 +1,4 @@
-import { Account, Avatars, Client, Databases, Locale } from "appwrite";
+import { Account, Avatars, Client, Databases, Functions, Locale } from "appwrite";
 
 const host = import.meta.env.VITE_APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1";
 
@@ -10,6 +10,8 @@ const databases = new Databases(client);
 
 const avatars = new Avatars(client);
 
+const functions = new Functions(client);
+
 const locale = new Locale(client);
 
-export { avatars, client, account, databases, locale };
+export { avatars, client, account, databases, functions, locale };
