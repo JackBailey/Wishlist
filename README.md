@@ -92,8 +92,3 @@ pnpm build
 ```sh
 pnpm format && pnpm lint
 ```
-
-
-# Other notes
-
-A fair bit of this project uses British English (Namely, the spelling of fulfillment). If this offends you, too bad. At least the use of "color" is consistent.
