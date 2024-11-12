@@ -8,7 +8,7 @@ const router = createRouter({
             path: "/",
             name: "home",
             redirect: () => {
-                return { name: "Register" };
+                return { name: "Lists" };
             }
         },
         {

@@ -47,6 +47,7 @@
                     v-model="showFulfilled"
                     color="primary"
                     inset
+                    v-if="spoilSurprises"
                 />
             </div>
             <v-alert
@@ -169,7 +170,7 @@ export default {
                                 .split(".")[0],
                         items: this.list.items
                             .filter((item) => {
-                                if (!this.showFulfilled && item.fulfillment) return false;
+                                if (!this.showFulfilled && item.fulfillment && this.spoilSurprises) return false;
                                 if (item.price >= lowerBound && item.price < upperBound) {
                                     return item;
                                 }
