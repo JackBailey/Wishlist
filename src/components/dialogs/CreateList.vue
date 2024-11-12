@@ -11,6 +11,8 @@
                 base-color="primary"
                 size="small"
                 :variant="variant"
+                :disabled="disabled"
+                title="Create a new list"
             />
         </template>
 
@@ -63,6 +65,10 @@ export default {
         variant: {
             type: String,
             default: "elevated"
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     components: {

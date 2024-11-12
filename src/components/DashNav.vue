@@ -4,13 +4,17 @@
             <v-list>
                 <v-list-item
                     :prepend-icon="mdiGift"
-                    to="/dash/lists"
-                    v-if="auth.user"
                 >
-                    Wishlists
+                    Readyto.gift
                 </v-list-item>
             </v-list>
         </template>
+
+        <v-btn
+            to="/dash/lists"
+            v-if="auth.user"
+            :icon="mdiFormatListBulleted"
+        />
 
         <v-btn
             href="https://github.com/JackBailey/Wishlist"
@@ -101,7 +105,7 @@
 </template>
 
 <script>
-import { mdiAccountCircle, mdiCog, mdiGift, mdiGithub, mdiMenu } from "@mdi/js";
+import { mdiAccountCircle, mdiCog, mdiFormatListBulleted, mdiGift, mdiGithub, mdiMenu } from "@mdi/js";
 import { account } from "@/appwrite";
 import { useAuthStore } from "@/stores/auth";
 export default {
@@ -118,6 +122,7 @@ export default {
             mdiCog,
             mdiGift,
             mdiGithub,
+            mdiFormatListBulleted,
             auth: useAuthStore(),
             menu: false,
             loadingLoginLogout: false

@@ -1,15 +1,59 @@
 <template>
     <v-main>
         <div class="page-content">
-            <h1>Lists <CreateList @createList="createList" /></h1>
+            <v-card
+                :prepend-icon="mdiInformation"
+                variant="elevated"
+                class="mb-5"
+                color="warning"
+                v-if="auth.user.emailVerification === false"
+            >
+                <template v-slot:title>
+                    <span class="font-weight-black">Please verify your email address to create lists.</span>
+                </template>
+                <v-card-text class="pt-4">
+                    <v-btn
+                        color="surface-variant"
+                        variant="flat"
+                        @click="verifyEmail"
+                    >Send Verification Email</v-btn>
+                    <v-dialog
+                        max-width="500"
+                        v-model="verificationDialog"
+                    >
+                        <v-card>
+                            <v-card-text>
+                                A verification email has been sent to {{ auth.user.email }}. Please check your inbox and spam folder, the link will be valid for 7 days.
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer/>
+
+                                <v-btn
+                                    text="Close"
+                                    @click="verificationDialog = false"
+                                />
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-card-text>
+            </v-card>
+            <h1>
+                Lists
+                <CreateList
+                    @createList="createList"
+                    :disabled="auth.user.emailVerification === false"
+                />
+                <!-- TODO: Properly disable -->
+            </h1>
             <v-divider />
             <div
                 class="loaders"
                 v-if="loading"
             >
-                <v-skeleton-loader type="list-item-two-line"/>
-                <v-skeleton-loader type="list-item-two-line"/>
-                <v-skeleton-loader type="list-item-two-line"/>
+                <v-skeleton-loader type="list-item-two-line" />
+                <v-skeleton-loader type="list-item-two-line" />
+                <v-skeleton-loader type="list-item-two-line" />
             </div>
             <v-list v-else-if="lists?.documents?.length">
                 <v-list-item
@@ -46,9 +90,9 @@
 </template>
 
 <script>
+import { account, databases } from "@/appwrite";
 import { mdiFormatListBulleted, mdiInformation } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
-import { databases } from "@/appwrite";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import VueMarkdown from "vue-markdown-render";
@@ -63,12 +107,24 @@ export default {
             mdiFormatListBulleted,
             mdiInformation,
             lists: [],
-            loading: true
+            loading: true,
+            verificationDialog: false
         };
     },
     methods: {
         createList(data) {
             this.lists.documents.push(data.list);
+        },
+        async verifyEmail() {
+            try {
+                await account.createVerification(
+                    "https://readyto.gift/dash/verify"
+                );
+
+                this.verificationDialog = true;
+            } catch (error) {
+                alert(error);
+            }
         }
     },
     async mounted() {

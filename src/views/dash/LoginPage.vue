@@ -46,6 +46,20 @@
                     text="No login methods are enabled. Please contact the site administrator."
                 />
             </div>
+            <v-alert
+                :type="alert.type || 'error'"
+                border="left"
+                elevation="2"
+                v-if="alert"
+                :icon="alert.icon || mdiAlert"
+                :title="alert.title"
+                :text="alert.text"
+                class="mt-4"
+            />
+            <p>
+                Don't have an account?
+                <router-link :to="`/dash/register?redirect=${redirectPath}`">Register here</router-link>
+            </p>
         </div>
     </v-main>
 </template>
@@ -90,7 +104,8 @@ export default {
                     }
                 }
             },
-            loadingLogin: false
+            loadingLogin: false,
+            alert: false
         };
     },
     methods: {
@@ -102,7 +117,10 @@ export default {
                     this.passwordLoginDetails.password
                 );
             } catch (error) {
-                alert(error);
+                this.alert = {
+                    title: "Error",
+                    text: error.message
+                };
 
                 this.loadingLogin = false;
                 return;
@@ -132,7 +150,6 @@ export default {
     justify-content: center;
     gap: 1rem;
     align-items: center;
-    text-align: center;
     width: 400px;
     max-width: 90%;
     margin: auto;

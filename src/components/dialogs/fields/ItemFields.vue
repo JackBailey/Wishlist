@@ -24,6 +24,9 @@
         label="Image"
         v-model="item.image"
         :prepend-icon="mdiImage"
+        persistent-hint
+        hint="This should be a direct link to an image."
+        class="mb-5"
     />
     <v-text-field
         type="number"
