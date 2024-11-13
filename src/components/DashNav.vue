@@ -6,7 +6,12 @@
                 @click.stop="drawer = !drawer"
             /> -->
 
-            <v-toolbar-title>readyto.gift</v-toolbar-title>
+            <v-toolbar-title>
+                <v-btn
+                    to="/dash/lists"
+                    :prepend-icon="mdiGift"
+                > readyto.gift </v-btn>
+            </v-toolbar-title>
 
             <v-spacer />
 

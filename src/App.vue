@@ -1,19 +1,24 @@
 <template>
     <v-app :theme="auth.userPrefs.darkMode ? 'dark' : 'light'">
         <DashNav :loading="loading" />
-        <RouterView v-if="!loading" />
+        <v-main>
+            <RouterView v-if="!loading" />
+            <SiteFooter />
+        </v-main>
     </v-app>
 </template>
 
 <script>
 import DashNav from "@/components/DashNav.vue";
 import { RouterView } from "vue-router";
+import SiteFooter from "./components/SiteFooter.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 export default {
     components: {
         DashNav,
-        RouterView
+        RouterView,
+        SiteFooter
     },
     data() {
         return {
@@ -79,6 +84,15 @@ nav a {
 
 nav a:first-of-type {
     border: 0;
+}
+
+.v-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    height: 100%;
 }
 
 @media (min-width: 1024px) {

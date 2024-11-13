@@ -1,53 +1,51 @@
 <template>
-    <v-main>
-        <div class="page-content">
-            <h1>Register</h1>
-            <div class="password-register">
-                <v-form @submit.prevent="register">
-                    <v-text-field
-                        v-model="registrationDetails.name"
-                        label="Name"
-                        type="text"
-                        autofocus
-                    />
-                    <v-text-field
-                        v-model="registrationDetails.email"
-                        label="Email"
-                        type="email"
-                    />
-                    <v-text-field
-                        v-model="registrationDetails.password"
-                        label="Password"
-                        type="password"
-                    />
-                    <v-text-field
-                        v-model="registrationDetails.passwordConfirmation"
-                        label="Password Confirmation"
-                        type="password"
-                    />
-                    <v-btn
-                        type="submit"
-                        color="primary"
-                        :loading="loadingRegistration"
-                    >Register</v-btn>
-                </v-form>
-                <v-alert
-                    :type="alert.type || 'error'"
-                    border="left"
-                    elevation="2"
-                    v-if="alert"
-                    :icon="alert.icon || mdiAlert"
-                    :title="alert.title"
-                    :text="alert.text"
-                    class="mt-4"
+    <div class="page-content">
+        <h1>Register</h1>
+        <div class="password-register">
+            <v-form @submit.prevent="register">
+                <v-text-field
+                    v-model="registrationDetails.name"
+                    label="Name"
+                    type="text"
+                    autofocus
                 />
-            </div>
-            <p>
-                Already have an account?
-                <router-link :to="`/dash/login?redirect=${redirectPath}`">Login here</router-link>
-            </p>
+                <v-text-field
+                    v-model="registrationDetails.email"
+                    label="Email"
+                    type="email"
+                />
+                <v-text-field
+                    v-model="registrationDetails.password"
+                    label="Password"
+                    type="password"
+                />
+                <v-text-field
+                    v-model="registrationDetails.passwordConfirmation"
+                    label="Password Confirmation"
+                    type="password"
+                />
+                <v-btn
+                    type="submit"
+                    color="primary"
+                    :loading="loadingRegistration"
+                >Register</v-btn>
+            </v-form>
+            <v-alert
+                :type="alert.type || 'error'"
+                border="left"
+                elevation="2"
+                v-if="alert"
+                :icon="alert.icon || mdiAlert"
+                :title="alert.title"
+                :text="alert.text"
+                class="mt-4"
+            />
         </div>
-    </v-main>
+        <p>
+            Already have an account?
+            <router-link :to="`/dash/login?redirect=${redirectPath}`">Login here</router-link>
+        </p>
+    </div>
 </template>
 
 <script>

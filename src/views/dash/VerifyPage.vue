@@ -1,21 +1,19 @@
 <template>
-    <v-main>
-        <div class="page-content">
-            <h1>Verify</h1>
-            <div class="verify">
-                <v-alert
-                    :type="alert.type || 'error'"
-                    border="left"
-                    elevation="2"
-                    v-if="alert"
-                    :icon="alert.icon || mdiAlert"
-                    :title="alert.title"
-                    :text="alert.text"
-                    class="mt-4"
-                />
-            </div>
-        </div>  
-    </v-main>
+    <div class="page-content">
+        <h1>Verify</h1>
+        <div class="verify">
+            <v-alert
+                :type="alert.type || 'error'"
+                border="left"
+                elevation="2"
+                v-if="alert"
+                :icon="alert.icon || mdiAlert"
+                :title="alert.title"
+                :text="alert.text"
+                class="mt-4"
+            />
+        </div>
+    </div>
 </template>
 
 <script>
@@ -49,14 +47,14 @@ export default {
                 const verificationResp = await account.updateVerification(userId, secret);
 
                 console.log(verificationResp);
-                
+
                 this.alert = {
                     title: "Success",
                     text: "Account successfully verified, redirecting you to the main page.",
                     type: "success",
                     icon: mdiInformation
                 };
-                
+
                 await this.auth.init();
 
                 setTimeout(() => {
