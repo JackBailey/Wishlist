@@ -13,78 +13,80 @@
                 > readyto.gift </v-btn>
             </v-toolbar-title>
 
-            <v-spacer />
+            <template v-slot:append>
+                <v-btn
+                    to="/dash/lists"
+                    v-if="auth.user"
+                    :prepend-icon="mdiFormatListBulleted"
+                >Lists</v-btn>
 
-            <v-btn
-                to="/dash/lists"
-                v-if="auth.user"
-                :prepend-icon="mdiFormatListBulleted"
-            >Lists</v-btn>
-            <v-menu
-                :close-on-content-click="false"
-                v-model="menu"
-            >
-                <template v-slot:activator="{ props }">
-                    <v-btn
-                        :icon="mdiAccountCircle"
-                        v-bind="props"
-                    />
-                </template>
-                <v-card>
-                    <v-list v-if="auth.user">
-                        <v-list-item
-                            :prepend-avatar="auth.user.name ? auth.avatar.href : null"
-                            :subtitle="auth.user.name ? auth.user.email : null"
-                            :title="auth.user.name || auth.user.email"
+                <v-menu
+                    :close-on-content-click="false"
+                    v-model="menu"
+                >
+                    <template v-slot:activator="{ props }">
+                        <v-btn
+                            :icon="mdiAccountCircle"
+                            v-bind="props"
                         />
-                    </v-list>
-                    <v-divider v-if="auth.user" />
-                    <v-list>
-                        <v-list-item>
-                            <v-switch
-                                v-model="auth.newUserPrefs.darkMode"
-                                label="Dark Mode"
-                                hide-details
-                                inset
-                                color="primary"
+                    </template>
+                    <v-card>
+                        <v-list v-if="auth.user">
+                            <v-list-item
+                                :prepend-avatar="auth.user.name ? auth.avatar.href : null"
+                                :subtitle="auth.user.name ? auth.user.email : null"
+                                :title="auth.user.name || auth.user.email"
                             />
-                        </v-list-item>
-                        <v-list-item v-if="!!auth.user">
-                            <v-switch
-                                v-model="auth.newUserPrefs.spoilSurprises"
-                                label="Spoil Surprises"
-                                hide-details
-                                inset
+                        </v-list>
+                        <v-divider v-if="auth.user" />
+                        <v-list>
+                            <v-list-item>
+                                <v-switch
+                                    v-model="auth.newUserPrefs.darkMode"
+                                    label="Dark Mode"
+                                    hide-details
+                                    inset
+                                    color="primary"
+                                />
+                            </v-list-item>
+                            <v-list-item v-if="!!auth.user">
+                                <v-switch
+                                    v-model="auth.newUserPrefs.spoilSurprises"
+                                    label="Spoil Surprises"
+                                    hide-details
+                                    inset
+                                    color="primary"
+                                />
+                            </v-list-item>
+                        </v-list>
+                        <v-card-actions>
+                            <v-spacer />
+                            <v-btn
+                                @click="logIn"
                                 color="primary"
-                            />
-                        </v-list-item>
-                    </v-list>
-                    <v-card-actions>
-                        <v-spacer />
-                        <v-btn
-                            @click="logIn"
-                            color="primary"
-                            v-if="!auth.user"
-                            :loading="loadingLoginLogout"
-                        >
-                            Log In</v-btn>
+                                v-if="!auth.user"
+                                :loading="loadingLoginLogout"
+                            >
+                                Log In</v-btn>
 
-                        <v-btn
-                            @click="logout"
-                            color="error"
-                            :loading="loadingLoginLogout"
-                            v-else
-                        >Logout</v-btn>
-                        <v-btn @click="menu = false">Cancel</v-btn>
+                            <v-btn
+                                @click="logout"
+                                color="error"
+                                :loading="loadingLoginLogout"
+                                v-else
+                            >Logout</v-btn>
+                            <v-btn @click="menu = false">Cancel</v-btn>
 
-                        <v-btn
-                            @click="updatePrefs"
-                            color="primary"
-                            variant="elevated"
-                        >Save</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-menu>
+                            <v-btn
+                                @click="updatePrefs"
+                                color="primary"
+                                variant="elevated"
+                            >Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-menu>
+            </template>
+
 
             <v-progress-linear
                 :active="loading"
@@ -94,90 +96,6 @@
                 bottom
             />
         </v-app-bar>
-
-        <!-- <v-navigation-drawer v-model="drawer">
-            <v-list>
-                <v-list-item to="/">test</v-list-item>
-            </v-list> -->
-        <!-- <v-list>
-                    <v-list-item>
-                        <v-btn
-                            to="/dash/lists"
-                            v-if="auth.user"
-                            :icon="mdiFormatListBulleted"
-                        />
-                    </v-list-item>
-                    <v-btn
-                        href="https://github.com/JackBailey/Wishlist"
-                        target="_blank"
-                        :icon="mdiGithub"
-                    />
-                    <v-list-item>
-                        <v-menu :close-on-content-click="false" v-model="menu">
-                            <template v-slot:activator="{ props }">
-                                <v-btn :prepend-icon="mdiAccountCircle" v-bind="props" v-if="auth.user">
-                                    {{ auth.user.name || auth.user.email }}
-                                </v-btn>
-                                <v-btn :prepend-icon="mdiCog" v-bind="props" v-else> Settings </v-btn>
-                            </template>
-                            <v-card>
-                                <v-list v-if="auth.user">
-                                    <v-list-item
-                                        :prepend-avatar="auth.user.name ? auth.avatar.href : null"
-                                        :subtitle="auth.user.name ? auth.user.email : null"
-                                        :title="auth.user.name || auth.user.email"
-                                    />
-                                </v-list>
-                                <v-divider v-if="auth.user" />
-                                <v-list>
-                                    <v-list-item>
-                                        <v-switch
-                                            v-model="auth.newUserPrefs.darkMode"
-                                            label="Dark Mode"
-                                            hide-details
-                                            inset
-                                            color="primary"
-                                        />
-                                    </v-list-item>
-                                    <v-list-item v-if="!!auth.user">
-                                        <v-switch
-                                            v-model="auth.newUserPrefs.spoilSurprises"
-                                            label="Spoil Surprises"
-                                            hide-details
-                                            inset
-                                            color="primary"
-                                        />
-                                    </v-list-item>
-                                </v-list>
-                                <v-card-actions>
-                                    <v-spacer />
-                                    <v-btn
-                                        @click="logIn"
-                                        color="primary"
-                                        v-if="!auth.user"
-                                        :loading="loadingLoginLogout"
-                                    >
-                                        Log In</v-btn
-                                    >
-    
-                                    <v-btn
-                                        @click="logout"
-                                        color="error"
-                                        :loading="loadingLoginLogout"
-                                        v-else
-                                        >Logout</v-btn
-                                    >
-                                    <v-btn @click="menu = false">Cancel</v-btn>
-    
-                                    <v-btn @click="updatePrefs" color="primary" variant="elevated"
-                                        >Save</v-btn
-                                    >
-                                </v-card-actions>
-                            </v-card>
-                        </v-menu>
-                    </v-list-item>
-                </v-list> -->
-        <!-- </v-navigation-drawer> -->
     </div>
 </template>
 
