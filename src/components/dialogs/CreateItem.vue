@@ -79,7 +79,7 @@ export default {
                 description: "",
                 url: "",
                 image: "",
-                price: 0,
+                price: "",
                 displayPrice: true,
                 priority: "none"
             },

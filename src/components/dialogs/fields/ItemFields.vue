@@ -32,6 +32,7 @@
         type="number"
         label="Price"
         step="0.01"
+        placeholder="0"
         v-model="item.price"
         :prefix="currencyStore.getCurrency(currency).symbol"
         :prepend-icon="mdiCash"
