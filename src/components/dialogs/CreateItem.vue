@@ -7,11 +7,11 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                :icon="mdiPlus"
+                :append-icon="mdiPlus"
                 base-color="primary"
                 size="small"
                 :variant="variant"
-            />
+            >Add Item</v-btn>
         </template>
 
         <template v-slot:default="{ isActive }">

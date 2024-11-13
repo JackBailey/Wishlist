@@ -1,105 +1,91 @@
 <template>
-    <v-main v-if="!list">
-        <div class="page-content">
-            <v-skeleton-loader type="card" />
-            <v-skeleton-loader type="card" />
-            <v-skeleton-loader type="card" />
+    <div
+        class="page-content"
+        v-if="!list"
+    >
+        <v-skeleton-loader type="card" />
+        <v-skeleton-loader type="card" />
+        <v-skeleton-loader type="card" />
+    </div>
+    <div
+        class="page-content"
+        v-else
+    >
+        <v-card
+            class="list-header"
+            variant="tonal"
+        >
+            <h1>
+                {{ list.title }}
+                <ListManagementButtons
+                    :list="list"
+                    v-if="wishlistOwner"
+                />
+            </h1>
+            <vue-markdown
+                v-if="list.description"
+                :source="list.description"
+                class="description user-item-markdown"
+            />
+        </v-card>
+        <div class="filters">
+            <v-switch
+                label="Show Fulfilled"
+                v-model="showFulfilled"
+                color="primary"
+                inset
+                v-if="spoilSurprises"
+            />
         </div>
-    </v-main>
-    <v-main v-else>
-        <div class="page-content">
-            <v-card
-                class="list-header"
-                variant="tonal"
+        <v-alert
+            v-if="!wishlistOwner"
+            type="info"
+            :icon="mdiInformation"
+            elevation="2"
+            class="mt-5"
+            text="Make sure to mark anything as Fulfilled if you've purchased or plan on purchasing any of the items on the list! This will not be shown to the owner of this list."
+            color="primary"
+        />
+        <div
+            class="items"
+            v-if="list.items.length"
+        >
+            <div
+                class="item-price-group"
+                v-for="priceGroup in itemsByPriceGroups"
+                :key="priceGroup.price"
             >
-                <h1>
-                    {{ list.title }}
-                    <v-btn-group
-                        base-color="primary"
-                        divided
-                        rounded="pill"
-                        v-if="wishlistOwner"
-                    >
-                        <CreateItem
-                            :list="list"
-                            @newItem="addItem"
-                        />
-                        <EditList
-                            :list="list"
-                            @updateList="updateList"
-                            variant="outlined"
-                        />
-                        <DeleteList
-                            :list="list"
-                            variant="outlined"
-                        />
-                    </v-btn-group>
-                </h1>
-                <vue-markdown
-                    v-if="list.description"
-                    :source="list.description"
-                    class="description user-item-markdown"
-                />
-            </v-card>
-            <div class="filters">
-                <v-switch
-                    label="Show Fulfilled"
-                    v-model="showFulfilled"
-                    color="primary"
-                    inset
-                    v-if="spoilSurprises"
-                />
+                <h3>{{ priceGroup.title }}</h3>
+                <v-divider />
+                <div class="item-price-group-items">
+                    <ListItem
+                        v-for="item in priceGroup.items"
+                        :key="item.$id"
+                        :item="item"
+                        :wishlistOwner="wishlistOwner"
+                        :currency="list.currency"
+                        @removeItem="removeItem(item.$id)"
+                        @editItem="editItem($event)"
+                        @fulfillItem="fulfillItem($event)"
+                        @unfulfillItem="unfulfillItem($event)"
+                    />
+                </div>
             </div>
+        </div>
+        <div
+            class="no-items"
+            v-else
+        >
+            <v-spacer height="20" />
             <v-alert
-                v-if="!wishlistOwner"
                 type="info"
                 :icon="mdiInformation"
                 elevation="2"
                 class="mt-5"
-                text="Make sure to mark anything as Fulfilled if you've purchased or plan on purchasing any of the items on the list! This will not be shown to the owner of this list."
-                color="primary"
+                text="No items currently exist in this list. Add some!"
             />
-            <div
-                class="items"
-                v-if="list.items.length"
-            >
-                <div
-                    class="item-price-group"
-                    v-for="priceGroup in itemsByPriceGroups"
-                    :key="priceGroup.price"
-                >
-                    <h3>{{ priceGroup.title }}</h3>
-                    <v-divider />
-                    <div class="item-price-group-items">
-                        <ListItem
-                            v-for="item in priceGroup.items"
-                            :key="item.$id"
-                            :item="item"
-                            :wishlistOwner="wishlistOwner"
-                            :currency="list.currency"
-                            @removeItem="removeItem(item.$id)"
-                            @editItem="editItem($event)"
-                            @fulfillItem="fulfillItem($event)"
-                            @unfulfillItem="unfulfillItem($event)"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div
-                class="no-items"
-                v-else
-            >
-                <v-spacer height="20" />
-                <v-alert
-                    type="info"
-                    :icon="mdiInformation"
-                    elevation="2"
-                    class="mt-5"
-                    text="No items currently exist in this list. Add some!"
-                />
-            </div>
         </div>
-    </v-main>
+    </div>
 </template>
 
 <script>
@@ -108,6 +94,7 @@ import { databases } from "@/appwrite";
 import DeleteList from "@/components/dialogs/DeleteList.vue";
 import EditList from "@/components/dialogs/EditList.vue";
 import ListItem from "@/components/ListItem.vue";
+import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
 import { mdiInformation } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
@@ -117,6 +104,7 @@ export default {
         CreateItem,
         EditList,
         DeleteList,
+        ListManagementButtons,
         ListItem,
         VueMarkdown
     },
@@ -170,7 +158,8 @@ export default {
                                 .split(".")[0],
                         items: this.list.items
                             .filter((item) => {
-                                if (!this.showFulfilled && item.fulfillment && this.spoilSurprises) return false;
+                                if (!this.showFulfilled && item.fulfillment && this.spoilSurprises)
+                                    return false;
                                 if (item.price >= lowerBound && item.price < upperBound) {
                                     return item;
                                 }

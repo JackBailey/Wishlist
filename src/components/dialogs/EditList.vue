@@ -5,12 +5,11 @@
         v-model="dialogOpen"
     >
         <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
+            <v-list-item
                 v-bind="activatorProps"
-                :icon="mdiPencil"
-                base-color="primary"
-                size="small"
-                :variant="variant"
+                :prepend-icon="mdiPencil"
+                title="Edit List"
+                link
             />
         </template>
 
