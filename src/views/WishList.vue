@@ -20,8 +20,9 @@
                         rounded="pill"
                         v-if="wishlistOwner"
                     >
-                        <CreateItem
+                        <ModifyItem
                             :list="list"
+                            :currency="list.currency"
                             @newItem="addItem"
                         />
                         <EditList
@@ -102,18 +103,18 @@
 </template>
 
 <script>
-import CreateItem from "@/components/dialogs/CreateItem.vue";
 import { databases } from "@/appwrite";
 import DeleteList from "@/components/dialogs/DeleteList.vue";
 import EditList from "@/components/dialogs/EditList.vue";
 import ListItem from "@/components/ListItem.vue";
 import { mdiInformation } from "@mdi/js";
+import ModifyItem from "@/components/dialogs/ModifyItem.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
-        CreateItem,
+        ModifyItem,
         EditList,
         DeleteList,
         ListItem,

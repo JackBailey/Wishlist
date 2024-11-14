@@ -7,7 +7,7 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                :icon="mdiPlus"
+                :icon="item ? mdiPencil : mdiPlus"
                 base-color="primary"
                 size="small"
                 :variant="variant"
@@ -15,11 +15,11 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-            <v-card title="Create Item">
+            <v-card :title="item ? 'Edit Item' : 'Create Item'">
                 <v-card-text>
                     <ItemFields
-                        v-model:item="newItem"
-                        :currency="list.currency"
+                        v-model:item="modifiedItem"
+                        :currency="currency"
                     />
                     <v-alert
                         v-if="alert"
@@ -46,10 +46,19 @@
                     />
                     <v-btn
                         color="primary"
+                        text="Save"
+                        @click="editItem"
+                        variant="elevated"
+                        :loading="loading"
+                        v-if="item"
+                    />
+                    <v-btn
+                        color="primary"
                         text="Create"
                         @click="createItem"
                         variant="elevated"
                         :loading="loading"
+                        v-else
                     />
                 </v-card-actions>
                 <v-alert
@@ -64,11 +73,14 @@
 <script>
 import { AppwriteException, ID } from "appwrite";
 import { databases, functions } from "@/appwrite";
-import { mdiAlert, mdiPlus, mdiRobot } from "@mdi/js";
+import { mdiAlert, mdiPencil, mdiPlus, mdiRobot } from "@mdi/js";
 import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
 export default {
     title: "ListDialog",
     props: {
+        item: {
+            type: Object
+        },
         list: {
             type: Object,
             default: () => ({})
@@ -76,6 +88,10 @@ export default {
         variant: {
             type: String,
             default: "elevated"
+        },
+        currency: {
+            type: String,
+            required: true
         }
     },
     components: {
@@ -85,7 +101,7 @@ export default {
         return {
             listId: null,
             dialogOpen: false,
-            newItem: {
+            modifiedItem: {
                 title: "",
                 description: "",
                 url: "",
@@ -94,6 +110,7 @@ export default {
                 displayPrice: true,
                 priority: "none"
             },
+            mdiPencil,
             mdiPlus,
             mdiAlert,
             mdiRobot,
@@ -108,12 +125,24 @@ export default {
             this.autofillError = false;
             if (open === true) {
                 this.listId = this.list.$id;
+
+                if (this.item) {
+                    this.modifiedItem = {
+                        title: this.item.title,
+                        description: this.item.description,
+                        url: this.item.url,
+                        image: this.item.image,
+                        price: this.item.price,
+                        displayPrice: this.item.displayPrice,
+                        priority: this.item.priority
+                    };
+                }
             }
         }
     },
     methods: {
         async autoFill() {
-            const url = this.newItem.url;
+            const url = this.modifiedItem.url;
             if (!url) {
                 this.autofillError = "Please enter a URL to use the auto-fill feature.";
                 return;
@@ -134,11 +163,11 @@ export default {
 
                 if (result.status === "completed") {
                     const responseData = JSON.parse(result.responseBody);
-                    if (!responseData.hasOwnProperty("error")) {
-                        this.newItem.title = responseData.title;
-                        this.newItem.description = responseData.description;
-                        this.newItem.image = responseData.image;
-                        this.newItem.price = parseFloat(responseData.price.price) || 0;
+                    if (!Object.prototype.hasOwnProperty.call(responseData, "error")) {
+                        this.modifiedItem.title = responseData.title;
+                        this.modifiedItem.description = responseData.description;
+                        this.modifiedItem.image = responseData.image;
+                        this.modifiedItem.price = parseFloat(responseData.price.price) || 0;
                     } else {
                         console.error("Error:" , responseData);
                         this.autofillError = responseData.error;
@@ -156,7 +185,7 @@ export default {
             this.alert = false;
             this.loading = true;
 
-            if (this.newItem.title === "") {
+            if (this.modifiedItem.title === "") {
                 this.alert = {
                     title: "Error",
                     text: "Title is required."
@@ -170,13 +199,13 @@ export default {
                     import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
                     ID.unique(),
                     {
-                        title: this.newItem.title,
-                        description: this.newItem.description || null,
-                        url: this.newItem.url || null,
-                        image: this.newItem.image || null,
-                        price: parseFloat(this.newItem.price) || 0,
-                        displayPrice: this.newItem.displayPrice,
-                        priority: this.newItem.priority,
+                        title: this.modifiedItem.title,
+                        description: this.modifiedItem.description || null,
+                        url: this.modifiedItem.url || null,
+                        image: this.modifiedItem.image || null,
+                        price: parseFloat(this.modifiedItem.price) || 0,
+                        displayPrice: this.modifiedItem.displayPrice,
+                        priority: this.modifiedItem.priority,
                         list: this.listId
                     }
                 );
@@ -196,11 +225,11 @@ export default {
                 return;
             }
 
-            this.$emit("newItem", {
+            this.$emit("modifiedItem", {
                 item: result
             });
 
-            this.newItem = {
+            this.modifiedItem = {
                 title: "",
                 description: "",
                 url: "",
@@ -209,6 +238,50 @@ export default {
                 displayPrice: true,
                 priority: "none"
             };
+
+            this.dialogOpen = false;
+            this.loading = false;
+        },
+        async editItem() {
+            let result;
+            this.alert = false;
+            this.loading = true;
+
+            try {
+                result = await databases.updateDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
+                    this.item.$id,
+                    {
+                        title: this.modifiedItem.title,
+                        description: this.modifiedItem.description || null,
+                        url: this.modifiedItem.url || null,
+                        image: this.modifiedItem.image || null,
+                        price: parseFloat(this.modifiedItem.price) || 0,
+                        displayPrice: this.modifiedItem.displayPrice,
+                        priority: this.modifiedItem.priority,
+                        list: this.listId
+                    }
+                );
+            } catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        title: "Error",
+                        text: e.message
+                    };
+                } else {
+                    this.alert = {
+                        title: "Error",
+                        text: "An unknown error occurred."
+                    };
+                }
+                this.loading = false;
+                return;
+            }
+
+            this.$emit("editItem", {
+                item: result
+            });
 
             this.dialogOpen = false;
             this.loading = false;

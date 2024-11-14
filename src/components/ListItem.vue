@@ -27,7 +27,7 @@
                 variant="outlined"
                 size="small"
             >Open Website</v-btn>
-            <EditItem
+            <ModifyItem
                 variant="outlined"
                 :item="item"
                 :currency="currency"
@@ -101,8 +101,8 @@
 import { mdiGift, mdiOpenInNew, mdiWeb } from "@mdi/js";
 import { convertPriority } from "@/utils";
 import DeleteItem from "@/components/dialogs/DeleteItem.vue";
-import EditItem from "@/components/dialogs/EditItem.vue";
 import FulfillItem from "@/components/dialogs/FulfillItem.vue";
+import ModifyItem from "./dialogs/ModifyItem.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 import VueMarkdown from "vue-markdown-render";
@@ -123,7 +123,7 @@ export default {
     },
     components: {
         DeleteItem,
-        EditItem,
+        ModifyItem,
         FulfillItem,
         VueMarkdown
     },
