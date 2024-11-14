@@ -487,7 +487,7 @@ export async function getPreviewFromContent(response, options) {
 
     if (!response.url) {
         throw new Error(
-            "link-preview-js did not receive a valid response object"
+            "Invalid URL"
         );
     }
 

@@ -12,9 +12,7 @@
                 size="small"
                 :variant="variant"
             >
-                <template v-if="!item">
-                    Add Item
-                </template>
+                <template v-if="!item"> Add Item </template>
             </v-btn>
         </template>
 
@@ -37,13 +35,22 @@
                     />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn
-                        text="Auto-fill"
-                        :prepend-icon="mdiRobot"
-                        variant="tonal"
-                        @click="autoFill"
-                        :loading="autofillLoading"
-                    />
+                    <v-tooltip
+                        :open-on-hover="modifiedItem.url === ''"
+                    >
+                        <template v-slot:activator="{ props }">
+                            <span v-bind="props">
+                                <v-btn
+                                    text="Auto-fill"
+                                    :prepend-icon="mdiRobot"
+                                    variant="tonal"
+                                    @click="autoFill"
+                                    :loading="autofillLoading"
+                                    :disabled="modifiedItem.url === ''"
+                                /></span>
+                        </template>
+                        <span>Please enter a URL to use the auto-fill feature</span>
+                    </v-tooltip>
                     <v-btn
                         text="Cancel"
                         @click="isActive.value = false"
@@ -173,13 +180,12 @@ export default {
                         this.modifiedItem.image = responseData.image;
                         this.modifiedItem.price = parseFloat(responseData.price.price) || 0;
                     } else {
-                        console.error("Error:" , responseData);
+                        console.error("Error:", responseData);
                         this.autofillError = responseData.error;
                     }
-
                 }
             } catch (e) {
-                console.error("Error:" , e);
+                console.error("Error:", e);
             }
 
             this.autofillLoading = false;
