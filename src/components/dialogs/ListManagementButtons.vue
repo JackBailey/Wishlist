@@ -4,9 +4,11 @@
         divided
         rounded="pill"
     >
-        <CreateItem
+        <ModifyItem
             :list="list"
             :variant="variant"
+            :currency="currency"
+            @newItem="(data) => $emit('newItem', data)"
         />
 
         <v-btn
@@ -36,11 +38,11 @@
 </template>
 
 <script setup>
-import CreateItem from "./CreateItem.vue";
 import { defineProps } from "vue";
 import DeleteList from "./DeleteList.vue";
 import EditList from "./EditList.vue";
 import { mdiMenuDown } from "@mdi/js";
+import ModifyItem from "./ModifyItem.vue";
 
 defineProps({
     list: {
@@ -50,6 +52,10 @@ defineProps({
     variant: {
         type: String,
         default: "elevated"
+    },
+    currency: {
+        type: String,
+        required: true
     }
 });
 </script>

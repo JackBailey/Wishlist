@@ -18,7 +18,6 @@
                 <v-card-text>
                     <ListFields
                         v-model:list="editedList"
-                        :currency="currency"
                     />
                     <v-alert
                         v-if="alert"

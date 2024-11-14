@@ -19,7 +19,9 @@
                 {{ list.title }}
                 <ListManagementButtons
                     :list="list"
+                    :currency="list.currency"
                     v-if="wishlistOwner"
+                    @newItem="addItem"
                 />
             </h1>
             <vue-markdown
@@ -89,10 +91,7 @@
 </template>
 
 <script>
-import CreateItem from "@/components/dialogs/CreateItem.vue";
 import { databases } from "@/appwrite";
-import DeleteList from "@/components/dialogs/DeleteList.vue";
-import EditList from "@/components/dialogs/EditList.vue";
 import ListItem from "@/components/ListItem.vue";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
 import { mdiInformation } from "@mdi/js";
@@ -101,9 +100,6 @@ import { useCurrencyStore } from "@/stores/currency";
 import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
-        CreateItem,
-        EditList,
-        DeleteList,
         ListManagementButtons,
         ListItem,
         VueMarkdown
