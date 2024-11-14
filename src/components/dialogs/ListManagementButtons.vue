@@ -39,7 +39,6 @@
 
         <v-dialog
             :max-width="$vuetify.display.mobile ? '100%' : '500px'"
-            :fullscreen="$vuetify.display.mobile ? true : false"
             v-model="quickcreateDialogOpen"
         >
             <template v-slot:activator>
@@ -110,7 +109,8 @@ let quickcreateDialogOpen = ref(false);
 
 const quickCreate = async () => {
     const result = await navigator.permissions.query({ name: "clipboard-read" });
-    if (result.state === "granted") {
+    console.log(result);
+    if (result.state !== "denied") {
         const clipboardContents = await navigator.clipboard.readText();
 
         const validURL = validation.urlRegex.test(clipboardContents);
@@ -125,7 +125,11 @@ const quickCreate = async () => {
             quickcreateDialogOpen.value = true;
         }
     } else {
-        alert("Clipboard read permission denied");
+        quickCreateError.value = {
+            title: "Error",
+            text: "Clipboard read permission denied"
+        };
+        quickcreateDialogOpen.value = true;
     }
 };
 

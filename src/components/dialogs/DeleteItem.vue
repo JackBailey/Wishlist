@@ -1,7 +1,6 @@
 <template>
     <v-dialog
         :max-width="$vuetify.display.mobile ? '100%' : '500px'"
-        :fullscreen="$vuetify.display.mobile ? true : false"
         v-model="dialogOpen"
     >
         <template v-slot:activator="{ props: activatorProps }">
