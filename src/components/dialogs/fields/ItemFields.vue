@@ -8,7 +8,7 @@
             v-model="item.title"
             maxlength="64"
             counter
-            autofocus
+            :autofocus="!item.url" 
             :rules="[() => !!item.title || 'Title is required']"
         />
         <v-textarea

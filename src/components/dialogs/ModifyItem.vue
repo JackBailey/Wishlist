@@ -188,7 +188,9 @@ export default {
                         this.modifiedItem.title = responseData.title;
                         this.modifiedItem.description = responseData.description;
                         this.modifiedItem.image = responseData.image;
-                        this.modifiedItem.price = parseFloat(responseData.price.price) || 0;
+                        if (responseData.price) {
+                            this.modifiedItem.price = parseFloat(responseData.price.price) || 0;
+                        }
                     } else {
                         this.errors = {
                             url: responseData.error
