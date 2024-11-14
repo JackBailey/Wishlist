@@ -13,11 +13,10 @@ const formatTitle = (data, site) => {
                 .replace(/^Amazon\.[^:]+:\s*/, "")
                 .replace("Free delivery and returns on all eligible orders. Shop ", "")
                 .replace(/\s*:\s*.*$/, "");
-
         }
     }
 
-    return title.slice(0, 64).trim();
+    return title ? title.slice(0, 64).trim() : "";
 };
 
 const getPreview = async (url) => {
