@@ -44,11 +44,20 @@
         >
             <template v-slot:activator>
                 <v-btn
+                    :icon="mdiClipboard"
+                    variant="tonal"
+                    @click="quickCreate"
+                    v-if="$vuetify.display.mobile"
+                />
+                <v-btn
                     :prepend-icon="mdiClipboard"
                     variant="tonal"
                     @click="quickCreate"
+                    v-else
                 > 
-                    Quickcreate
+                    <template v-if="!$vuetify.display.mobile">
+                        Quickcreate
+                    </template>
                 </v-btn>
             </template>
 
