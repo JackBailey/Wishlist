@@ -1,107 +1,113 @@
 <template>
-    <v-app-bar>
-        <template v-slot:prepend>
-            <v-list>
-                <v-list-item
+    <div class="app-nav">
+        <v-app-bar prominent>
+            <!-- <v-app-bar-nav-icon
+                variant="text"
+                @click.stop="drawer = !drawer"
+            /> -->
+
+            <v-toolbar-title>
+                <v-btn
+                    to="/dash/lists"
                     :prepend-icon="mdiGift"
+                > readyto.gift </v-btn>
+            </v-toolbar-title>
+
+            <template v-slot:append>
+                <v-btn
                     to="/dash/lists"
                     v-if="auth.user"
-                >
-                    Wishlists
-                </v-list-item>
-            </v-list>
-        </template>
+                    :prepend-icon="mdiFormatListBulleted"
+                >Lists</v-btn>
 
-        <v-btn
-            href="https://github.com/JackBailey/Wishlist"
-            target="_blank"
-            :icon="mdiGithub"
-        />
-        <v-menu
-            :close-on-content-click="false"
-            v-model="menu"
-        >
-            <template v-slot:activator="{ props }">
-                <v-btn
-                    :prepend-icon="mdiAccountCircle"
-                    v-bind="props"
-                    v-if="auth.user"
+                <v-menu
+                    :close-on-content-click="false"
+                    v-model="menu"
                 >
-                    {{ auth.user.name || auth.user.email }}
-                </v-btn>
-                <v-btn
-                    :prepend-icon="mdiCog"
-                    v-bind="props"
-                    v-else
-                > Settings </v-btn>
+                    <template v-slot:activator="{ props }">
+                        <v-btn
+                            :icon="mdiAccountCircle"
+                            v-bind="props"
+                        />
+                    </template>
+                    <v-card>
+                        <v-list v-if="auth.user">
+                            <v-list-item
+                                :prepend-avatar="auth.user.name ? auth.avatar.href : null"
+                                :subtitle="auth.user.name ? auth.user.email : null"
+                                :title="auth.user.name || auth.user.email"
+                            />
+                        </v-list>
+                        <v-divider v-if="auth.user" />
+                        <v-list>
+                            <v-list-item>
+                                <v-switch
+                                    v-model="auth.newUserPrefs.darkMode"
+                                    label="Dark Mode"
+                                    hide-details
+                                    inset
+                                    color="primary"
+                                />
+                            </v-list-item>
+                            <v-list-item v-if="!!auth.user">
+                                <v-switch
+                                    v-model="auth.newUserPrefs.spoilSurprises"
+                                    label="Spoil Surprises"
+                                    hide-details
+                                    inset
+                                    color="primary"
+                                />
+                            </v-list-item>
+                        </v-list>
+                        <v-card-actions>
+                            <v-spacer />
+                            <v-btn
+                                @click="logIn"
+                                color="primary"
+                                v-if="!auth.user"
+                                :loading="loadingLoginLogout"
+                            >
+                                Log In</v-btn>
+
+                            <v-btn
+                                @click="logout"
+                                color="error"
+                                :loading="loadingLoginLogout"
+                                v-else
+                            >Logout</v-btn>
+                            <v-btn @click="menu = false">Cancel</v-btn>
+
+                            <v-btn
+                                @click="updatePrefs"
+                                color="primary"
+                                variant="elevated"
+                            >Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-menu>
             </template>
-            <v-card>
-                <v-list v-if="auth.user">
-                    <v-list-item
-                        :prepend-avatar="auth.user.name ? auth.avatar.href : null"
-                        :subtitle="auth.user.name ? auth.user.email : null"
-                        :title="auth.user.name || auth.user.email"
-                    />
-                </v-list>
-                <v-divider v-if="auth.user" />
-                <v-list>
-                    <v-list-item>
-                        <v-switch
-                            v-model="auth.newUserPrefs.darkMode"
-                            label="Dark Mode"
-                            hide-details
-                            inset
-                            color="primary"
-                        />
-                    </v-list-item>
-                    <v-list-item v-if="!!auth.user">
-                        <v-switch
-                            v-model="auth.newUserPrefs.spoilSurprises"
-                            label="Spoil Surprises"
-                            hide-details
-                            inset
-                            color="primary"
-                        />
-                    </v-list-item>
-                </v-list>
-                <v-card-actions>
-                    <v-spacer />
-                    <v-btn
-                        @click="logIn"
-                        color="primary"
-                        v-if="!auth.user"
-                        :loading="loadingLoginLogout"
-                    >
-                        Log In</v-btn>
 
-                    <v-btn
-                        @click="logout"
-                        color="error"
-                        :loading="loadingLoginLogout"
-                        v-else
-                    >Logout</v-btn>
-                    <v-btn @click="menu = false">Cancel</v-btn>
 
-                    <v-btn
-                        @click="updatePrefs"
-                        color="primary"
-                        variant="elevated"
-                    >Save</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-menu>
-        <v-progress-linear
-            :active="loading"
-            indeterminate
-            color="primary"
-            absolute
-            bottom
-        />
-    </v-app-bar>
+            <v-progress-linear
+                :active="loading"
+                indeterminate
+                color="primary"
+                absolute
+                bottom
+            />
+        </v-app-bar>
+    </div>
 </template>
 
 <script>
-import { mdiAccountCircle, mdiCog, mdiGift, mdiGithub, mdiMenu } from "@mdi/js";
+import {
+    mdiAccountCircle,
+    mdiCog,
+    mdiFormatListBulleted,
+    mdiGift,
+    mdiGithub,
+    mdiMenu
+} from "@mdi/js";
 import { account } from "@/appwrite";
 import { useAuthStore } from "@/stores/auth";
 export default {
@@ -118,9 +124,11 @@ export default {
             mdiCog,
             mdiGift,
             mdiGithub,
+            mdiFormatListBulleted,
             auth: useAuthStore(),
             menu: false,
-            loadingLoginLogout: false
+            loadingLoginLogout: false,
+            drawer: true
         };
     },
     methods: {

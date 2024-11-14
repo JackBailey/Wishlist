@@ -7,11 +7,15 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                :icon="item ? mdiPencil : mdiPlus"
+                :append-icon="item ? mdiPencil : mdiPlus"
                 base-color="primary"
                 size="small"
                 :variant="variant"
-            />
+            >
+                <template v-if="!item">
+                    Add Item
+                </template>
+            </v-btn>
         </template>
 
         <template v-slot:default="{ isActive }">
@@ -106,7 +110,7 @@ export default {
                 description: "",
                 url: "",
                 image: "",
-                price: 0,
+                price: "",
                 displayPrice: true,
                 priority: "none"
             },
@@ -225,7 +229,7 @@ export default {
                 return;
             }
 
-            this.$emit("modifiedItem", {
+            this.$emit("newItem", {
                 item: result
             });
 

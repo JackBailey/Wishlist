@@ -1,53 +1,65 @@
 <template>
-    <v-main>
-        <div class="page-content">
-            <h1>Log In</h1>
-            <div
-                class="password-login"
-                v-if="methods.includes('password')"
-            >
-                <v-form @submit.prevent="passwordLogin">
-                    <v-text-field
-                        v-model="passwordLoginDetails.email"
-                        label="Email"
-                        type="email"
-                        autofocus
-                    />
-                    <v-text-field
-                        v-model="passwordLoginDetails.password"
-                        label="Password"
-                        type="password"
-                    />
-                    <v-btn
-                        type="submit"
-                        color="primary"
-                        :loading="loadingLogin"
-                    >Login</v-btn>
-                </v-form>
-            </div>
-            <v-divider
-                v-if="methods.includes('password') && methods.length > 1"
-                color="border"
-                :thickness="3"
-            />
-            <div class="buttons">
-                <v-btn
-                    variant="tonal"
-                    :prepend-icon="methodsData[method].icon"
-                    @click="methodsData[method].login()"
-                    v-for="method in methods.filter((method) => method !== 'password')"
-                    :key="method"
-                >Login with {{ methodsData[method].name }}</v-btn>
-                <v-alert
-                    v-if="methods.length === 0"
-                    type="error"
-                    :icon="mdiAlert"
-                    class="mt-4"
-                    text="No login methods are enabled. Please contact the site administrator."
+    <div class="page-content">
+        <h1>Log In</h1>
+        <div
+            class="password-login"
+            v-if="methods.includes('password')"
+        >
+            <v-form @submit.prevent="passwordLogin">
+                <v-text-field
+                    v-model="passwordLoginDetails.email"
+                    label="Email"
+                    type="email"
+                    autofocus
                 />
-            </div>
+                <v-text-field
+                    v-model="passwordLoginDetails.password"
+                    label="Password"
+                    type="password"
+                />
+                <v-btn
+                    type="submit"
+                    color="primary"
+                    :loading="loadingLogin"
+                >Login</v-btn>
+            </v-form>
         </div>
-    </v-main>
+        <v-divider
+            v-if="methods.includes('password') && methods.length > 1"
+            color="border"
+            :thickness="3"
+        />
+        <div class="buttons">
+            <v-btn
+                variant="tonal"
+                :prepend-icon="methodsData[method].icon"
+                @click="methodsData[method].login()"
+                v-for="method in methods.filter((method) => method !== 'password')"
+                :key="method"
+            >Login with {{ methodsData[method].name }}</v-btn>
+            <v-alert
+                v-if="methods.length === 0"
+                type="error"
+                :icon="mdiAlert"
+                class="mt-4"
+                text="No login methods are enabled. Please contact the site administrator."
+            />
+        </div>
+        <v-alert
+            :type="alert.type || 'error'"
+            border="left"
+            elevation="2"
+            v-if="alert"
+            :icon="alert.icon || mdiAlert"
+            :title="alert.title"
+            :text="alert.text"
+            class="mt-4"
+        />
+        <p>
+            Don't have an account?
+            <router-link :to="`/dash/register?redirect=${redirectPath}`">Register here</router-link>
+        </p>
+    </div>
 </template>
 
 <script>
@@ -90,7 +102,8 @@ export default {
                     }
                 }
             },
-            loadingLogin: false
+            loadingLogin: false,
+            alert: false
         };
     },
     methods: {
@@ -102,7 +115,10 @@ export default {
                     this.passwordLoginDetails.password
                 );
             } catch (error) {
-                alert(error);
+                this.alert = {
+                    title: "Error",
+                    text: error.message
+                };
 
                 this.loadingLogin = false;
                 return;
@@ -132,7 +148,6 @@ export default {
     justify-content: center;
     gap: 1rem;
     align-items: center;
-    text-align: center;
     width: 400px;
     max-width: 90%;
     margin: auto;

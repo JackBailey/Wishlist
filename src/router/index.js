@@ -8,12 +8,12 @@ const router = createRouter({
             path: "/",
             name: "home",
             redirect: () => {
-                return { name: "lists" };
+                return { name: "Lists" };
             }
         },
         {
             path: "/dash/lists",
-            name: "lists",
+            name: "Lists",
             component: () => import("@/views/dash/UserLists.vue"),
             meta: {
                 requiresAuth: true
@@ -36,6 +36,16 @@ const router = createRouter({
             path: "/dash/login",
             name: "login",
             component: () => import("@/views/dash/LoginPage.vue")
+        },
+        {
+            path: "/dash/register",
+            name: "Register",
+            component: () => import("@/views/dash/RegisterPage.vue")
+        },
+        {
+            path: "/dash/verify",
+            name: "Verify",
+            component: () => import("@/views/dash/VerifyPage.vue")
         },
         {
             path: "/dash/error",

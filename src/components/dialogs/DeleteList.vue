@@ -5,11 +5,12 @@
         v-model="dialogOpen"
     >
         <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
+            <v-list-item
                 v-bind="activatorProps"
-                color="error"
-                :icon="mdiDelete"
-                :variant="variant"
+                :prepend-icon="mdiDelete"
+                title="Delete List"
+                link
+                base-color="error"
             />
         </template>
 

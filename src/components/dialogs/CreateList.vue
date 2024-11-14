@@ -7,11 +7,14 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                :icon="mdiPlus"
+                :append-icon="mdiPlus"
                 base-color="primary"
-                size="small"
                 :variant="variant"
-            />
+                :disabled="disabled"
+                title="Create a new list"
+                size="large"
+                rounded="pill"
+            >Create List</v-btn>
         </template>
 
         <template v-slot:default="{ isActive }">
@@ -63,6 +66,10 @@ export default {
         variant: {
             type: String,
             default: "elevated"
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
