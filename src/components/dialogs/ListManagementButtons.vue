@@ -113,16 +113,16 @@ const quickCreate = async () => {
     if (result.state !== "denied") {
         const clipboardContents = await navigator.clipboard.readText();
 
-        const validURL = validation.urlRegex.test(clipboardContents);
+        const validURLs = clipboardContents.match(validation.urlRegexGlobal);
 
-        if (validURL) {
-            quickCreateURL.value = clipboardContents;
-        } else {
+        if (validURLs.length === 0) {
             quickCreateError.value = {
                 title: "Invalid URL",
-                text: "The clipboard does not contain a valid URL."
+                text: "The clipboard does not contain any valid URLs."
             };
             quickcreateDialogOpen.value = true;
+        } else {
+            quickCreateURL.value = validURLs[0];
         }
     } else {
         quickCreateError.value = {
