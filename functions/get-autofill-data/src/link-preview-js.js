@@ -126,9 +126,27 @@ function getPrice(doc, url) {
         const price = wholePrice + fractionPrice;
 
         return { currency, price };
-    }
+    } else {
+        let price = null;
+        const pricePatterns = [
+            ".pd__cost__retail-price",
+            ".price"
+        ];
 
-    return null;
+        pricePatterns.forEach((pattern) => {
+            const patternResult = doc(pattern).first().text();
+            if (patternResult) {
+                price = parseFloat(patternResult.replace(/[^0-9.]/g, "").trim());
+                if (!isNaN(price)) {
+                    return price;
+                }
+            }
+        });
+
+        if (price) return price;
+
+        
+    }
 }
 
 function getVideos(doc) {
