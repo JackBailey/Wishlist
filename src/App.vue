@@ -1,8 +1,8 @@
 <template>
     <v-app :theme="auth.userPrefs.darkMode ? 'dark' : 'light'">
         <DashNav :loading="loading" />
-        <v-main>
-            <RouterView v-if="!loading" />
+        <v-main v-if="!loading">
+            <RouterView />
             <SiteFooter />
         </v-main>
     </v-app>
