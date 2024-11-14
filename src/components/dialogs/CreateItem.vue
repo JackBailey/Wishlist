@@ -138,6 +138,7 @@ export default {
                         this.newItem.title = responseData.title;
                         this.newItem.description = responseData.description;
                         this.newItem.image = responseData.image;
+                        this.newItem.price = parseFloat(responseData.price.price) || 0;
                     } else {
                         console.error("Error:" , responseData);
                         this.autofillError = responseData.error;
