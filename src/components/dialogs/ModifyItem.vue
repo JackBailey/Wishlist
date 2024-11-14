@@ -188,6 +188,7 @@ export default {
                         this.modifiedItem.title = responseData.title;
                         this.modifiedItem.description = responseData.description;
                         this.modifiedItem.image = responseData.image;
+                        this.modifiedItem.url = responseData.url;
                         if (responseData.price) {
                             this.modifiedItem.price = parseFloat(responseData.price.price) || 0;
                         }

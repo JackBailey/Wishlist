@@ -1,5 +1,6 @@
 import { getLinkPreview } from "./link-preview-js.js";
 import getSite from "./get-site.js";
+import { TidyURL } from "tidy-url";
 
 const formatTitle = (data, site) => {
     let { title, description } = data;
@@ -83,7 +84,7 @@ export default async ({ req, res, log, error }) => {
 
         const autofillData = {
             title: formatTitle(data, site),
-            url: data.url,
+            url: TidyURL.clean(data.url),
             image: getBestImage(data.url, data.images),
             price: data.price
         };
