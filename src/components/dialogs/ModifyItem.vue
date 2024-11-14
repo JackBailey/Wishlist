@@ -22,6 +22,7 @@
                     <ItemFields
                         v-model:item="modifiedItem"
                         :currency="currency"
+                        :errors="errors"
                     />
                     <v-alert
                         v-if="alert"
@@ -72,10 +73,6 @@
                         v-else
                     />
                 </v-card-actions>
-                <v-alert
-                    :text="autofillError"
-                    v-if="autofillError"
-                />
             </v-card>
         </template>
     </v-dialog>
@@ -103,6 +100,10 @@ export default {
         currency: {
             type: String,
             required: true
+        },
+        quickCreateURL: {
+            type: String,
+            default: ""
         }
     },
     components: {
@@ -128,12 +129,21 @@ export default {
             alert: false,
             loading: false,
             autofillLoading: false,
-            autofillError: false
+            errors: {}
         };
     },
     watch: {
+        quickCreateURL(newURL) {
+            if (newURL) {
+                this.dialogOpen = true;
+                this.modifiedItem.url = newURL;
+                this.autoFill();
+
+                this.$emit("unsetQuickCreateURL", "");
+            }
+        },
         dialogOpen(open) {
-            this.autofillError = false;
+            this.errors = {};
             if (open === true) {
                 this.listId = this.list.$id;
 
@@ -153,12 +163,14 @@ export default {
     },
     methods: {
         async autoFill() {
+            this.errors = {};
             const url = this.modifiedItem.url;
             if (!url) {
-                this.autofillError = "Please enter a URL to use the auto-fill feature.";
+                this.errors = {
+                    url: "Please enter a URL to use the auto-fill feature."
+                };
                 return;
             }
-            this.autofillError = false;
             this.autofillLoading = true;
 
             try {
@@ -170,8 +182,6 @@ export default {
                     false
                 );
 
-                console.log(result);
-
                 if (result.status === "completed") {
                     const responseData = JSON.parse(result.responseBody);
                     if (!Object.prototype.hasOwnProperty.call(responseData, "error")) {
@@ -180,8 +190,9 @@ export default {
                         this.modifiedItem.image = responseData.image;
                         this.modifiedItem.price = parseFloat(responseData.price.price) || 0;
                     } else {
-                        console.error("Error:", responseData);
-                        this.autofillError = responseData.error;
+                        this.errors = {
+                            url: responseData.error
+                        };
                     }
                 }
             } catch (e) {

@@ -381,7 +381,7 @@ function parseResponse(response, options) {
  */
 export async function getLinkPreview(text, options) {
     if (!text || typeof text !== "string") {
-        throw new Error("link-preview-js did not receive a valid url or text");
+        throw new Error("Invalid URL");
     }
 
     const detectedUrl = text
@@ -391,7 +391,7 @@ export async function getLinkPreview(text, options) {
 
     if (!detectedUrl) {
         throw new Error(
-            "link-preview-js did not receive a valid a url or text"
+            "Invalid URL"
         );
     }
 
@@ -441,7 +441,7 @@ export async function getLinkPreview(text, options) {
         const forwardedUrl = response.headers.get("location") || "";
 
         if (!options.handleRedirects(fetchUrl, forwardedUrl)) {
-            throw new Error("link-preview-js could not handle redirect");
+            throw new Error("Could not handle redirect");
         }
 
         if (options?.resolveDNSHost) {
@@ -481,7 +481,7 @@ export async function getLinkPreview(text, options) {
 export async function getPreviewFromContent(response, options) {
     if (!response || typeof response !== "object") {
         throw new Error(
-            "link-preview-js did not receive a valid response object"
+            "Did not receive a valid response object"
         );
     }
 

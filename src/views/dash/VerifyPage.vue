@@ -44,9 +44,7 @@ export default {
             const { userId, secret } = this.$route.query;
 
             try {
-                const verificationResp = await account.updateVerification(userId, secret);
-
-                console.log(verificationResp);
+                await account.updateVerification(userId, secret);
 
                 this.alert = {
                     title: "Success",
