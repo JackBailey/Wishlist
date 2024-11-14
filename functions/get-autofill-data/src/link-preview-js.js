@@ -128,24 +128,33 @@ function getPrice(doc, url) {
         return { currency, price };
     } else {
         let price = null;
+        let currency = null;
         const pricePatterns = [
             ".pd__cost__retail-price",
-            ".price"
+            ".price",
+            ".price-tag",
+            "[class*=\"price\"]",
+            "[id*=\"price\"]",
+            "[class*=\"amount\"]"
         ];
 
         pricePatterns.forEach((pattern) => {
-            const patternResult = doc(pattern).first().text();
-            if (patternResult) {
-                price = parseFloat(patternResult.replace(/[^0-9.]/g, "").trim());
-                if (!isNaN(price)) {
-                    return price;
+            const element = doc(pattern).first();
+            if (element.length) {
+                const text = element.text();
+                const priceMatch = text.match(/(\d{1,3}(,\d{3})*(\.\d{2})?)/);
+                if (priceMatch) {
+                    const extractedPrice = priceMatch[0].replace(/,/g, '');
+                    price = parseFloat(extractedPrice);
+                    // const currencyMatch = text.match(/[^\d.,\s]+/);
+                    // console.log({extractedPrice, pattern, currencyMatch});
+
+                    // if (currencyMatch) currency = currencyMatch[0];
                 }
             }
         });
 
         if (price) return price;
-
-        
     }
 }
 

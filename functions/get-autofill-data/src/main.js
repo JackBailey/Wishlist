@@ -84,7 +84,7 @@ export default async ({ req, res, log, error }) => {
 
         const autofillData = {
             title: formatTitle(data, site),
-            url: TidyURL.clean(data.url),
+            url: TidyURL.clean(data.url).url,
             image: getBestImage(data.url, data.images),
             price: data.price
         };
