@@ -185,10 +185,17 @@ export default {
                 if (result.status === "completed") {
                     const responseData = JSON.parse(result.responseBody);
                     if (!Object.prototype.hasOwnProperty.call(responseData, "error")) {
-                        this.modifiedItem.title = responseData.title;
+                        if (!responseData.title && !responseData.image && !responseData.price) {
+                            this.errors = {
+                                url: "Unable to autofill data."
+                            };
+                            this.autofillLoading = false;
+                            return;
+                        }
+                        if (responseData.title) this.modifiedItem.title = responseData.title;
                         this.modifiedItem.description = responseData.description;
-                        this.modifiedItem.image = responseData.image;
                         this.modifiedItem.url = responseData.url;
+                        if (responseData.image) this.modifiedItem.image = responseData.image;
                         if (responseData.price) {
                             this.modifiedItem.price = parseFloat(responseData.price.price) || 0;
                         }

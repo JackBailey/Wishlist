@@ -32,4 +32,3 @@ coverage
 .vercel
 .env
 output.env
-appwrite.json

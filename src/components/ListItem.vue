@@ -88,10 +88,16 @@
             <v-img
                 :src="item.image"
                 alt=""
+                position="center right"
+                v-if="!$vuetify.display.mobile"
+            />
+            <v-img
+                :src="item.image"
+                alt=""
                 height="200"
-                width="auto"
-                max-width="300"
-                :position="`center ${$vuetify.display.mobile ? 'center' : 'right'}`"
+                width="300"
+                position="center center"
+                v-else
             />
         </div>
     </v-card>

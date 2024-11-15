@@ -66,9 +66,9 @@ const getBestImage = (url, images) => {
 };
 
 export default async ({ req, res, log, error }) => {
-    const { url } = req.bodyJson;
-
     try {
+        const { url } = req.bodyJson;
+
         const data = await getPreview(url);
         const site = getSite(url);
 
