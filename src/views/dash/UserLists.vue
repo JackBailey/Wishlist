@@ -44,7 +44,6 @@
                 @createList="createList"
                 :disabled="auth.user.emailVerification === false"
             />
-            <!-- TODO: Properly disable -->
         </h1>
         <v-divider />
         <div

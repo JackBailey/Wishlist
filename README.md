@@ -28,7 +28,6 @@ This is a simple Wishlist app, to keep track of things you'd like. If anyone buy
 - Author can choose to see what has been purchased or not
 - Multiple currency support (whatever Appwrite supports), can be set per list
 
-
 # Setup
 
 ## Installation
@@ -42,6 +41,9 @@ Install dependencies for this project:
 ```sh
 pnpm install
 ```
+
+> [!NOTE]  
+> It might make more sense using appwrite-cli for this, using appwrite.json. I wasn't aware of it when I made the setup script, which is now outdated.
 
 Create a new project within Appwrite, and create a new API key. Subsitute the values in the below command with your API key and Project ID. Replace the endpoint if using your own instance.
 

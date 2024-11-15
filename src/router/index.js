@@ -45,7 +45,10 @@ const router = createRouter({
         {
             path: "/dash/verify",
             name: "Verify",
-            component: () => import("@/views/dash/VerifyPage.vue")
+            component: () => import("@/views/dash/VerifyPage.vue"),
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: "/dash/error",
