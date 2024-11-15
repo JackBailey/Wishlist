@@ -2,7 +2,7 @@
     <v-text-field
         label="Title"
         v-model="list.title"
-        maxlength="64"
+        maxlength="128"
         counter
         autofocus
     />

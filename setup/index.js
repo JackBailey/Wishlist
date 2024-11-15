@@ -67,7 +67,7 @@ const prepareDatabases = async () => {
         true
     );
 
-    await databases.createStringAttribute(database.$id, itemsCollection.$id, "title", 64, true);
+    await databases.createStringAttribute(database.$id, itemsCollection.$id, "title", 128, true);
 
     await databases.createStringAttribute(
         database.$id,
@@ -121,7 +121,7 @@ const prepareDatabases = async () => {
 
     await databases.createStringAttribute(database.$id, listsCollection.$id, "author", 20, true);
 
-    await databases.createStringAttribute(database.$id, listsCollection.$id, "title", 64, true);
+    await databases.createStringAttribute(database.$id, listsCollection.$id, "title", 128, true);
 
     await databases.createStringAttribute(
         database.$id,

@@ -69,7 +69,7 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 64,
+                    "size": 128,
                     "default": null
                 },
                 {
@@ -131,7 +131,7 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 64,
+                    "size": 128,
                     "default": null
                 },
                 {

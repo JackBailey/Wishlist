@@ -16,7 +16,7 @@ const formatTitle = (data, site) => {
         }
     }
 
-    return title ? title.slice(0, 64).trim() : "";
+    return title ? title.slice(0, 128).trim() : "";
 };
 
 const getPreview = async (url) => {
