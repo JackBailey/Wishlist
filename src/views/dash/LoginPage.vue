@@ -59,6 +59,9 @@
             Don't have an account?
             <router-link :to="`/dash/register?redirect=${redirectPath}`">Register here</router-link>
         </p>
+        <p v-if="methods.includes('password')">
+            <router-link to="/dash/recovery/start">Forgot your password?</router-link>
+        </p>
     </div>
 </template>
 

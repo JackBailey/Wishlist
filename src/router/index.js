@@ -51,6 +51,16 @@ const router = createRouter({
             }
         },
         {
+            path: "/dash/recovery/start",
+            name: "Start Recovery",
+            component: () => import("@/views/dash/recovery/StartRecovery.vue")
+        },
+        {
+            path: "/dash/recovery/complete",
+            name: "Complete Recovery",
+            component: () => import("@/views/dash/recovery/CompleteRecovery.vue")
+        },
+        {
             path: "/dash/error",
             name: "error",
             component: () => import("@/views/dash/ErrorPage.vue")

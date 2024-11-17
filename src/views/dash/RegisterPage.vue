@@ -79,7 +79,7 @@ export default {
             if (!this.registrationDetails.name) {
                 this.alert = {
                     title: "Error",
-                    message: "Please enter a name."
+                    text: "Please enter a name."
                 };
                 return;
             }
@@ -87,7 +87,7 @@ export default {
             if (!this.registrationDetails.email) {
                 this.alert = {
                     title: "Error",
-                    message: "Please enter an email address."
+                    text: "Please enter an email address."
                 };
                 return;
             }
@@ -95,7 +95,7 @@ export default {
             if (!this.registrationDetails.password) {
                 this.alert = {
                     title: "Error",
-                    message: "Please enter a password."
+                    text: "Please enter a password."
                 };
                 return;
             }
@@ -105,7 +105,7 @@ export default {
             ) {
                 this.alert = {
                     title: "Error",
-                    message: "Passwords do not match."
+                    text: "Passwords do not match."
                 };
                 return;
             }
