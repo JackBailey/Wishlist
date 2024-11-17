@@ -128,7 +128,7 @@ function getPrice(doc, url) {
         return { currency, price };
     } else {
         let price = null;
-        let currency = null;
+        // let currency = null;
         const pricePatterns = [
             ".pd__cost__retail-price",
             ".price",
@@ -144,7 +144,7 @@ function getPrice(doc, url) {
                 const text = element.text();
                 const priceMatch = text.match(/(\d{1,3}(,\d{3})*(\.\d{2})?)/);
                 if (priceMatch) {
-                    const extractedPrice = priceMatch[0].replace(/,/g, '');
+                    const extractedPrice = priceMatch[0].replace(/,/g, "");
                     price = parseFloat(extractedPrice);
                     // const currencyMatch = text.match(/[^\d.,\s]+/);
                     // console.log({extractedPrice, pattern, currencyMatch});

@@ -181,6 +181,14 @@
                     "array": false,
                     "size": 4000,
                     "default": null
+                },
+                {
+                    "key": "imageID",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 20,
+                    "default": null
                 }
             ],
             "indexes": []
@@ -232,9 +240,12 @@
             "fileSecurity": true,
             "name": "images",
             "enabled": true,
-            "maximumFileSize": 5000000,
-            "allowedFileExtensions": [],
-            "compression": "none",
+            "maximumFileSize": 20000000,
+            "allowedFileExtensions": [
+                "jpg",
+                "png"
+            ],
+            "compression": "gzip",
             "encryption": true,
             "antivirus": true
         }

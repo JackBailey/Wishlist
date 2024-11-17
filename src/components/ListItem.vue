@@ -83,16 +83,19 @@
         </div>
         <div
             class="item-image"
-            v-if="item.image"
+            v-if="imageURL"
         >
             <v-img
-                :src="item.image"
+                :src="imageURL"
                 alt=""
+                height="200"
+                width="auto"
+                max-width="300"
                 position="center right"
                 v-if="!$vuetify.display.mobile"
             />
             <v-img
-                :src="item.image"
+                :src="imageURL"
                 alt=""
                 height="200"
                 width="300"
@@ -108,10 +111,13 @@ import { mdiGift, mdiOpenInNew, mdiWeb } from "@mdi/js";
 import { convertPriority } from "@/utils";
 import DeleteItem from "@/components/dialogs/DeleteItem.vue";
 import FulfillItem from "@/components/dialogs/FulfillItem.vue";
+import { ImageFormat } from "appwrite";
 import ModifyItem from "./dialogs/ModifyItem.vue";
+import { storage } from "@/appwrite";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 import VueMarkdown from "vue-markdown-render";
+
 export default {
     props: {
         item: {
@@ -146,6 +152,29 @@ export default {
     computed: {
         spoilSurprises() {
             return this.auth.userPrefs.spoilSurprises;
+        },
+        imageURL() {
+            if (this.item.imageID) {
+                return storage.getFilePreview(
+                    import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                    this.item.imageID,
+                    undefined, // width (optional)
+                    400, // height (optional)
+                    undefined, // gravity (optional)
+                    undefined, // quality (optional)
+                    undefined, // borderWidth (optional)
+                    undefined, // borderColor (optional)
+                    undefined, // borderRadius (optional)
+                    undefined, // opacity (optional)
+                    undefined, // rotation (optional)
+                    undefined, // background (optional)
+                    ImageFormat.Png // output (optional)
+                ).href;
+            } else if (this.item.image) {
+                return this.item.image;
+            } else {
+                return null;
+            }
         }
     },
     methods: {

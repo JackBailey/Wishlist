@@ -23,6 +23,8 @@
                         v-model:item="modifiedItem"
                         :currency="currency"
                         :errors="errors"
+                        @file-state="setFileState"
+                        :uploading-file="uploadingFile"
                     />
                     <v-alert
                         v-if="alert"
@@ -80,7 +82,7 @@
 
 <script>
 import { AppwriteException, ID } from "appwrite";
-import { databases, functions } from "@/appwrite";
+import { databases, functions, storage } from "@/appwrite";
 import { mdiAlert, mdiPencil, mdiPlus, mdiRobot } from "@mdi/js";
 import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
 export default {
@@ -117,7 +119,9 @@ export default {
                 title: "",
                 description: "",
                 url: "",
-                image: "",
+                image: null,
+                imageID: null,
+                imageFile: null,
                 price: "",
                 displayPrice: true,
                 priority: "none"
@@ -129,7 +133,9 @@ export default {
             alert: false,
             loading: false,
             autofillLoading: false,
-            errors: {}
+            errors: {},
+            fileState: false,
+            uploadingFile: false
         };
     },
     watch: {
@@ -142,7 +148,7 @@ export default {
                 this.$emit("unsetQuickCreateURL", "");
             }
         },
-        dialogOpen(open) {
+        async dialogOpen(open) {
             this.errors = {};
             if (open === true) {
                 this.listId = this.list.$id;
@@ -153,15 +159,28 @@ export default {
                         description: this.item.description,
                         url: this.item.url,
                         image: this.item.image,
+                        imageID: this.item.imageID,
                         price: this.item.price,
                         displayPrice: this.item.displayPrice,
                         priority: this.item.priority
                     };
+
+                    if (this.item.imageID) {
+                        const file = await storage.getFile(
+                            import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                            this.item.imageID
+                        );
+
+                        this.modifiedItem.imageFile = new File(["a".repeat(file.sizeOriginal)], file.name);
+                    }
                 }
             }
         }
     },
     methods: {
+        setFileState(value) {
+            this.fileState = value;
+        },
         async autoFill() {
             this.errors = {};
             const url = this.modifiedItem.url;
@@ -225,6 +244,19 @@ export default {
                 return;
             }
             try {
+                if (this.modifiedItem.imageFile) {
+                    this.uploadingFile = true;
+                    const fileUpload = await storage.createFile(
+                        import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                        ID.unique(),
+                        this.modifiedItem.imageFile
+                    );
+
+                    this.uploadingFile = false;
+                    this.modifiedItem.imageID = fileUpload.$id;
+                    this.modifiedItem.image = "";
+                }
+
                 result = await databases.createDocument(
                     import.meta.env.VITE_APPWRITE_DB,
                     import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
@@ -234,6 +266,7 @@ export default {
                         description: this.modifiedItem.description || null,
                         url: this.modifiedItem.url || null,
                         image: this.modifiedItem.image || null,
+                        imageID: this.modifiedItem.imageID || null,
                         price: parseFloat(this.modifiedItem.price) || 0,
                         displayPrice: this.modifiedItem.displayPrice,
                         priority: this.modifiedItem.priority,
@@ -265,6 +298,7 @@ export default {
                 description: "",
                 url: "",
                 image: "",
+                imageID: null,
                 price: 0,
                 displayPrice: true,
                 priority: "none"
@@ -279,6 +313,32 @@ export default {
             this.loading = true;
 
             try {
+                if (["removed", "replaced"].includes(this.fileState)) {
+                    if (this.modifiedItem.imageID) {
+                        await storage.deleteFile(
+                            import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                            this.modifiedItem.imageID
+                        );
+
+                        this.modifiedItem.imageID = null;
+                    }
+                }
+
+                if (["added", "replaced"].includes(this.fileState)) {
+                    this.uploadingFile = true;
+                    const fileUpload = await storage.createFile(
+                        import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                        ID.unique(),
+                        this.modifiedItem.imageFile,
+                        []
+                    );
+
+                    this.uploadingFile = false;
+
+                    this.modifiedItem.imageID = fileUpload.$id;
+                    this.modifiedItem.image = "";
+                }
+
                 result = await databases.updateDocument(
                     import.meta.env.VITE_APPWRITE_DB,
                     import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
@@ -288,6 +348,7 @@ export default {
                         description: this.modifiedItem.description || null,
                         url: this.modifiedItem.url || null,
                         image: this.modifiedItem.image || null,
+                        imageID: this.modifiedItem.imageID || null,
                         price: parseFloat(this.modifiedItem.price) || 0,
                         displayPrice: this.modifiedItem.displayPrice,
                         priority: this.modifiedItem.priority,

@@ -76,5 +76,5 @@ export const CONSTANTS = {
 
     REGEX_CONTENT_TYPE_TEXT: new RegExp("text/.*", "i"),
 
-    REGEX_CONTENT_TYPE_APPLICATION: new RegExp("application/.*", "i"),
+    REGEX_CONTENT_TYPE_APPLICATION: new RegExp("application/.*", "i")
 };

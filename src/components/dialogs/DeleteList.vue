@@ -48,9 +48,9 @@
 </template>
 
 <script>
+import { databases, storage } from "@/appwrite";
 import { mdiAlert, mdiDelete } from "@mdi/js";
 import { AppwriteException } from "appwrite";
-import { databases } from "@/appwrite";
 export default {
     title: "ListDialog",
     props: {
@@ -78,11 +78,25 @@ export default {
             this.loading = true;
             this.alert = false;
             try {
+                await Promise.all(this.list.items.map(async (item) => {
+                    if (item.imageID) {
+                        await storage.deleteFile(
+                            import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                            item.imageID
+                        );
+                    }
+                }));
+
                 await databases.deleteDocument(
                     import.meta.env.VITE_APPWRITE_DB,
                     import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
                     this.list.$id
                 );
+
+                this.$router.push("/dash/lists");
+    
+                this.dialogOpen = false;
+                this.loading = false;
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
@@ -99,10 +113,6 @@ export default {
                 return;
             }
 
-            this.$router.push("/dash/lists");
-
-            this.dialogOpen = false;
-            this.loading = false;
         }
     }
 };

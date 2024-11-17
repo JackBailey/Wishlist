@@ -55,9 +55,9 @@
 </template>
 
 <script>
+import { databases, storage } from "@/appwrite";
 import { mdiAlert, mdiDelete } from "@mdi/js";
 import { AppwriteException } from "appwrite";
-import { databases } from "@/appwrite";
 export default {
     title: "ListDialog",
     props: {
@@ -85,6 +85,12 @@ export default {
             this.loading = true;
             this.alert = false;
             try {
+                if (this.item.imageID) {
+                    await storage.deleteFile(
+                        import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                        this.item.imageID
+                    );
+                }
                 await databases.deleteDocument(
                     import.meta.env.VITE_APPWRITE_DB,
                     import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
