@@ -103,7 +103,8 @@ export default {
                         import.meta.env.VITE_APPWRITE_DB,
                         import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
                         [
-                            Query.equal("shortUrl", this.editedList.shortUrl)
+                            Query.equal("shortUrl", this.editedList.shortUrl),
+                            Query.notEqual("$id", this.listId)
                         ]
                     );
 

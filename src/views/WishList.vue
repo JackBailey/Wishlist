@@ -22,6 +22,7 @@
                     :currency="list.currency"
                     v-if="wishlistOwner"
                     @newItem="addItem"
+                    @updateList="updateList"
                 />
             </h1>
             <vue-markdown
@@ -91,10 +92,10 @@
 </template>
 
 <script>
+import { mdiInformation, mdiShare } from "@mdi/js";
 import { databases } from "@/appwrite";
 import ListItem from "@/components/ListItem.vue";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
-import { mdiInformation } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 import VueMarkdown from "vue-markdown-render";
@@ -121,6 +122,7 @@ export default {
             },
             sort: "price",
             mdiInformation,
+            mdiShare,
             priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
             showFulfilled: localStorage.getItem("showFulfilled") !== "false"
         };
@@ -181,6 +183,8 @@ export default {
         updateList(data) {
             this.list.title = data.list.title;
             this.list.description = data.list.description;
+            this.list.currency = data.list.currency;
+            this.list.shortUrl = data.list.shortUrl;
         },
         addItem(data) {
             this.list.items.push(data.item);
@@ -268,7 +272,9 @@ main {
             h1 {
                 display: flex;
                 align-items: center;
+                flex-wrap: wrap;
                 gap: 1rem;
+
             }
             .description {
                 margin-top: 1rem;

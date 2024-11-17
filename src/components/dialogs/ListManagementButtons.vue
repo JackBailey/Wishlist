@@ -31,7 +31,10 @@
                     rounded="lg"
                     slim
                 >
-                    <EditList :list="list" />
+                    <EditList
+                        :list="list"
+                        @updateList="$emit('updateList', $event)"
+                    />
                     <DeleteList :list="list" />
                 </v-list>
             </v-menu>
@@ -74,18 +77,48 @@
                 </v-card>
             </template>
         </v-dialog>
+
+        <v-btn
+            variant="tonal"
+            base-color="primary"
+            :icon="mdiShare"
+            @click="copyListURL"
+            v-if="$vuetify.display.mobile"
+        />
+        <v-btn
+            variant="tonal"
+            base-color="primary"
+            :prepend-icon="mdiShare"
+            @click="copyListURL"
+            v-else
+        >
+            Share
+        </v-btn>
+
+        <v-snackbar
+            v-model="shareButtonSnackbarOpen"
+            :timeout="2000"
+            color="primary"
+            variant="tonal"
+        >
+            <span>Link copied to clipboard</span>
+        </v-snackbar>
     </v-btn-group>
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
-import { mdiClipboard, mdiMenuDown } from "@mdi/js";
+import { defineEmits, defineProps, ref } from "vue";
+import { mdiClipboard, mdiMenuDown, mdiShare } from "@mdi/js";
 import DeleteList from "./DeleteList.vue";
 import EditList from "./EditList.vue";
 import ModifyItem from "./ModifyItem.vue";
 import validation from "@/utils/validation";
 
-defineProps({
+const shareButtonSnackbarOpen = ref(false);
+
+defineEmits(["newItem", "updateList"]);
+
+const props = defineProps({
     list: {
         type: Object,
         default: () => ({})
@@ -106,6 +139,12 @@ let quickCreateError = ref({
     text: ""
 });
 let quickcreateDialogOpen = ref(false);
+
+const copyListURL = () => {
+    const listURL = `${window.location.origin}/${props.list.shortUrl ? props.list.shortUrl : "/list/" + props.list.$id}`;
+    navigator.clipboard.writeText(listURL);
+    shareButtonSnackbarOpen.value = true;
+};
 
 const quickCreate = async () => {
     const result = await navigator.permissions.query({ name: "clipboard-read" });
