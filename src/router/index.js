@@ -54,6 +54,11 @@ const router = createRouter({
             path: "/dash/error",
             name: "error",
             component: () => import("@/views/dash/ErrorPage.vue")
+        },
+        {
+            path: "/:id(.*)*",
+            name: "not-found",
+            component: () => import("@/views/NotFound.vue")
         }
     ]
 });

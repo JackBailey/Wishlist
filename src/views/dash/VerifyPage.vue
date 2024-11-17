@@ -4,7 +4,7 @@
         <div class="verify">
             <v-alert
                 :type="alert.type || 'error'"
-                border="left"
+                border="start"
                 elevation="2"
                 v-if="alert"
                 :icon="alert.icon || mdiAlert"

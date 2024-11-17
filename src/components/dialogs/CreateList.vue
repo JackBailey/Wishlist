@@ -24,12 +24,12 @@
                     <v-alert
                         v-if="alert"
                         type="error"
-                        border="left"
+                        border="start"
+                        class="mt-4"
                         elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
                         :text="alert.text"
-                        class="mt-4"
                     />
                 </v-card-text>
                 <v-card-actions>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { AppwriteException, ID } from "appwrite";
+import { AppwriteException, ID, Query } from "appwrite";
 import { databases } from "@/appwrite";
 import ListFields from "@/components/dialogs/fields/ListFields.vue";
 import { mdiPlus } from "@mdi/js";
@@ -80,7 +80,8 @@ export default {
             newList: {
                 title: "",
                 description: "",
-                currency: "USD"
+                currency: "USD",
+                shortUrl: ""
             },
             listId: null,
             dialogOpen: false,
@@ -95,7 +96,8 @@ export default {
             if (open === true) {
                 this.editedList = {
                     title: this.list.title,
-                    description: this.list.description
+                    description: this.list.description,
+                    shortUrl: this.list.shortUrl
                 };
                 this.listId = this.list.$id;
             }
@@ -114,6 +116,42 @@ export default {
                 this.loading = false;
                 return;
             }
+
+            if (this.newList.shortUrl) {
+                try {
+                    const conflictingDocuments = await databases.listDocuments(
+                        import.meta.env.VITE_APPWRITE_DB,
+                        import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                        [
+                            Query.equal("shortUrl", this.newList.shortUrl)
+                        ]
+                    );
+
+                    if (conflictingDocuments.total !== 0) {
+                        this.alert = {
+                            title: "Error",
+                            text: "Short URL already in use."
+                        };
+                        this.loading = false;
+                        return;
+                    }
+                } catch (e) {
+                    if (e instanceof AppwriteException) {
+                        this.alert = {
+                            title: "Error",
+                            text: e.message
+                        };
+                    } else {
+                        this.alert = {
+                            title: "Error",
+                            text: "An unknown error occurred."
+                        };
+                    }
+                    this.loading = false;
+                    return;
+                }
+            }
+
             try {
                 list = await databases.createDocument(
                     import.meta.env.VITE_APPWRITE_DB,
@@ -143,7 +181,8 @@ export default {
 
             this.newList = {
                 title: "",
-                description: ""
+                description: "",
+                shortUrl: ""
             };
 
             this.dialogOpen = false;

@@ -23,7 +23,8 @@
                         v-if="alert"
                         type="error"
                         dismissible
-                        border="left"
+                        border="start"
+                        class="mt-4"
                         elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
@@ -49,8 +50,8 @@
 </template>
 
 <script>
+import { AppwriteException, Query } from "appwrite";
 import { mdiAlert, mdiPencil } from "@mdi/js";
-import { AppwriteException } from "appwrite";
 import { databases } from "@/appwrite";
 import ListFields from "@/components/dialogs/fields/ListFields.vue";
 export default {
@@ -85,7 +86,8 @@ export default {
                 this.editedList = {
                     title: this.list.title,
                     description: this.list.description,
-                    currency: this.list.currency
+                    currency: this.list.currency,
+                    shortUrl: this.list.shortUrl
                 };
                 this.listId = this.list.$id;
             }
@@ -95,6 +97,41 @@ export default {
         async updateList() {
             this.alert = false;
             this.loading = true;
+            if (this.editedList.shortUrl) {
+                try {
+                    const conflictingDocuments = await databases.listDocuments(
+                        import.meta.env.VITE_APPWRITE_DB,
+                        import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                        [
+                            Query.equal("shortUrl", this.editedList.shortUrl)
+                        ]
+                    );
+
+                    if (conflictingDocuments.total !== 0) {
+                        this.alert = {
+                            title: "Error",
+                            text: "Short URL already in use."
+                        };
+                        this.loading = false;
+                        return;
+                    }
+                } catch (e) {
+                    if (e instanceof AppwriteException) {
+                        this.alert = {
+                            title: "Error",
+                            text: e.message
+                        };
+                    } else {
+                        this.alert = {
+                            title: "Error",
+                            text: "An unknown error occurred."
+                        };
+                    }
+                    this.loading = false;
+                    return;
+                }
+            }
+
             try {
                 await databases.updateDocument(
                     import.meta.env.VITE_APPWRITE_DB,

@@ -8,7 +8,7 @@
             "databases": true,
             "locale": true,
             "health": false,
-            "storage": false,
+            "storage": true,
             "teams": false,
             "users": true,
             "functions": true,
@@ -99,6 +99,14 @@
                     "array": false,
                     "size": 3,
                     "default": "USD"
+                },
+                {
+                    "key": "shortUrl",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 32,
+                    "default": null
                 }
             ],
             "indexes": []

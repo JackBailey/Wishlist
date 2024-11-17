@@ -21,7 +21,7 @@
                     <v-alert
                         v-if="alert"
                         type="error"
-                        border="left"
+                        border="start"
                         elevation="2"
                         :icon="mdiAlert"
                         :title="alert.title"
