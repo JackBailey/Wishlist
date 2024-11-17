@@ -155,21 +155,27 @@ export default {
         },
         imageURL() {
             if (this.item.imageID) {
-                return storage.getFilePreview(
-                    import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
-                    this.item.imageID,
-                    undefined, // width (optional)
-                    400, // height (optional)
-                    undefined, // gravity (optional)
-                    undefined, // quality (optional)
-                    undefined, // borderWidth (optional)
-                    undefined, // borderColor (optional)
-                    undefined, // borderRadius (optional)
-                    undefined, // opacity (optional)
-                    undefined, // rotation (optional)
-                    undefined, // background (optional)
-                    ImageFormat.Png // output (optional)
-                ).href;
+                try {
+                    const imageURL = storage.getFilePreview(
+                        import.meta.env.VITE_APPWRITE_IMAGE_BUCKET,
+                        this.item.imageID,
+                        undefined, // width (optional)
+                        400, // height (optional)
+                        undefined, // gravity (optional)
+                        undefined, // quality (optional)
+                        undefined, // borderWidth (optional)
+                        undefined, // borderColor (optional)
+                        undefined, // borderRadius (optional)
+                        undefined, // opacity (optional)
+                        undefined, // rotation (optional)
+                        undefined, // background (optional)
+                        ImageFormat.Png // output (optional)
+                    );
+                    return imageURL.toString();
+                } catch (error) {
+                    console.error(error);
+                    return null;
+                }
             } else if (this.item.image) {
                 return this.item.image;
             } else {

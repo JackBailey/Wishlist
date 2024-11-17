@@ -7,13 +7,22 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
-                :append-icon="item ? mdiPencil : mdiPlus"
+                :append-icon="mdiPlus"
                 base-color="primary"
                 size="small"
                 :variant="variant"
+                v-if="!item"
             >
-                <template v-if="!item"> Add Item </template>
+                Add Item
             </v-btn>
+            <v-btn
+                v-bind="activatorProps"
+                :icon="mdiPencil"
+                base-color="primary"
+                size="small"
+                :variant="variant"
+                v-else
+            />
         </template>
 
         <template v-slot:default="{ isActive }">
