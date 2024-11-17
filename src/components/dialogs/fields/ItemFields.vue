@@ -153,5 +153,14 @@ const validateUrl = (url) => (url === "" || validation.urlRegex.test(url) ? true
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
+
+    @media screen and (max-width: 768px){
+        flex-direction: column;
+        gap: 1rem;
+
+        .v-btn {
+            margin-bottom: 1rem;
+        }
+    }
 }
 </style>
