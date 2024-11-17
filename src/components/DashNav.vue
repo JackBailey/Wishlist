@@ -58,6 +58,15 @@
                                     color="primary"
                                 />
                             </v-list-item>
+                            <v-list-item v-if="!!auth.user">
+                                <v-btn
+                                    to="/dash/recovery/start"
+                                    :prepend-icon="mdiLockReset"
+                                    variant="tonal"
+                                >   
+                                    Change Password
+                                </v-btn>
+                            </v-list-item>
                         </v-list>
                         <v-card-actions>
                             <v-spacer />
@@ -106,6 +115,7 @@ import {
     mdiFormatListBulleted,
     mdiGift,
     mdiGithub,
+    mdiLockReset,
     mdiMenu
 } from "@mdi/js";
 import { account } from "@/appwrite";
@@ -125,6 +135,7 @@ export default {
             mdiGift,
             mdiGithub,
             mdiFormatListBulleted,
+            mdiLockReset,
             auth: useAuthStore(),
             menu: false,
             loadingLoginLogout: false,

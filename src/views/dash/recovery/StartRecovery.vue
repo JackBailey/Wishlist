@@ -79,13 +79,6 @@ export default {
             }
             this.loadingRecovery = false;
         }
-    },
-    mounted() {
-        if (this.auth.user) {
-            account.deleteSession("current");
-            this.auth.user = null;
-            this.auth.init();
-        }
     }
 };
 </script>
