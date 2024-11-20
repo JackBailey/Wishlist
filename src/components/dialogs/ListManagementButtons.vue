@@ -107,11 +107,11 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps, ref } from "vue";
 import { mdiClipboard, mdiMenuDown, mdiShare } from "@mdi/js";
 import DeleteList from "./DeleteList.vue";
 import EditList from "./EditList.vue";
 import ModifyItem from "./ModifyItem.vue";
+import { ref } from "vue";
 import validation from "@/utils/validation";
 
 const shareButtonSnackbarOpen = ref(false);

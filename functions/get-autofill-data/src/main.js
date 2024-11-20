@@ -69,6 +69,13 @@ export default async ({ req, res, log, error }) => {
     try {
         const { url } = req.bodyJson;
 
+
+        if (!url) {
+            return res.json({
+                error: "No URL provided"
+            });
+        }
+
         const data = await getPreview(url);
         const site = getSite(url);
 

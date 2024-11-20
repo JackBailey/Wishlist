@@ -232,6 +232,10 @@ export default {
                             url: responseData.error
                         };
                     }
+                } else {
+                    this.errors = {
+                        url: "Unable to autofill data." + result.errors
+                    };
                 }
             } catch (e) {
                 console.error("Error:", e);

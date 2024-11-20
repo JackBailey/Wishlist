@@ -91,8 +91,8 @@
 </template>
 
 <script setup>
-import { defineEmits, ref, useTemplateRef } from "vue";
 import { mdiCash, mdiFileLink, mdiImage, mdiLink, mdiUpload } from "@mdi/js";
+import { ref, useTemplateRef } from "vue";
 import { priorityMap } from "@/utils";
 import { useCurrencyStore } from "@/stores/currency";
 import validation from "@/utils/validation";
@@ -141,7 +141,12 @@ defineProps({
     }
 });
 
-const validateUrl = (url) => (url === "" || validation.urlRegex.test(url) ? true : "Invalid URL");
+console.log(validation.urlRegex);
+
+const validateUrl = (url) => {
+    console.log(url);
+    return url === "" || validation.urlRegex.test(url) ? true : "Invalid URL"
+};
 </script>
 
 <style scoped>
