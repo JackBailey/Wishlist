@@ -128,8 +128,12 @@ export default {
             }
 
             await this.auth.init();
+            const [path, queryString] = this.redirectPath.split('?');
+            const query = queryString ? Object.fromEntries(new URLSearchParams(queryString)) : {};
+
             this.$router.push({
-                path: this.redirectPath
+                path,
+                query: { ...this.$route.query, ...query }
             });
         }
     },

@@ -141,8 +141,6 @@ defineProps({
     }
 });
 
-console.log(validation.urlRegex);
-
 const validateUrl = (url) => {
     console.log(url);
     return url === "" || validation.urlRegex.test(url) ? true : "Invalid URL"

@@ -78,7 +78,7 @@ router.beforeEach(async (to, from, next) => {
     await authStore.init();
     if (to.meta && to.meta.requiresAuth) {
         if (!authStore.isLoggedIn) {
-            next({ name: "login", query: { redirect: to.fullPath } });
+            next({ name: "login", query: { redirect: encodeURIComponent(to.fullPath) } });
         } else {
             next();
         }

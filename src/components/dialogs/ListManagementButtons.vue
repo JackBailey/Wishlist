@@ -108,6 +108,7 @@
 
 <script setup>
 import { mdiClipboard, mdiMenuDown, mdiShare } from "@mdi/js";
+import { useRoute, useRouter } from "vue-router";
 import DeleteList from "./DeleteList.vue";
 import EditList from "./EditList.vue";
 import ModifyItem from "./ModifyItem.vue";
@@ -130,8 +131,15 @@ const props = defineProps({
     currency: {
         type: String,
         required: true
+    },
+    quickCreateQueryURL: {
+        type: String,
+        default: ""
     }
 });
+
+const router = useRouter();
+const route = useRoute();
 
 let quickCreateURL = ref("");
 let quickCreateError = ref({
@@ -148,13 +156,12 @@ const copyListURL = () => {
 
 const quickCreate = async () => {
     const result = await navigator.permissions.query({ name: "clipboard-read" });
-    console.log(result);
     if (result.state !== "denied") {
         const clipboardContents = await navigator.clipboard.readText();
 
         const validURLs = clipboardContents.match(validation.urlRegexGlobal);
 
-        if (validURLs.length === 0) {
+        if (!validURLs || validURLs.length === 0) {
             quickCreateError.value = {
                 title: "Invalid URL",
                 text: "The clipboard does not contain any valid URLs."
@@ -174,5 +181,13 @@ const quickCreate = async () => {
 
 const resetQuickCreateURL = () => {
     quickCreateURL.value = "";
+    if (route.query.quickcreateurl) {
+        const { quickcreateurl, ...remainingQueries } = route.query;
+        router.replace({ query: remainingQueries });
+    }
 };
+
+if (props.quickCreateQueryURL) {
+    quickCreateURL.value = props.quickCreateQueryURL;
+}
 </script>

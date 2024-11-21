@@ -45,6 +45,18 @@
                 :disabled="auth.user.emailVerification === false"
             />
         </h1>
+        <v-card
+            variant="tonal"
+            class="mb-4"
+            v-if="quickCreateURL"
+        >
+            <v-card-text>
+                <p>
+                    Select a list to add the following item to:
+                </p>
+                <strong>URL:</strong> {{ quickCreateURL }}
+            </v-card-text>
+        </v-card>
         <v-divider />
         <div
             class="loaders"
@@ -58,7 +70,7 @@
             <v-list-item
                 v-for="list in lists.documents"
                 :key="list.$id"
-                :href="`/list/${list.$id}`"
+                :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
                 :title="list.title"
                 :lines="list.description ? 'two' : 'one'"
                 :prepend-icon="mdiFormatListBulleted"
@@ -93,7 +105,9 @@ import { mdiFormatListBulleted, mdiInformation } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
+import validation from "@/utils/validation";
 import VueMarkdown from "vue-markdown-render";
+
 export default {
     components: {
         CreateList,
@@ -106,7 +120,8 @@ export default {
             mdiInformation,
             lists: [],
             loading: true,
-            verificationDialog: false
+            verificationDialog: false,
+            quickCreateURL: false
         };
     },
     methods: {
@@ -130,6 +145,21 @@ export default {
             [Query.equal("author", this.auth.user.$id)]
         );
         this.loading = false;
+
+        const { title, text, url } = this.$route.query;
+
+        if (!title && !text && !url) return;
+
+        if (!url) {
+            if (text.match(validation.urlRegexGlobal)) {
+                this.quickCreateURL = text.match(validation.urlRegexGlobal)[0];
+            }
+            else if (title.match(validation.urlRegexGlobal)) {
+                this.quickCreateURL = title.match(validation.urlRegexGlobal)[0];
+            }
+        } else {
+            this.quickCreateURL = url;
+        }
     }
 };
 </script>

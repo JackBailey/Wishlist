@@ -23,15 +23,9 @@ import { useAuthStore } from "@/stores/auth";
 
 export default {
     data() {
-        const redirectPath = this.$route.query.redirect
-            ? this.$route.query.redirect
-            : "/dash/lists";
-        const successRedirect = window.location.origin + redirectPath;
         return {
             auth: useAuthStore(),
             mdiAlert,
-            redirectPath,
-            successRedirect,
             loadingVerification: false,
             alert: false
         };

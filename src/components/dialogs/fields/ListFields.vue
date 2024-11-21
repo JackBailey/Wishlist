@@ -28,7 +28,6 @@
         v-model="list.shortUrl"
         maxlength="32"
         counter
-        autofocus
         persistent-hint
         :hint="
             list.shortUrl ? `Your short URL will be: ${origin}/${list.shortUrl}` : `Set a memorable short URL for your list`

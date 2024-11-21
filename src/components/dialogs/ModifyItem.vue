@@ -391,6 +391,15 @@ export default {
             this.dialogOpen = false;
             this.loading = false;
         }
+    },
+    mounted() {
+        if (this.quickCreateURL) {
+            this.dialogOpen = true;
+            this.modifiedItem.url = this.quickCreateURL;
+            this.autoFill();
+    
+            this.$emit("unsetQuickCreateURL", "");
+        }
     }
 };
 </script>

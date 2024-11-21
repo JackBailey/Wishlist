@@ -20,6 +20,7 @@
                 <ListManagementButtons
                     :list="list"
                     :currency="list.currency"
+                    :quickCreateQueryURL="quickCreateURL"
                     v-if="wishlistOwner"
                     @newItem="addItem"
                     @updateList="updateList"
@@ -92,8 +93,8 @@
 </template>
 
 <script>
+import { client, databases } from "@/appwrite";
 import { mdiInformation, mdiShare } from "@mdi/js";
-import { databases } from "@/appwrite";
 import ListItem from "@/components/ListItem.vue";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
 import { useAuthStore } from "@/stores/auth";
@@ -124,7 +125,8 @@ export default {
             mdiInformation,
             mdiShare,
             priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
-            showFulfilled: localStorage.getItem("showFulfilled") !== "false"
+            showFulfilled: localStorage.getItem("showFulfilled") !== "false",
+            quickCreateURL: this.$route.query.quickcreateurl
         };
     },
     computed: {

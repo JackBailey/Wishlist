@@ -61,11 +61,10 @@ export default {
             this.alert = false;
             this.loadingRecovery = true;
             try {
-                const resp = await account.createRecovery(
+                await account.createRecovery(
                     this.recoveryDetails.email,
                     "https://readyto.gift/dash/recovery/complete"
                 );
-                console.log(resp);
                 this.alert = {
                     type: "success",
                     title: "Success",
