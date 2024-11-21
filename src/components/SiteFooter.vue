@@ -20,6 +20,7 @@
                 :icon="mdiGithub"
                 slim
                 href="https://github.com/JackBailey/Wishlist"
+                class="ml-4"
             />
         </div>
     </v-footer>
