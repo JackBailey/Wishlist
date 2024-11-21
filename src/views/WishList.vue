@@ -41,6 +41,21 @@
                 v-if="spoilSurprises"
             />
         </div>
+        <v-card
+            title="Try the app!"
+            variant="tonal"
+            class="my-5"
+            v-if="pwaPromo"
+        >
+            <v-card-text pt="4">
+                <p>
+                    Add this website as an app to your home screen for a better experience.
+                </p>
+                <p>
+                    It even allows for sharing links directly to the app to add them to your wishlist!
+                </p>
+            </v-card-text>
+        </v-card>
         <v-alert
             v-if="!wishlistOwner"
             type="info"
@@ -126,7 +141,8 @@ export default {
             mdiShare,
             priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
             showFulfilled: localStorage.getItem("showFulfilled") !== "false",
-            quickCreateURL: this.$route.query.quickcreateurl
+            quickCreateURL: this.$route.query.quickcreateurl,
+            pwaPromo: false
         };
     },
     computed: {
@@ -259,6 +275,9 @@ export default {
             });
 
         this.list = list;
+        window.addEventListener("appinstalled", () => {
+            this.pwaPromo = false;
+        });
     }
 };
 </script>
