@@ -115,6 +115,10 @@ function getImages(doc, rootUrl, imagesPropertyType) {
 
 function getPrice(doc, url) {
     const site = getSite(url);
+
+    const metaTagPrice = metaTagContent(doc, "og:price:amount", "property") || metaTagContent(doc, "product:price:amount", "property");
+    if (metaTagPrice) return { price: parseFloat(metaTagPrice) };
+
     if (site === "amazon") {
         const currency = doc("span.a-price-symbol").first().text();
         const wholePriceText = doc("span.a-price-whole").first().contents().first().text();
@@ -154,7 +158,7 @@ function getPrice(doc, url) {
             }
         });
 
-        if (price) return price;
+        if (price) return { price };
     }
 }
 
