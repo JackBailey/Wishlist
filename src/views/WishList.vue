@@ -38,7 +38,7 @@
                 v-model="showFulfilled"
                 color="primary"
                 inset
-                v-if="spoilSurprises"
+                v-if="!wishlistOwner"
             />
         </div>
         <v-card
@@ -174,7 +174,7 @@ export default {
                                 .split(".")[0],
                         items: this.list.items
                             .filter((item) => {
-                                if (!this.showFulfilled && item.fulfillment && this.spoilSurprises)
+                                if (!this.showFulfilled && !this.wishlistOwner && item.fulfillment)
                                     return false;
                                 if (item.price >= lowerBound && item.price < upperBound) {
                                     return item;

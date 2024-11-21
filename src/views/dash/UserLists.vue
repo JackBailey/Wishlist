@@ -66,22 +66,27 @@
             <v-skeleton-loader type="list-item-two-line" />
             <v-skeleton-loader type="list-item-two-line" />
         </div>
+
         <v-list v-else-if="lists?.documents?.length">
-            <v-list-item
+            <v-card
                 v-for="list in lists.documents"
                 :key="list.$id"
                 :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
                 :title="list.title"
                 :lines="list.description ? 'two' : 'one'"
-                :prepend-icon="mdiFormatListBulleted"
+                variant="tonal"
+                class="mb-4"
             >
                 <template
                     v-slot:subtitle
                     v-if="list.description"
                 >
-                    <VueMarkdown :source="list.description" />
+                    <VueMarkdown
+                        :source="list.description"
+                        lass="description user-item-markdown"
+                    />
                 </template>
-            </v-list-item>
+            </v-card>
         </v-list>
         <div
             class="no-items"
@@ -101,8 +106,8 @@
 
 <script>
 import { account, databases } from "@/appwrite";
-import { mdiFormatListBulleted, mdiInformation } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
+import { mdiInformation } from "@mdi/js";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import validation from "@/utils/validation";
@@ -116,7 +121,6 @@ export default {
     data() {
         return {
             auth: useAuthStore(),
-            mdiFormatListBulleted,
             mdiInformation,
             lists: [],
             loading: true,
@@ -142,8 +146,12 @@ export default {
         this.lists = await databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DB,
             import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-            [Query.equal("author", this.auth.user.$id)]
+            [
+                Query.equal("author", this.auth.user.$id),
+                Query.orderDesc("$createdAt")
+            ]
         );
+
         this.loading = false;
 
         const { title, text, url } = this.$route.query;
