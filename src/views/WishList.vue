@@ -269,7 +269,10 @@ export default {
             })
             .map((item) => {
                 item.fulfillment = this.fulfilledItems.documents.find(
-                    (fulfillment) => fulfillment.item.$id === item.$id
+                    (fulfillment) => {
+                        if (!fulfillment.item) return false;
+                        return fulfillment.item.$id === item.$id;
+                    }
                 );
                 return item;
             });
