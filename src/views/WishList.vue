@@ -29,7 +29,7 @@
                     :prepend-icon="listSaved ? mdiStarOff : mdiStar"
                     variant="tonal"
                     rounded="pill"
-                    v-if="!wishlistOwner && auth.user"
+                    v-if="!wishlistOwner"
                     @click="saveList"
                     :color="listSaved ? 'primary' : 'default'"
                 >
@@ -261,6 +261,27 @@ export default {
             });
         },
         async saveList() {
+            if (!this.auth.user) {
+                this.dialogs.create({
+                    title: "Sign In Required",
+                    text: "Sign in to save this list for later, as well as to create your own lists!",
+                    variant: "info",
+                    actions: [
+                        {
+                            text: "Sign In",
+                            action: "close",
+                            color: "primary",
+                            to: "/dash/login?redirect=" + this.$route.fullPath
+                        },
+                        {
+                            text: "Cancel",
+                            action: "close",
+                            color: "default"
+                        }
+                    ]
+                });
+                return;
+            }
             if (this.auth.userPrefs.savedLists && this.auth.userPrefs.savedLists.includes(this.list.$id)) {
                 this.auth.newUserPrefs.savedLists = this.auth.newUserPrefs.savedLists.filter((listId) => listId !== this.list.$id);
                 try {

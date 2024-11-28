@@ -25,12 +25,18 @@
 
 <script setup>
 import { useDialogs } from "@/stores/dialogs";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const dialogs = useDialogs();
 
 const actionHandler = (action, index) => {
     if (action.action === "close") {
         dialogs.close(index);
+        if (action.to) {
+            router.push(action.to);
+        }
     } else {
         action.action();
     }
