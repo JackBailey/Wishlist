@@ -5,11 +5,13 @@
             <RouterView />
             <SiteFooter />
         </v-main>
+        <GlobalDialogs />
     </v-app>
 </template>
 
 <script>
 import DashNav from "@/components/DashNav.vue";
+import GlobalDialogs from "./components/GlobalDialogs.vue";
 import { RouterView } from "vue-router";
 import SiteFooter from "./components/SiteFooter.vue";
 import { useAuthStore } from "@/stores/auth";
@@ -18,7 +20,8 @@ export default {
     components: {
         DashNav,
         RouterView,
-        SiteFooter
+        SiteFooter,
+        GlobalDialogs
     },
     data() {
         return {

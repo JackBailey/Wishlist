@@ -25,6 +25,16 @@
                     @newItem="addItem"
                     @updateList="updateList"
                 />
+                <v-btn
+                    :prepend-icon="listSaved ? mdiStarOff : mdiStar"
+                    variant="tonal"
+                    rounded="pill"
+                    v-if="!wishlistOwner && auth.user"
+                    @click="saveList"
+                    :color="listSaved ? 'primary' : 'default'"
+                >
+                    {{ listSaved ? "Unsave" : "Save" }}
+                </v-btn>
             </h1>
             <vue-markdown
                 v-if="list.description"
@@ -108,12 +118,13 @@
 </template>
 
 <script>
-import { client, databases } from "@/appwrite";
-import { mdiInformation, mdiShare } from "@mdi/js";
+import { account, databases } from "@/appwrite";
+import { mdiInformation, mdiShare, mdiStar, mdiStarOff } from "@mdi/js";
 import ListItem from "@/components/ListItem.vue";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
+import { useDialogs } from "@/stores/dialogs";
 import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
@@ -142,7 +153,10 @@ export default {
             priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
             showFulfilled: localStorage.getItem("showFulfilled") !== "false",
             quickCreateURL: this.$route.query.quickcreateurl,
-            pwaPromo: false
+            pwaPromo: false,
+            mdiStar,
+            mdiStarOff,
+            dialogs: useDialogs()
         };
     },
     computed: {
@@ -195,6 +209,10 @@ export default {
                 })
                 .filter((priceGroup) => priceGroup.items.length);
             return priceGroupItems;
+        },
+        listSaved() {
+            if (!this.auth.userPrefs.savedLists) return false;
+            return this.auth.userPrefs.savedLists.includes(this.list.$id);
         }
     },
     methods: {
@@ -241,6 +259,47 @@ export default {
                 }
                 return item;
             });
+        },
+        async saveList() {
+            if (this.auth.userPrefs.savedLists && this.auth.userPrefs.savedLists.includes(this.list.$id)) {
+                this.auth.newUserPrefs.savedLists = this.auth.newUserPrefs.savedLists.filter((listId) => listId !== this.list.$id);
+                try {
+                    const accountResp = await account.updatePrefs(this.auth.newUserPrefs);
+                    this.auth.userPrefs = accountResp.prefs;
+                } catch (error) {
+                    this.dialogs.create({
+                        title: "Error",
+                        text: "An error occurred while trying to unsave this list. Please try again later. " + error.message,
+                        variant: "error",
+                        actions: [
+                            {
+                                text: "OK",
+                                action: "close",
+                                color: "primary"
+                            }
+                        ]
+                    });
+                }
+            } else {
+                this.auth.newUserPrefs.savedLists = [...this.auth.newUserPrefs.savedLists, this.list.$id];
+                try {
+                    const accountResp = await account.updatePrefs(this.auth.newUserPrefs);
+                    this.auth.userPrefs = accountResp.prefs;
+                } catch (error) {
+                    this.dialogs.create({
+                        title: "Error",
+                        text: "An error occurred while trying to save this list. Please try again later. " + error.message,
+                        variant: "error",
+                        actions: [
+                            {
+                                text: "OK",
+                                action: "close",
+                                color: "primary"
+                            }
+                        ]
+                    });
+                }
+            }   
         }
     },
     watch: {

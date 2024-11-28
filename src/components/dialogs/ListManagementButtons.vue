@@ -3,6 +3,8 @@
         base-color="primary"
         divided
         rounded="pill"
+        density="comfortable"
+        size="small"
     >
         <ModifyItem
             :list="list"

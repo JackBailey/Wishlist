@@ -9,7 +9,6 @@
                 v-bind="activatorProps"
                 :append-icon="mdiPlus"
                 base-color="primary"
-                size="small"
                 :variant="variant"
                 v-if="!item"
             >
@@ -19,7 +18,6 @@
                 v-bind="activatorProps"
                 :icon="mdiPencil"
                 base-color="primary"
-                size="small"
                 :variant="variant"
                 v-else
             />

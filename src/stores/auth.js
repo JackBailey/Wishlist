@@ -8,11 +8,13 @@ export const useAuthStore = defineStore({
         avatar: null,
         userPrefs: {
             darkMode: false,
-            spoilSurprises: false
+            spoilSurprises: false,
+            savedLists: []
         },
         newUserPrefs: {
             darkMode: false,
-            spoilSurprises: false
+            spoilSurprises: false,
+            savedLists: []
         }
     }),
     actions: {
@@ -39,7 +41,7 @@ export const useAuthStore = defineStore({
                 }
             }
 
-            this.newUserPrefs = { ...this.userPrefs };
+            this.newUserPrefs = { ...this.newUserPrefs, ...this.userPrefs };
         }
     },
     getters: {

@@ -57,7 +57,6 @@
                 <strong>URL:</strong> {{ quickCreateURL }}
             </v-card-text>
         </v-card>
-        <v-divider />
         <div
             class="loaders"
             v-if="loading"
@@ -65,9 +64,15 @@
             <v-skeleton-loader type="list-item-two-line" />
             <v-skeleton-loader type="list-item-two-line" />
             <v-skeleton-loader type="list-item-two-line" />
+
+            <h2>Saved Lists</h2>
+
+            <v-skeleton-loader type="list-item-two-line" />
+            <v-skeleton-loader type="list-item-two-line" />
+            <v-skeleton-loader type="list-item-two-line" />
         </div>
 
-        <v-list v-else-if="lists?.documents?.length">
+        <v-list v-if="!loading && lists?.documents?.length">
             <v-card
                 v-for="list in lists.documents"
                 :key="list.$id"
@@ -87,10 +92,36 @@
                     />
                 </template>
             </v-card>
+
         </v-list>
+        <h2 v-if="!loading && savedLists.length">Saved Lists</h2>
+        <v-list
+            v-if="!loading && savedLists.length"
+        >
+            <v-card
+                v-for="list in savedLists"
+                :key="list.$id"
+                :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
+                :title="list.title"
+                :lines="list.description ? 'two' : 'one'"
+                variant="tonal"
+                class="mb-4"
+            >
+                <template
+                    v-slot:subtitle
+                    v-if="list.description"
+                >
+                    <VueMarkdown
+                        :source="list.description"
+                        lass="description user-item-markdown"
+                    />
+                </template>
+            </v-card>
+        </v-list>
+
         <div
             class="no-items"
-            v-else
+            v-if="!loading && !lists?.documents?.length && !savedLists.length"
         >
             <v-spacer height="20" />
             <v-alert
@@ -123,6 +154,7 @@ export default {
             auth: useAuthStore(),
             mdiInformation,
             lists: [],
+            savedLists: [],
             loading: true,
             verificationDialog: false,
             quickCreateURL: false
@@ -141,6 +173,7 @@ export default {
                 alert(error);
             }
         }
+
     },
     async mounted() {
         this.lists = await databases.listDocuments(
@@ -151,6 +184,18 @@ export default {
                 Query.orderDesc("$createdAt")
             ]
         );
+
+        if (this.auth.userPrefs.savedLists && this.auth.userPrefs.savedLists.length) {
+            const savedLists = await databases.listDocuments(
+                import.meta.env.VITE_APPWRITE_DB,
+                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                [
+                    Query.equal("$id", this.auth.userPrefs.savedLists)
+                ]
+            );
+
+            this.savedLists = savedLists.documents;
+        }
 
         this.loading = false;
 
