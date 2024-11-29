@@ -74,7 +74,7 @@ import { useAuthStore } from "@/stores/auth";
 export default {
     data() {
         const redirectPath = this.$route.query.redirect
-            ? this.$route.query.redirect
+            ? decodeURIComponent(this.$route.query.redirect)
             : "/dash/lists";
         const errorRedirect = window.location.origin + "/dash/error";
         const successRedirect = window.location.origin + redirectPath;
