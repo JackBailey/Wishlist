@@ -122,6 +122,7 @@ import { account, databases } from "@/appwrite";
 import { mdiInformation, mdiShare, mdiStar, mdiStarOff } from "@mdi/js";
 import ListItem from "@/components/ListItem.vue";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
+import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 import { useDialogs } from "@/stores/dialogs";
@@ -135,7 +136,7 @@ export default {
     data() {
         return {
             list: false,
-            fulfilledItems: [],
+            fulfillments: [],
             listId: this.$route.params.id,
             auth: useAuthStore(),
             currency: useCurrencyStore(),
@@ -329,38 +330,58 @@ export default {
         }
     },
     async mounted() {
-        let list = await databases.getDocument(
-            import.meta.env.VITE_APPWRITE_DB,
-            import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-            this.listId
-        );
+        try {
+            let list = await databases.getDocument(
+                import.meta.env.VITE_APPWRITE_DB,
+                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                this.listId
+            );
 
-        this.fulfilledItems = await databases.listDocuments(
-            import.meta.env.VITE_APPWRITE_DB,
-            import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION
-        );
+            window.document.title = list.title + " - Ready.togift";
+    
+            this.fulfillments = await databases.listDocuments(
+                import.meta.env.VITE_APPWRITE_DB,
+                import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
+                [
+                    Query.equal("item", list.items.map((item) => item.$id))
+                ]
+            );
 
-        list.items = list.items
-            .sort((a, b) => {
-                if (this.sort === "price") {
-                    return a.price - b.price;
-                }
-                return a.title.localeCompare(b.title);
-            })
-            .map((item) => {
-                item.fulfillment = this.fulfilledItems.documents.find(
-                    (fulfillment) => {
-                        if (!fulfillment.item) return false;
-                        return fulfillment.item.$id === item.$id;
+            list.items = list.items
+                .sort((a, b) => {
+                    if (this.sort === "price") {
+                        return a.price - b.price;
                     }
-                );
-                return item;
-            });
+                    return a.title.localeCompare(b.title);
+                })
+                .map((item) => {
+                    item.fulfillment = this.fulfillments.documents.find(
+                        (fulfillment) => {
+                            return fulfillment.item.$id === item.$id;
+                        }
+                    );
 
-        this.list = list;
-        window.addEventListener("appinstalled", () => {
-            this.pwaPromo = false;
-        });
+                    return item;
+                });
+    
+            this.list = list;
+            window.addEventListener("appinstalled", () => {
+                this.pwaPromo = false;
+            });
+        } catch (error) {
+            this.dialogs.create({
+                title: "Error",
+                text: "An error occurred while trying to load this list. Please try again later. " + error.message,
+                variant: "error",
+                actions: [
+                    {
+                        text: "OK",
+                        action: "close",
+                        color: "primary"
+                    }
+                ]
+            });
+        }
     }
 };
 </script>
