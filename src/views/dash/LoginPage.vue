@@ -113,10 +113,12 @@ export default {
         async passwordLogin() {
             this.loadingLogin = true;
             try {
-                await account.createEmailPasswordSession(
+                const accountResp = await account.createEmailPasswordSession(
                     this.passwordLoginDetails.email,
                     this.passwordLoginDetails.password
                 );
+
+                this.auth.setPreviouslyLoggedInUserID(accountResp.$id);
             } catch (error) {
                 this.alert = {
                     title: "Error",

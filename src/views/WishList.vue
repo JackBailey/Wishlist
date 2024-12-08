@@ -278,15 +278,15 @@ export default {
         async saveList() {
             if (!this.auth.user) {
                 this.dialogs.create({
-                    title: "Sign In Required",
-                    text: "Sign in to save this list for later, as well as to create your own lists!",
+                    title: "Log In Required",
+                    text: "Log In to save this list for later, as well as to create your own lists!",
                     variant: "info",
                     actions: [
                         {
-                            text: "Sign In",
+                            text: "Log In",
                             action: "close",
                             color: "primary",
-                            to: "/dash/login?redirect=" + this.$route.fullPath
+                            to: "/dash/login?redirect=" + encodeURIComponent(this.$route.fullPath)
                         },
                         {
                             text: "Cancel",
@@ -336,6 +336,38 @@ export default {
                     });
                 }
             }   
+        },
+        async createAvoidSpoilersDialog(list) {
+            if (!this.auth.user && this.auth.previouslyLoggedInUserID && list.author === this.auth.previouslyLoggedInUserID) {
+                const dialogResponse = await this.dialogs.create({
+                    title: "Warning",
+                    text: "It appears you may have created this list. Would you like to log in, to avoid spoilers?",
+                    variant: "warning",
+                    opaque: true,
+                    persistent: true,
+                    async: true,
+                    actions: [
+                        {
+                            text: "Continue Anyway",
+                            action: () => {
+                                this.auth.removePreviouslyLoggedInUserID();
+                            },
+                            closeAfterAction: true,
+                            color: "error",
+                            variant: "text"
+                        },
+                        {
+                            text: "Log In",
+                            to: "/dash/login?redirect=" + encodeURIComponent(this.$route.fullPath),
+                            closeAfterAction: true,
+                            color: "primary",
+                            variant: "elevated"
+                        }
+                    ]
+                });
+
+                return dialogResponse === "No";
+            }
         }
     },
     watch: {
@@ -350,6 +382,12 @@ export default {
                 import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
                 this.listId
             );
+
+            const redirectingToLoginPage = await this.createAvoidSpoilersDialog(list);
+
+            if (redirectingToLoginPage) {
+                return;
+            }
 
             window.document.title = list.title + " - Ready.togift";
             
@@ -385,6 +423,14 @@ export default {
             this.list = list;
             window.addEventListener("appinstalled", () => {
                 this.pwaPromo = false;
+            });
+
+            this.auth.$subscribe((mutation, state) => {
+                if (mutation.events.key === "user") {
+                    if (mutation.events.oldValue && !state.user) {
+                        this.createAvoidSpoilersDialog(this.list);
+                    }
+                }
             });
         } catch (error) {
             this.dialogs.create({

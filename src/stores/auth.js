@@ -6,6 +6,7 @@ export const useAuthStore = defineStore({
     state: () => ({
         user: null,
         avatar: null,
+        previouslyLoggedInUserID: localStorage.getItem("previouslyLoggedInUserID"),
         userPrefs: {
             darkMode: false,
             spoilSurprises: false,
@@ -21,6 +22,10 @@ export const useAuthStore = defineStore({
         async init() {
             try {
                 this.user = await account.get();
+
+                if (this.user) {
+                    localStorage.setItem("previouslyLoggedInUserID", this.user.$id);
+                }
 
                 if (this.user.name) this.avatar = avatars.getInitials(this.user.name);
                 if (this.user.prefs) {
@@ -42,6 +47,14 @@ export const useAuthStore = defineStore({
             }
 
             this.newUserPrefs = { ...this.newUserPrefs, ...this.userPrefs };
+        },
+        removePreviouslyLoggedInUserID() {
+            localStorage.removeItem("previouslyLoggedInUserID");
+            this.previouslyLoggedInUserID = null;
+        },
+        setPreviouslyLoggedInUserID(userID) {
+            localStorage.setItem("previouslyLoggedInUserID", userID);
+            this.previouslyLoggedInUserID = userID;
         }
     },
     getters: {
