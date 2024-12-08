@@ -75,9 +75,10 @@
             text="Make sure to mark anything as Fulfilled if you've purchased or plan on purchasing any of the items on the list! This will not be shown to the owner of this list."
             color="primary"
         />
+
         <div
             class="items"
-            v-if="list.items.length"
+            v-if="itemsByPriceGroups.length"
         >
             <div
                 class="item-price-group"
@@ -111,8 +112,21 @@
                 :icon="mdiInformation"
                 elevation="2"
                 class="mt-5"
-                text="No items currently exist in this list. Add some!"
-            />
+            >
+                <template
+                    v-slot:text
+                    v-if="list.items.length"
+                >
+                    Items exist on this list, but they've all been fulfilled. Lucky them!
+                </template>
+                <template
+                    v-slot:text
+                    v-else
+                >
+                    No items currently exist in this list.
+                    <template v-if="wishlistOwner"> Add some! </template>
+                </template>
+            </v-alert>
         </div>
     </div>
 </template>
@@ -168,7 +182,7 @@ export default {
             return this.auth.userPrefs.spoilSurprises;
         },
         itemsByPriceGroups() {
-            if (!this.list || this.list.items.length === 0) return;
+            if (!this.list || this.list.items.length === 0) return [];
 
             const priceGroupItems = this.priceGroups
                 .map((price, index) => {
