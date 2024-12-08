@@ -13,10 +13,10 @@ importers:
         version: 16.0.2
       dotenv:
         specifier: ^16.4.5
-        version: 16.4.5
+        version: 16.4.7
       material:
         specifier: github:treeder/material
-        version: https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603
+        version: https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d
       material-symbols:
         specifier: ^0.27.0
         version: 0.27.0
@@ -728,8 +728,8 @@ packages:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
 
-  dotenv@16.4.5:
-    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
   entities@3.0.1:
@@ -1146,9 +1146,9 @@ packages:
   material-symbols@0.27.0:
     resolution: {integrity: sha512-nRHpnw2Cz7eNl6GptgHHhkjauL0zvkYsuiqy1HBifOYCY4fdbZ/PwtdZN4RNmwA+9jQPoymvlArVPPX5nYTdZg==}
 
-  material@https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603:
-    resolution: {tarball: https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603}
-    version: 0.0.44
+  material@https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d:
+    resolution: {tarball: https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d}
+    version: 0.0.45
 
   mdurl@1.0.1:
     resolution: {integrity: sha512-/sKlQJCBYVY9Ers9hqzKou4H6V5UWc/M59TH2dvkt+84itfnq7uFOMLpOiOS4ujvHP4etln18fmIxA5R5fll0g==}
@@ -2129,7 +2129,7 @@ snapshots:
     dependencies:
       esutils: 2.0.3
 
-  dotenv@16.4.5: {}
+  dotenv@16.4.7: {}
 
   entities@3.0.1: {}
 
@@ -2646,7 +2646,7 @@ snapshots:
 
   material-symbols@0.27.0: {}
 
-  material@https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603:
+  material@https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d:
     dependencies:
       lit: 3.1.4
       tslib: 2.6.3
