@@ -1,21 +1,22 @@
 <template>
     <div class="page-content">
-        <v-card
-            :prepend-icon="mdiInformation"
-            variant="elevated"
-            class="mb-5"
-            color="warning"
+        <v-alert
+            type="warning"
+            border="start"
+            elevation="32"
+            :icon="mdiInformation"
+            title="Verification Required"
+            text="Please verify your email address to create lists."
+            class="mb-4"
             v-if="auth.user.emailVerification === false"
         >
-            <template v-slot:title>
-                <span class="font-weight-black">Please verify your email address to create lists.</span>
-            </template>
-            <v-card-text class="pt-4">
+            <v-card-actions>
                 <v-btn
-                    color="surface-variant"
-                    variant="flat"
+                    variant="outlined"
                     @click="verifyEmail"
-                >Send Verification Email</v-btn>
+                >
+                    Send Verification Email
+                </v-btn>
                 <v-dialog
                     max-width="500"
                     v-model="verificationDialog"
@@ -36,10 +37,10 @@
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
-            </v-card-text>
-        </v-card>
+            </v-card-actions>
+        </v-alert>
         <h1>
-            Lists
+            Your lists
             <CreateList
                 @createList="createList"
                 :disabled="auth.user.emailVerification === false"

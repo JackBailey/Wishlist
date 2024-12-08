@@ -1,7 +1,7 @@
 <template>
     <v-app :theme="auth.userPrefs.darkMode ? 'dark' : 'light'">
         <DashNav :loading="loading" />
-        <v-main v-if="!loading">
+        <v-main>
             <RouterView />
             <SiteFooter />
         </v-main>
@@ -9,48 +9,54 @@
     </v-app>
 </template>
 
-<script>
+<script setup>
+import { onMounted, ref } from "vue";
+import { RouterView, useRouter } from "vue-router";
 import DashNav from "@/components/DashNav.vue";
 import GlobalDialogs from "./components/GlobalDialogs.vue";
-import { RouterView } from "vue-router";
 import SiteFooter from "./components/SiteFooter.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
-export default {
-    components: {
-        DashNav,
-        RouterView,
-        SiteFooter,
-        GlobalDialogs
-    },
-    data() {
-        return {
-            auth: useAuthStore(),
-            currencyStore: useCurrencyStore(),
-            loading: true
-        };
-    },
-    async mounted() {
-        await this.currencyStore.init();
-        this.loading = false;
 
-        const {
-            VITE_UMAMI_URL: umamiURL,
-            VITE_UMAMI_ID: umamiID,
-            VITE_UMAMI_DOMAINS: umamiDomains
-        } = import.meta.env;
+const auth = useAuthStore();
+const currencyStore = useCurrencyStore();
 
-        if (umamiURL && umamiID) {
-            const script = document.createElement("script");
-            script.src = `${umamiURL}`;
-            script.setAttribute("data-website-id", umamiID);
-            if (umamiDomains) {
-                script.setAttribute("data-domains", umamiDomains);
-            }
-            document.head.appendChild(script);
-        }
+const router = useRouter();
+
+const loading = ref(true);
+
+router.beforeResolve((to, from, next) => {
+    if (to.name) {
+        loading.value = true;
     }
-};
+
+    next();
+});
+
+router.afterEach(() => {
+    loading.value = false;
+});
+
+onMounted(async () => {
+    await auth.init();
+    await currencyStore.init();
+
+    const {
+        VITE_UMAMI_URL: umamiURL,
+        VITE_UMAMI_ID: umamiID,
+        VITE_UMAMI_DOMAINS: umamiDomains
+    } = import.meta.env;
+
+    if (umamiURL && umamiID) {
+        const script = document.createElement("script");
+        script.src = `${umamiURL}`;
+        script.setAttribute("data-website-id", umamiID);
+        if (umamiDomains) {
+            script.setAttribute("data-domains", umamiDomains);
+        }
+        document.head.appendChild(script);
+    }
+});
 </script>
 
 <style scoped>
