@@ -104,6 +104,8 @@
 import { AppwriteException, ID } from "appwrite";
 import { mdiAlert, mdiGift, mdiGiftOff } from "@mdi/js";
 import { databases } from "@/appwrite";
+import { useAuthStore } from "@/stores/auth";
+
 export default {
     title: "ListDialog",
     props: {
@@ -124,7 +126,8 @@ export default {
             mdiGiftOff,
             mdiAlert,
             alert: false,
-            loading: false
+            loading: false,
+            auth: useAuthStore()
         };
     },
     methods: {
@@ -192,6 +195,11 @@ export default {
 
             this.dialogOpen = false;
             this.loading = false;
+        }
+    },
+    mounted() {
+        if (this.auth.user && this.auth.user.name) {
+            this.name = this.auth.user.name.split(" ")[0];
         }
     }
 };
