@@ -338,14 +338,18 @@ export default {
             );
 
             window.document.title = list.title + " - Ready.togift";
-    
-            this.fulfillments = await databases.listDocuments(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
-                [
-                    Query.equal("item", list.items.map((item) => item.$id))
-                ]
-            );
+            
+            this.fulfillments = [];
+
+            if (list.items.length) {
+                this.fulfillments = (await databases.listDocuments(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
+                    [
+                        Query.equal("item", list.items.map((item) => item.$id))
+                    ]
+                )).documents;
+            }
 
             list.items = list.items
                 .sort((a, b) => {
@@ -355,7 +359,7 @@ export default {
                     return a.title.localeCompare(b.title);
                 })
                 .map((item) => {
-                    item.fulfillment = this.fulfillments.documents.find(
+                    item.fulfillment = this.fulfillments.find(
                         (fulfillment) => {
                             return fulfillment.item.$id === item.$id;
                         }
