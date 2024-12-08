@@ -45,16 +45,18 @@
                 text="No login methods are enabled. Please contact the site administrator."
             />
         </div>
-        <v-alert
-            :type="alert.type || 'error'"
-            border="start"
-            elevation="2"
-            v-if="alert"
-            :icon="alert.icon || mdiAlert"
-            :title="alert.title"
-            :text="alert.text"
-            class="mt-4"
-        />
+        <div class="alert">
+            <v-alert
+                :type="alert.type || 'error'"
+                border="start"
+                elevation="2"
+                v-if="alert"
+                :icon="alert.icon || mdiAlert"
+                :title="alert.title"
+                :text="alert.text"
+                class="mt-4"
+            />
+        </div>
         <p>
             Don't have an account?
             <router-link :to="`/dash/register?redirect=${redirectPath}`">Register here</router-link>
