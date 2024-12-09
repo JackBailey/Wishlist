@@ -383,13 +383,13 @@ export default {
                 this.listId
             );
 
+            let loadedAsAuthor = this.auth.user && list.author === this.auth.user.$id;
+
             const redirectingToLoginPage = await this.createAvoidSpoilersDialog(list);
 
-            if (redirectingToLoginPage) {
-                return;
-            }
+            if (redirectingToLoginPage) return;
 
-            window.document.title = list.title + " - Ready.togift";
+            window.document.title = list.title + " - Readyto.gift";
             
             this.fulfillments = [];
 
@@ -426,10 +426,9 @@ export default {
             });
 
             this.auth.$subscribe((mutation, state) => {
-                if (mutation.events.key === "user") {
-                    if (mutation.events.oldValue && !state.user) {
-                        this.createAvoidSpoilersDialog(this.list);
-                    }
+                if (!state.user && loadedAsAuthor) {
+                    this.createAvoidSpoilersDialog(this.list);
+                    loadedAsAuthor = false;
                 }
             });
         } catch (error) {
