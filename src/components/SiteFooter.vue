@@ -19,7 +19,7 @@
             <v-btn
                 :icon="mdiGithub"
                 slim
-                href="https://github.com/JackBailey/Wishlist"
+                href="https://github.com/JackBailey/Readyto.gift"
                 class="ml-4"
             />
         </div>
