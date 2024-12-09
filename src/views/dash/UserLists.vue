@@ -39,16 +39,25 @@
                 </v-dialog>
             </v-card-actions>
         </v-alert>
-        <h1>
-            Your lists
-            <CreateList
-                @createList="createList"
-                :disabled="auth.user.emailVerification === false"
-            />
-        </h1>
+        <v-card
+            color="surface"
+            variant="flat"
+            class="pa-2 mb-4"
+        >
+            <template v-slot:title>
+                <h1 class="mb-0">Your lists</h1>
+            </template>
+            <template v-slot:append>
+                <CreateList
+                    @createList="createList"
+                    :disabled="auth.user.emailVerification === false"
+                />
+            </template>
+        </v-card>
         <v-card
             variant="tonal"
             class="mb-4"
+            color="surface"
             v-if="quickCreateURL"
         >
             <v-card-text>
@@ -66,23 +75,35 @@
             <v-skeleton-loader type="list-item-two-line" />
             <v-skeleton-loader type="list-item-two-line" />
 
-            <h2>Saved Lists</h2>
+            <v-card
+                class="pa-2 mb-4"
+                variant="flat"
+                color="surface"
+            >
+                <template v-slot:title>
+                    <h2 class="mb-0">Saved lists</h2>
+                </template>
+                <template v-slot:prepend>
+                    <v-icon>{{ mdiStar }}</v-icon>
+                </template>
+            </v-card>
 
             <v-skeleton-loader type="list-item-two-line" />
             <v-skeleton-loader type="list-item-two-line" />
             <v-skeleton-loader type="list-item-two-line" />
         </div>
 
-        <v-list v-if="!loading && lists?.documents?.length">
+        <v-list v-else-if="!loading && lists?.documents?.length">
             <v-card
                 v-for="list in lists.documents"
                 :key="list.$id"
                 :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
-                :title="list.title"
-                :lines="list.description ? 'two' : 'one'"
                 variant="tonal"
                 class="mb-4"
             >
+                <template v-slot:title>
+                    <h3>{{ list.title }}</h3>                    
+                </template>
                 <template
                     v-slot:subtitle
                     v-if="list.description"
@@ -95,7 +116,19 @@
             </v-card>
 
         </v-list>
-        <h2 v-if="!loading && savedLists.length">Saved Lists</h2>
+        <v-card
+            class="pa-2 mb-4"
+            variant="flat"
+            color="surface"
+            v-if="!loading && savedLists.length"
+        >
+            <template v-slot:title>
+                <h2 class="mb-0">Saved lists</h2>
+            </template>
+            <template v-slot:prepend>
+                <v-icon>{{ mdiStar }}</v-icon>
+            </template>
+        </v-card>
         <v-list
             v-if="!loading && savedLists.length"
         >
@@ -104,10 +137,12 @@
                 :key="list.$id"
                 :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
                 :title="list.title"
-                :lines="list.description ? 'two' : 'one'"
                 variant="tonal"
                 class="mb-4"
             >
+                <template v-slot:title>
+                    <h3>{{ list.title }}</h3>                    
+                </template>
                 <template
                     v-slot:subtitle
                     v-if="list.description"
@@ -138,8 +173,8 @@
 
 <script>
 import { account, databases } from "@/appwrite";
+import { mdiInformation, mdiStar } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
-import { mdiInformation } from "@mdi/js";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import validation from "@/utils/validation";
@@ -154,6 +189,7 @@ export default {
         return {
             auth: useAuthStore(),
             mdiInformation,
+            mdiStar,
             lists: [],
             savedLists: [],
             loading: true,
@@ -225,11 +261,9 @@ main {
         margin: 0 auto;
         padding: 2rem 0;
 
-        h1 {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding-bottom: 0.5rem;
+        h1, h2 {
+            word-break: break-word;
+            white-space: pre-wrap;
         }
     }
 }

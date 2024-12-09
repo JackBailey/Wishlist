@@ -1,5 +1,5 @@
 <template>
-    <v-footer>
+    <v-footer class="mb-4 v-card--variant-tonal pa-0">
         <div class="made-by">
             <p>Created by <a
                 href="https://jackbailey.dev"
@@ -20,7 +20,9 @@
                 :icon="mdiGithub"
                 slim
                 href="https://github.com/JackBailey/Readyto.gift"
-                class="ml-4"
+                class="ml-2"
+                density="compact"
+                size="large"
             />
         </div>
     </v-footer>

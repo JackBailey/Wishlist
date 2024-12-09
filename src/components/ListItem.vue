@@ -53,6 +53,7 @@
                     v-if="item.fulfilledBy"
                     color="primary"
                     variant="elevated"
+                    rounded
                 >
                     <span> Fulfilled by {{ item.fulfilledBy }} </span>
                 </v-chip>
@@ -60,6 +61,7 @@
                     v-if="item.price && item.displayPrice"
                     color="primary"
                     variant="elevated"
+                    rounded
                 >
                     <span>{{ currencyStore.formatter(this.currency).format(item.price) }}</span>
                 </v-chip>
@@ -68,6 +70,7 @@
                     :prepend-icon="convertPriority(item.priority).icon"
                     color="primary"
                     variant="elevated"
+                    rounded
                 >
                     {{ convertPriority(item.priority).text }}
                 </v-chip>
@@ -76,6 +79,7 @@
                     v-if="item.url"
                     :href="item.url"
                     target="_blank"
+                    rounded
                 >
                     {{ getWebsiteHostname(item.url) }}
                 </v-chip>

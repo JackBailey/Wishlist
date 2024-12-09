@@ -15,8 +15,10 @@
             class="list-header"
             variant="tonal"
         >
-            <h1>
-                {{ list.title }}
+            <template v-slot:title>
+                <h1 class="mb-0">{{ list.title }}</h1>
+            </template>
+            <template v-slot:append>
                 <ListManagementButtons
                     :list="list"
                     :currency="list.currency"
@@ -35,12 +37,13 @@
                 >
                     {{ listSaved ? "Unsave" : "Save" }}
                 </v-btn>
-            </h1>
-            <vue-markdown
-                v-if="list.description"
-                :source="list.description"
-                class="description user-item-markdown"
-            />
+            </template>
+            <v-card-text v-if="list.description">
+                <vue-markdown
+                    :source="list.description"
+                    class="description user-item-markdown"
+                />
+            </v-card-text>
         </v-card>
         <div class="filters">
             <v-switch
@@ -112,6 +115,7 @@
                 :icon="mdiInformation"
                 elevation="2"
                 class="mt-5"
+                color="primary"
             >
                 <template
                     v-slot:text
@@ -373,7 +377,8 @@ export default {
     watch: {
         showFulfilled(val) {
             localStorage.setItem("showFulfilled", val);
-        }
+        },
+        
     },
     async mounted() {
         try {
@@ -458,14 +463,8 @@ main {
         .list-header {
             padding: 1rem;
             h1 {
-                display: flex;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 1rem;
-
-            }
-            .description {
-                margin-top: 1rem;
+                word-break: break-word;
+                white-space: pre-wrap;
             }
         }
 

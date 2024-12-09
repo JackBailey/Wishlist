@@ -1,16 +1,16 @@
 <template>
     <div class="app-nav">
-        <v-app-bar prominent>
-            <!-- <v-app-bar-nav-icon
-                variant="text"
-                @click.stop="drawer = !drawer"
-            /> -->
-
+        <v-app-bar
+            flat
+            color="primary"
+            width="lg"
+            variant="tonal"
+        >
             <v-toolbar-title>
-                <v-btn
-                    to="/dash/lists"
-                    :prepend-icon="mdiGift"
-                > readyto.gift </v-btn>
+                <v-icon size="x-small">
+                    {{ mdiGift }}
+                </v-icon>
+                readyto.gift
             </v-toolbar-title>
 
             <template v-slot:append>
@@ -18,6 +18,8 @@
                     to="/dash/lists"
                     v-if="auth.user"
                     :prepend-icon="mdiFormatListBulleted"
+                    color="on-primary-container"
+                    variant="tonal"
                 >Lists</v-btn>
 
                 <v-menu
@@ -28,6 +30,9 @@
                         <v-btn
                             :icon="mdiAccountCircle"
                             v-bind="props"
+                            class="ml-2"
+                            density="compact"
+                            size="large"
                         />
                     </template>
                     <v-card>
