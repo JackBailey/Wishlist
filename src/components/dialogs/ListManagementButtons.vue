@@ -5,6 +5,7 @@
         rounded="pill"
         density="comfortable"
         size="small"
+        :class="class"
     >
         <ModifyItem
             :list="list"

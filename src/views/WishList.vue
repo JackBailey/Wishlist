@@ -23,7 +23,7 @@
                     :list="list"
                     :currency="list.currency"
                     :quickCreateQueryURL="quickCreateURL"
-                    v-if="wishlistOwner"
+                    v-if="wishlistOwner && !$vuetify.display.mobile"
                     @newItem="addItem"
                     @updateList="updateList"
                 />
@@ -44,6 +44,16 @@
                     class="description user-item-markdown"
                 />
             </v-card-text>
+            <div class="mobile-list-management-buttons">
+                <ListManagementButtons
+                    :list="list"
+                    :currency="list.currency"
+                    :quickCreateQueryURL="quickCreateURL"
+                    @newItem="addItem"
+                    @updateList="updateList"
+                    v-if="wishlistOwner && $vuetify.display.mobile"
+                />
+            </div>
         </v-card>
         <div class="filters">
             <v-switch
@@ -377,8 +387,7 @@ export default {
     watch: {
         showFulfilled(val) {
             localStorage.setItem("showFulfilled", val);
-        },
-        
+        }
     },
     async mounted() {
         try {
@@ -465,6 +474,10 @@ main {
             h1 {
                 word-break: break-word;
                 white-space: pre-wrap;
+            }
+
+            .mobile-list-management-buttons {
+                text-align: center;
             }
         }
 

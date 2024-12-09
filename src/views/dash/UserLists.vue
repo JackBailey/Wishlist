@@ -57,7 +57,6 @@
         <v-card
             variant="tonal"
             class="mb-4"
-            color="surface"
             v-if="quickCreateURL"
         >
             <v-card-text>

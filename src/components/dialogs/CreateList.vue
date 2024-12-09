@@ -14,7 +14,20 @@
                 title="Create a new list"
                 size="large"
                 rounded="pill"
-            >Create List</v-btn>
+                v-if="!$vuetify.display.mobile"
+            >
+                Create List
+            </v-btn>
+            <v-btn
+                v-bind="activatorProps"
+                :icon="mdiPlus"
+                base-color="primary"
+                :variant="variant"
+                :disabled="disabled"
+                title="Create a new list"
+                rounded="pill"
+                v-else
+            />
         </template>
 
         <template v-slot:default="{ isActive }">
