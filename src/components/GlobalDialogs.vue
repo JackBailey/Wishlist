@@ -10,7 +10,7 @@
         <v-dialog
             v-model="dialog.open"
             :max-width="dialog.maxWidth || $vuetify.display.mobile ? '100%' : '500px'"
-            :fullscreen="dialog.fullscreen || $vuetify.display.mobile ? true : false"
+            :fullscreen="dialog.fullscreen !== undefined ? dialog.fullscreen : $vuetify.display.mobile ? true : false"
             hide-overlay
             :persistent="dialog.persistent"
         >

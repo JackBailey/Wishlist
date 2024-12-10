@@ -184,8 +184,21 @@ let quickcreateDialogOpen = ref(false);
 let listSaveLoading = ref(false);
 
 
-const copyListURL = () => {
+const copyListURL = async () => {
     const listURL = `${window.location.origin}/${props.list.shortUrl ? props.list.shortUrl : "list/" + props.list.$id}`;
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                url: listURL
+            });
+
+            return;
+        }
+        catch (error) {
+            if (error?.name === "AbortError") return;
+        }
+    }
+    
     navigator.clipboard.writeText(listURL);
     shareButtonSnackbarOpen.value = true;
 };
@@ -198,6 +211,7 @@ const saveList = async () => {
             title: "Log In Required",
             text: "Log In to save this list for later, as well as to create your own lists!",
             variant: "info",
+            fullscreen: false,
             actions: [
                 {
                     text: "Log In",
