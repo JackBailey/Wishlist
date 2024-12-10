@@ -3,6 +3,7 @@
         <DashNav :loading="loading" />
         <v-main>
             <RouterView />
+            <div class="loading-placeholder"></div>
             <SiteFooter />
         </v-main>
         <GlobalDialogs />
@@ -96,8 +97,8 @@ nav a:first-of-type {
 }
 
 .v-main {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr max-content;
 }
 
 .page-content {
