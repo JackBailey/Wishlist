@@ -5,7 +5,7 @@
         rounded="pill"
         density="comfortable"
         size="small"
-        :class="class"
+        :class="props.class"
     >
         <ModifyItem
             :list="list"
@@ -14,12 +14,14 @@
             :quickCreateURL="quickCreateURL"
             @unsetQuickCreateURL="resetQuickCreateURL"
             @newItem="(data) => $emit('newItem', data)"
+            v-if="wishlistOwner"
         />
 
         <v-btn
             size="small"
             icon
-            variant="tonal"
+            variant="outlined"
+            v-if="wishlistOwner"
         >
             <v-icon :icon="mdiMenuDown" />
 
@@ -46,17 +48,18 @@
         <v-dialog
             :max-width="$vuetify.display.mobile ? '100%' : '500px'"
             v-model="quickcreateDialogOpen"
+            v-if="wishlistOwner"
         >
             <template v-slot:activator>
                 <v-btn
                     :icon="mdiClipboard"
-                    variant="tonal"
+                    variant="outlined"
                     @click="quickCreate"
                     v-if="$vuetify.display.mobile"
                 />
                 <v-btn
                     :prepend-icon="mdiClipboard"
-                    variant="tonal"
+                    variant="outlined"
                     @click="quickCreate"
                     v-else
                 > 
@@ -82,15 +85,14 @@
         </v-dialog>
 
         <v-btn
-            variant="tonal"
-            base-color="primary"
+            variant="outlined"
             :icon="mdiShare"
             @click="copyListURL"
-            v-if="$vuetify.display.mobile"
+            v-if="$vuetify.display.mobile && wishlistOwner"
         />
+
         <v-btn
-            variant="tonal"
-            base-color="primary"
+            variant="outlined"
             :prepend-icon="mdiShare"
             @click="copyListURL"
             v-else
@@ -98,25 +100,41 @@
             Share
         </v-btn>
 
+        <v-btn
+            :prepend-icon="listSaved ? mdiStarOff : mdiStar"
+            :variant="listSaved ? 'tonal' : 'outlined'"
+            v-if="!wishlistOwner"
+            @click="saveList"
+            :loading="listSaveLoading"
+        >
+            {{ listSaved ? "Unsave" : "Save" }}
+        </v-btn>
+
         <v-snackbar
             v-model="shareButtonSnackbarOpen"
             :timeout="2000"
             color="primary"
-            variant="tonal"
-        >
-            <span>Link copied to clipboard</span>
-        </v-snackbar>
+            rounded="pill"
+            timer
+            text="Link copied to clipboard"
+        />
     </v-btn-group>
 </template>
 
 <script setup>
-import { mdiClipboard, mdiMenuDown, mdiShare } from "@mdi/js";
+import { mdiClipboard, mdiMenuDown, mdiShare, mdiStar, mdiStarOff } from "@mdi/js";
 import { useRoute, useRouter } from "vue-router";
+import { account } from "@/appwrite";
 import DeleteList from "./DeleteList.vue";
 import EditList from "./EditList.vue";
 import ModifyItem from "./ModifyItem.vue";
 import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import { useDialogs } from "@/stores/dialogs";
 import validation from "@/utils/validation";
+
+const auth = useAuthStore();
+const dialogs = useDialogs();
 
 const shareButtonSnackbarOpen = ref(false);
 
@@ -138,6 +156,18 @@ const props = defineProps({
     quickCreateQueryURL: {
         type: String,
         default: ""
+    },
+    class: {
+        type: String,
+        default: ""
+    },
+    wishlistOwner: {
+        type: Boolean,
+        default: false
+    },
+    listSaved: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -149,12 +179,84 @@ let quickCreateError = ref({
     title: "",
     text: ""
 });
+
 let quickcreateDialogOpen = ref(false);
+let listSaveLoading = ref(false);
+
 
 const copyListURL = () => {
-    const listURL = `${window.location.origin}/${props.list.shortUrl ? props.list.shortUrl : "/list/" + props.list.$id}`;
+    const listURL = `${window.location.origin}/${props.list.shortUrl ? props.list.shortUrl : "list/" + props.list.$id}`;
     navigator.clipboard.writeText(listURL);
     shareButtonSnackbarOpen.value = true;
+};
+
+const saveList = async () => {
+    listSaveLoading.value = true;
+    if (!auth.user) {
+        listSaveLoading.value = false;
+        dialogs.create({
+            title: "Log In Required",
+            text: "Log In to save this list for later, as well as to create your own lists!",
+            variant: "info",
+            actions: [
+                {
+                    text: "Log In",
+                    action: "close",
+                    color: "primary",
+                    to: "/dash/login?redirect=" + encodeURIComponent(route.fullPath)
+                },
+                {
+                    text: "Cancel",
+                    action: "close",
+                    color: "default"
+                }
+            ]
+        });
+        return;
+    }
+    if (auth.userPrefs.savedLists && auth.userPrefs.savedLists.includes(props.list.$id)) {
+        auth.newUserPrefs.savedLists = auth.newUserPrefs.savedLists.filter((listId) => listId !== props.list.$id);
+        try {
+            const accountResp = await account.updatePrefs(auth.newUserPrefs);
+            auth.userPrefs = accountResp.prefs;
+            listSaveLoading.value = false;
+        } catch (error) {
+            listSaveLoading.value = false;
+            dialogs.create({
+                title: "Error",
+                text: "An error occurred while trying to unsave this list. Please try again later. " + error.message,
+                variant: "error",
+                actions: [
+                    {
+                        text: "OK",
+                        action: "close",
+                        color: "primary"
+                    }
+                ]
+            });
+        }
+    } else {
+        auth.newUserPrefs.savedLists = [...auth.newUserPrefs.savedLists, props.list.$id];
+        try {
+            const accountResp = await account.updatePrefs(auth.newUserPrefs);
+            auth.userPrefs = accountResp.prefs;
+            listSaveLoading.value = false;
+        } catch (error) {
+            listSaveLoading.value = false;
+            dialogs.create({
+                title: "Error",
+                text: "An error occurred while trying to save this list. Please try again later. " + error.message,
+                variant: "error",
+                actions: [
+                    {
+                        text: "OK",
+                        action: "close",
+                        color: "primary"
+                    }
+                ]
+            });
+        }
+    }   
 };
 
 const quickCreate = async () => {

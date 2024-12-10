@@ -23,20 +23,12 @@
                     :list="list"
                     :currency="list.currency"
                     :quickCreateQueryURL="quickCreateURL"
-                    v-if="wishlistOwner && !$vuetify.display.mobile"
+                    :wishlistOwner="wishlistOwner"
+                    :listSaved="listSaved"
                     @newItem="addItem"
                     @updateList="updateList"
+                    v-if="!$vuetify.display.mobile"
                 />
-                <v-btn
-                    :prepend-icon="listSaved ? mdiStarOff : mdiStar"
-                    variant="tonal"
-                    rounded="pill"
-                    v-if="!wishlistOwner"
-                    @click="saveList"
-                    :color="listSaved ? 'primary' : 'default'"
-                >
-                    {{ listSaved ? "Unsave" : "Save" }}
-                </v-btn>
             </template>
             <v-card-text v-if="list.description">
                 <vue-markdown
@@ -44,14 +36,18 @@
                     class="description user-item-markdown"
                 />
             </v-card-text>
-            <div class="mobile-list-management-buttons">
+            <div
+                class="mobile-list-buttons"
+                v-if="$vuetify.display.mobile"
+            >
                 <ListManagementButtons
                     :list="list"
                     :currency="list.currency"
                     :quickCreateQueryURL="quickCreateURL"
+                    :wishlistOwner="wishlistOwner"
+                    :listSaved="listSaved"
                     @newItem="addItem"
                     @updateList="updateList"
-                    v-if="wishlistOwner && $vuetify.display.mobile"
                 />
             </div>
         </v-card>
@@ -146,10 +142,10 @@
 </template>
 
 <script>
-import { account, databases } from "@/appwrite";
-import { mdiInformation, mdiShare, mdiStar, mdiStarOff } from "@mdi/js";
+import { databases } from "@/appwrite";
 import ListItem from "@/components/ListItem.vue";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
+import { mdiInformation  } from "@mdi/js";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
@@ -178,13 +174,10 @@ export default {
             },
             sort: "price",
             mdiInformation,
-            mdiShare,
             priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
             showFulfilled: localStorage.getItem("showFulfilled") !== "false",
             quickCreateURL: this.$route.query.quickcreateurl,
             pwaPromo: false,
-            mdiStar,
-            mdiStarOff,
             dialogs: useDialogs()
         };
     },
@@ -288,68 +281,6 @@ export default {
                 }
                 return item;
             });
-        },
-        async saveList() {
-            if (!this.auth.user) {
-                this.dialogs.create({
-                    title: "Log In Required",
-                    text: "Log In to save this list for later, as well as to create your own lists!",
-                    variant: "info",
-                    actions: [
-                        {
-                            text: "Log In",
-                            action: "close",
-                            color: "primary",
-                            to: "/dash/login?redirect=" + encodeURIComponent(this.$route.fullPath)
-                        },
-                        {
-                            text: "Cancel",
-                            action: "close",
-                            color: "default"
-                        }
-                    ]
-                });
-                return;
-            }
-            if (this.auth.userPrefs.savedLists && this.auth.userPrefs.savedLists.includes(this.list.$id)) {
-                this.auth.newUserPrefs.savedLists = this.auth.newUserPrefs.savedLists.filter((listId) => listId !== this.list.$id);
-                try {
-                    const accountResp = await account.updatePrefs(this.auth.newUserPrefs);
-                    this.auth.userPrefs = accountResp.prefs;
-                } catch (error) {
-                    this.dialogs.create({
-                        title: "Error",
-                        text: "An error occurred while trying to unsave this list. Please try again later. " + error.message,
-                        variant: "error",
-                        actions: [
-                            {
-                                text: "OK",
-                                action: "close",
-                                color: "primary"
-                            }
-                        ]
-                    });
-                }
-            } else {
-                this.auth.newUserPrefs.savedLists = [...this.auth.newUserPrefs.savedLists, this.list.$id];
-                try {
-                    const accountResp = await account.updatePrefs(this.auth.newUserPrefs);
-                    this.auth.userPrefs = accountResp.prefs;
-                } catch (error) {
-                    this.dialogs.create({
-                        title: "Error",
-                        text: "An error occurred while trying to save this list. Please try again later. " + error.message,
-                        variant: "error",
-                        actions: [
-                            {
-                                text: "OK",
-                                action: "close",
-                                color: "primary"
-                            }
-                        ]
-                    });
-                }
-            }   
         },
         async createAvoidSpoilersDialog(list) {
             if (!this.auth.user && this.auth.previouslyLoggedInUserID && list.author === this.auth.previouslyLoggedInUserID) {
@@ -476,7 +407,7 @@ main {
                 white-space: pre-wrap;
             }
 
-            .mobile-list-management-buttons {
+            .mobile-list-buttons {
                 text-align: center;
             }
         }
