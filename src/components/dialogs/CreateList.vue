@@ -200,6 +200,13 @@ export default {
 
             this.dialogOpen = false;
             this.loading = false;
+
+            this.$router.push({
+                name: "list",
+                params: {
+                    id: list.$id
+                }
+            });
         }
     }
 };
