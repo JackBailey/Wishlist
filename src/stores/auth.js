@@ -21,7 +21,13 @@ export const useAuthStore = defineStore({
     actions: {
         async init() {
             try {
-                this.user = await account.get();
+                try {
+                    this.user = await account.get();
+                } catch (error) {
+                    if (error.type !== "general_unauthorized_scope") {
+                        throw error;
+                    }
+                }
 
                 if (this.user) {
                     localStorage.setItem("previouslyLoggedInUserID", this.user.$id);
