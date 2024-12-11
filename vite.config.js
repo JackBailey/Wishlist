@@ -1,4 +1,5 @@
 import { fileURLToPath, URL } from "node:url";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -29,10 +30,18 @@ if (missingEnvVars.length > 0) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue(), vuetify()],
+    plugins: [vue(), vuetify(), sentryVitePlugin({
+        org: "readytogift",
+        project: "javascript-vue"
+    })],
+
     resolve: {
         alias: {
             "@": fileURLToPath(new URL("./src", import.meta.url))
         }
+    },
+
+    build: {
+        sourcemap: true
     }
 });

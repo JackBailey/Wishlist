@@ -12,6 +12,7 @@ import * as Sentry from "@sentry/vue";
 
 const app = createApp(App);
 
+const pinia = createPinia();
 
 if (import.meta.env.VITE_SENTRY_DSN) {
     Sentry.init({
@@ -30,10 +31,13 @@ if (import.meta.env.VITE_SENTRY_DSN) {
         replaysOnErrorSampleRate: 1.0 // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
         
     });
+
+    pinia.use(Sentry.createSentryPiniaPlugin({
+        attachPiniaState: true
+    }));
 }
 
-
-app.use(createPinia());
+app.use(pinia);
 
 app.use(router);
 app.use(vuetify);
