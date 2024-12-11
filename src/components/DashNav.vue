@@ -1,10 +1,10 @@
 <template>
     <div class="app-nav">
         <v-app-bar
-            flat
             color="primary"
             width="lg"
             variant="tonal"
+            elevation="6"
         >
             <v-toolbar-title>
                 <v-icon size="x-small">

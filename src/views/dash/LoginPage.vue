@@ -71,6 +71,7 @@
 import { mdiAlert, mdiGithub } from "@mdi/js";
 import { account } from "@/appwrite";
 import { OAuthProvider } from "appwrite";
+import { setUser as setSentryUser } from "@sentry/vue";
 import { useAuthStore } from "@/stores/auth";
 
 export default {
@@ -119,6 +120,15 @@ export default {
                     this.passwordLoginDetails.email,
                     this.passwordLoginDetails.password
                 );
+
+                if (import.meta.env.VITE_SENTRY_DSN) {
+                    setSentryUser({
+                        id: accountResp.$id,
+                        username: accountResp.name,
+                        email: accountResp.email
+                    });
+                }
+
 
                 this.auth.setPreviouslyLoggedInUserID(accountResp.$id);
             } catch (error) {

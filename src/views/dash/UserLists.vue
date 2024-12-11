@@ -42,7 +42,7 @@
         <v-card
             color="surface"
             variant="flat"
-            class="pa-2 mb-4"
+            class="pa-0 mb-4"
         >
             <template v-slot:title>
                 <h1 class="mb-0">Your lists</h1>
@@ -75,7 +75,7 @@
             <v-skeleton-loader type="list-item-two-line" />
 
             <v-card
-                class="pa-2 mb-4"
+                class="pa-0 mb-4"
                 variant="flat"
                 color="surface"
             >
@@ -116,7 +116,7 @@
 
         </v-list>
         <v-card
-            class="pa-2 mb-4"
+            class="pa-0 mb-4"
             variant="flat"
             color="surface"
             v-if="!loading && savedLists.length"

@@ -1,5 +1,6 @@
 import { account, avatars } from "@/appwrite";
 import { defineStore } from "pinia";
+import { setUser as setSentryUser } from "@sentry/vue";
 
 export const useAuthStore = defineStore({
     id: "auth",
@@ -31,6 +32,17 @@ export const useAuthStore = defineStore({
 
                 if (this.user) {
                     localStorage.setItem("previouslyLoggedInUserID", this.user.$id);
+                    if (import.meta.env.VITE_SENTRY_DSN) {
+                        setSentryUser({
+                            id: this.user.$id,
+                            username: this.user.name,
+                            email: this.user.email
+                        });
+                    }
+                } else {
+                    if (import.meta.env.VITE_SENTRY_DSN) {
+                        setSentryUser(null);
+                    }
                 }
 
                 if (this.user.name) this.avatar = avatars.getInitials(this.user.name);
@@ -38,6 +50,9 @@ export const useAuthStore = defineStore({
                     this.userPrefs = this.user.prefs;
                 }
             } catch {
+                if (import.meta.env.VITE_SENTRY_DSN) {
+                    setSentryUser(null);
+                }
                 this.user = null;
                 const localPrefs = localStorage.getItem("userPrefs");
                 if (localPrefs) {
