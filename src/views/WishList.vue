@@ -153,41 +153,35 @@ import { useDialogs } from "@/stores/dialogs";
 import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
-        ListManagementButtons,
         ListItem,
+        ListManagementButtons,
         VueMarkdown
     },
     data() {
         return {
-            list: false,
-            fulfillments: [],
-            listId: this.$route.params.id,
             auth: useAuthStore(),
             currency: useCurrencyStore(),
+            dialogs: useDialogs(),
+            fulfillments: [],
+            list: false,
+            listId: this.$route.params.id,
+            mdiInformation,
             newItem: {
-                title: "",
                 description: "",
-                url: "",
                 image: "",
                 price: 0,
-                priority: "none"
+                priority: "none",
+                title: "",
+                url: ""
             },
-            sort: "price",
-            mdiInformation,
             priceGroups: [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
-            showFulfilled: localStorage.getItem("showFulfilled") !== "false",
-            quickCreateURL: this.$route.query.quickcreateurl,
             pwaPromo: false,
-            dialogs: useDialogs()
+            quickCreateURL: this.$route.query.quickcreateurl,
+            showFulfilled: localStorage.getItem("showFulfilled") !== "false",
+            sort: "price"
         };
     },
     computed: {
-        wishlistOwner() {
-            return this.auth.isLoggedIn && this.auth.user.$id === this.list.author;
-        },
-        spoilSurprises() {
-            return this.auth.userPrefs.spoilSurprises;
-        },
         itemsByPriceGroups() {
             if (!this.list || this.list.items.length === 0) return [];
 
@@ -197,17 +191,6 @@ export default {
                     const upperBound = price;
 
                     return {
-                        price,
-                        title:
-                            this.currency
-                                .formatter(this.list.currency)
-                                .format(lowerBound)
-                                .split(".")[0] +
-                            " - " +
-                            this.currency
-                                .formatter(this.list.currency)
-                                .format(upperBound)
-                                .split(".")[0],
                         items: this.list.items
                             .filter((item) => {
                                 if (!this.showFulfilled && !this.wishlistOwner && item.fulfillment)
@@ -226,7 +209,18 @@ export default {
                                     return a.price - b.price;
                                 }
                                 return a.title.localeCompare(b.title);
-                            })
+                            }),
+                        price,
+                        title:
+                            this.currency
+                                .formatter(this.list.currency)
+                                .format(lowerBound)
+                                .split(".")[0] +
+                            " - " +
+                            this.currency
+                                .formatter(this.list.currency)
+                                .format(upperBound)
+                                .split(".")[0]
                     };
                 })
                 .filter((priceGroup) => priceGroup.items.length);
@@ -235,6 +229,12 @@ export default {
         listSaved() {
             if (!this.auth.userPrefs.savedLists) return false;
             return this.auth.userPrefs.savedLists.includes(this.list.$id);
+        },
+        spoilSurprises() {
+            return this.auth.userPrefs.spoilSurprises;
+        },
+        wishlistOwner() {
+            return this.auth.isLoggedIn && this.auth.user.$id === this.list.author;
         }
     },
     methods: {
@@ -285,30 +285,30 @@ export default {
         async createAvoidSpoilersDialog(list) {
             if (!this.auth.user && this.auth.previouslyLoggedInUserID && list.author === this.auth.previouslyLoggedInUserID) {
                 const dialogResponse = await this.dialogs.create({
-                    title: "Warning",
-                    text: "It appears you may have created this list. Would you like to log in, to avoid spoilers?",
-                    variant: "warning",
-                    opaque: true,
-                    persistent: true,
-                    async: true,
                     actions: [
                         {
-                            text: "Continue Anyway",
                             action: () => {
                                 this.auth.removePreviouslyLoggedInUserID();
                             },
                             closeAfterAction: true,
                             color: "error",
+                            text: "Continue Anyway",
                             variant: "text"
                         },
                         {
-                            text: "Log In",
-                            to: "/dash/login?redirect=" + encodeURIComponent(this.$route.fullPath),
                             closeAfterAction: true,
                             color: "primary",
+                            text: "Log In",
+                            to: "/dash/login?redirect=" + encodeURIComponent(this.$route.fullPath),
                             variant: "elevated"
                         }
-                    ]
+                    ],
+                    async: true,
+                    opaque: true,
+                    persistent: true,
+                    text: "It appears you may have created this list. Would you like to log in, to avoid spoilers?",
+                    title: "Warning",
+                    variant: "warning"
                 });
 
                 return dialogResponse === "No";
@@ -378,16 +378,16 @@ export default {
             });
         } catch (error) {
             this.dialogs.create({
-                title: "Error",
-                text: "An error occurred while trying to load this list. Please try again later. " + error.message,
-                variant: "error",
                 actions: [
                     {
-                        text: "OK",
                         action: "close",
-                        color: "primary"
+                        color: "primary",
+                        text: "OK"
                     }
-                ]
+                ],
+                text: "An error occurred while trying to load this list. Please try again later. " + error.message,
+                title: "Error",
+                variant: "error"
             });
         }
     }

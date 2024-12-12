@@ -24,10 +24,10 @@ import { useAuthStore } from "@/stores/auth";
 export default {
     data() {
         return {
+            alert: false,
             auth: useAuthStore(),
-            mdiAlert,
             loadingVerification: false,
-            alert: false
+            mdiAlert
         };
     },
     methods: {
@@ -41,10 +41,10 @@ export default {
                 await account.updateVerification(userId, secret);
 
                 this.alert = {
-                    title: "Success",
+                    icon: mdiInformation,
                     text: "Account successfully verified, redirecting you to the main page.",
-                    type: "success",
-                    icon: mdiInformation
+                    title: "Success",
+                    type: "success"
                 };
 
                 await this.auth.init();
@@ -56,8 +56,8 @@ export default {
                 }, 2000);
             } catch (error) {
                 this.alert = {
-                    title: "Error",
-                    text: error.message
+                    text: error.message,
+                    title: "Error"
                 };
             }
 

@@ -72,6 +72,10 @@ import { useAuthStore } from "@/stores/auth";
 export default {
     title: "ListDialog",
     props: {
+        disabled: {
+            type: Boolean,
+            default: false
+        },
         list: {
             type: Object,
             default: () => ({})
@@ -79,10 +83,6 @@ export default {
         variant: {
             type: String,
             default: "elevated"
-        },
-        disabled: {
-            type: Boolean,
-            default: false
         }
     },
     components: {
@@ -90,27 +90,27 @@ export default {
     },
     data() {
         return {
-            newList: {
-                title: "",
-                description: "",
-                currency: "USD",
-                shortUrl: ""
-            },
-            listId: null,
-            dialogOpen: false,
-            mdiPlus,
-            auth: useAuthStore(),
             alert: false,
-            loading: false
+            auth: useAuthStore(),
+            dialogOpen: false,
+            listId: null,
+            loading: false,
+            mdiPlus,
+            newList: {
+                currency: "USD",
+                description: "",
+                shortUrl: null,
+                title: ""
+            }
         };
     },
     watch: {
         dialogOpen(open) {
             if (open === true) {
                 this.editedList = {
-                    title: this.list.title,
                     description: this.list.description,
-                    shortUrl: this.list.shortUrl
+                    shortUrl: this.list.shortUrl,
+                    title: this.list.title
                 };
                 this.listId = this.list.$id;
             }
@@ -123,8 +123,8 @@ export default {
             this.loading = true;
             if (this.newList.title === "") {
                 this.alert = {
-                    title: "Error",
-                    text: "Title is required."
+                    text: "Title is required.",
+                    title: "Error"
                 };
                 this.loading = false;
                 return;
@@ -142,8 +142,8 @@ export default {
 
                     if (conflictingDocuments.total !== 0) {
                         this.alert = {
-                            title: "Error",
-                            text: "Short URL already in use."
+                            text: "Short URL already in use.",
+                            title: "Error"
                         };
                         this.loading = false;
                         return;
@@ -151,13 +151,13 @@ export default {
                 } catch (e) {
                     if (e instanceof AppwriteException) {
                         this.alert = {
-                            title: "Error",
-                            text: e.message
+                            text: e.message,
+                            title: "Error"
                         };
                     } else {
                         this.alert = {
-                            title: "Error",
-                            text: "An unknown error occurred."
+                            text: "An unknown error occurred.",
+                            title: "Error"
                         };
                     }
                     this.loading = false;
@@ -175,13 +175,13 @@ export default {
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
-                        title: "Error",
-                        text: e.message
+                        text: e.message,
+                        title: "Error"
                     };
                 } else {
                     this.alert = {
-                        title: "Error",
-                        text: "An unknown error occurred."
+                        text: "An unknown error occurred.",
+                        title: "Error"
                     };
                 }
                 this.loading = false;
@@ -193,9 +193,9 @@ export default {
             });
 
             this.newList = {
-                title: "",
                 description: "",
-                shortUrl: ""
+                shortUrl: "",
+                title: ""
             };
 
             this.dialogOpen = false;

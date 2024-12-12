@@ -261,7 +261,7 @@ export default {
     },
     methods: {
         createList(data) {
-            this.lists.documents.push(data.list);
+            this.lists.push(data.list);
         },
         async getLists() {
             this.loading = true;

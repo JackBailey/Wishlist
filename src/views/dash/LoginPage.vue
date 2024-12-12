@@ -82,21 +82,16 @@ export default {
         const errorRedirect = window.location.origin + "/dash/error";
         const successRedirect = window.location.origin + redirectPath;
         return {
+            alert: false,
             auth: useAuthStore(),
-            mdiGithub,
+            loadingLogin: false,
             mdiAlert,
+            mdiGithub,
             methods: import.meta.env.VITE_LOGIN_METHODS
                 ? import.meta.env.VITE_LOGIN_METHODS.split(",")
                 : [],
-            redirectPath,
-            successRedirect,
-            passwordLoginDetails: {
-                email: "",
-                password: ""
-            },
             methodsData: {
                 github: {
-                    name: "Github",
                     icon: mdiGithub,
                     login: () => {
                         account.createOAuth2Session(
@@ -105,11 +100,16 @@ export default {
                             errorRedirect,
                             ["user"]
                         );
-                    }
+                    },
+                    name: "Github"
                 }
             },
-            loadingLogin: false,
-            alert: false
+            passwordLoginDetails: {
+                email: "",
+                password: ""
+            },
+            redirectPath,
+            successRedirect
         };
     },
     methods: {
@@ -133,8 +133,8 @@ export default {
                 this.auth.setPreviouslyLoggedInUserID(accountResp.$id);
             } catch (error) {
                 this.alert = {
-                    title: "Error",
-                    text: error.message
+                    text: error.message,
+                    title: "Error"
                 };
 
                 this.loadingLogin = false;

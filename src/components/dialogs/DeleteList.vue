@@ -65,12 +65,12 @@ export default {
     },
     data() {
         return {
-            listId: null,
-            dialogOpen: false,
-            mdiDelete,
-            mdiAlert,
             alert: false,
-            loading: false
+            dialogOpen: false,
+            listId: null,
+            loading: false,
+            mdiAlert,
+            mdiDelete
         };
     },
     methods: {
@@ -100,13 +100,13 @@ export default {
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
-                        title: "Error",
-                        text: e.message
+                        text: e.message,
+                        title: "Error"
                     };
                 } else {
                     this.alert = {
-                        title: "Error",
-                        text: "An unknown error occurred."
+                        text: "An unknown error occurred.",
+                        title: "Error"
                     };
                 }
                 this.loading = false;

@@ -95,6 +95,10 @@ import ItemFields from "@/components/dialogs/fields/ItemFields.vue";
 export default {
     title: "ListDialog",
     props: {
+        currency: {
+            type: String,
+            required: true
+        },
         item: {
             type: Object
         },
@@ -102,17 +106,13 @@ export default {
             type: Object,
             default: () => ({})
         },
-        variant: {
-            type: String,
-            default: "elevated"
-        },
-        currency: {
-            type: String,
-            required: true
-        },
         quickCreateURL: {
             type: String,
             default: ""
+        },
+        variant: {
+            type: String,
+            default: "elevated"
         }
     },
     components: {
@@ -120,41 +120,32 @@ export default {
     },
     data() {
         return {
-            listId: null,
-            dialogOpen: false,
-            modifiedItem: {
-                title: "",
-                description: "",
-                url: "",
-                image: null,
-                imageID: null,
-                imageFile: null,
-                price: "",
-                displayPrice: true,
-                priority: "none"
-            },
-            mdiPencil,
-            mdiPlus,
-            mdiAlert,
-            mdiRobot,
             alert: false,
-            loading: false,
             autofillLoading: false,
+            dialogOpen: false,
             errors: {},
             fileState: false,
+            listId: null,
+            loading: false,
+            mdiAlert,
+            mdiPencil,
+            mdiPlus,
+            mdiRobot,
+            modifiedItem: {
+                description: "",
+                displayPrice: true,
+                image: null,
+                imageFile: null,
+                imageID: null,
+                price: "",
+                priority: "none",
+                title: "",
+                url: ""
+            },
             uploadingFile: false
         };
     },
     watch: {
-        quickCreateURL(newURL) {
-            if (newURL) {
-                this.dialogOpen = true;
-                this.modifiedItem.url = newURL;
-                this.autoFill();
-
-                this.$emit("unsetQuickCreateURL", "");
-            }
-        },
         async dialogOpen(open) {
             this.errors = {};
             if (open === true) {
@@ -162,14 +153,14 @@ export default {
 
                 if (this.item) {
                     this.modifiedItem = {
-                        title: this.item.title,
                         description: this.item.description,
-                        url: this.item.url,
+                        displayPrice: this.item.displayPrice,
                         image: this.item.image,
                         imageID: this.item.imageID,
                         price: this.item.price,
-                        displayPrice: this.item.displayPrice,
-                        priority: this.item.priority
+                        priority: this.item.priority,
+                        title: this.item.title,
+                        url: this.item.url
                     };
 
                     if (this.item.imageID) {
@@ -181,6 +172,15 @@ export default {
                         this.modifiedItem.imageFile = new File(["a".repeat(file.sizeOriginal)], file.name);
                     }
                 }
+            }
+        },
+        quickCreateURL(newURL) {
+            if (newURL) {
+                this.dialogOpen = true;
+                this.modifiedItem.url = newURL;
+                this.autoFill();
+
+                this.$emit("unsetQuickCreateURL", "");
             }
         }
     },
@@ -248,8 +248,8 @@ export default {
 
             if (this.modifiedItem.title === "") {
                 this.alert = {
-                    title: "Error",
-                    text: "Title is required."
+                    text: "Title is required.",
+                    title: "Error"
                 };
                 this.loading = false;
                 return;
@@ -273,27 +273,27 @@ export default {
                     import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
                     ID.unique(),
                     {
-                        title: this.modifiedItem.title,
                         description: this.modifiedItem.description || null,
-                        url: this.modifiedItem.url || null,
+                        displayPrice: this.modifiedItem.displayPrice,
                         image: this.modifiedItem.image || null,
                         imageID: this.modifiedItem.imageID || null,
+                        list: this.listId,
                         price: parseFloat(this.modifiedItem.price) || 0,
-                        displayPrice: this.modifiedItem.displayPrice,
                         priority: this.modifiedItem.priority,
-                        list: this.listId
+                        title: this.modifiedItem.title,
+                        url: this.modifiedItem.url || null
                     }
                 );
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
-                        title: "Error",
-                        text: e.message
+                        text: e.message,
+                        title: "Error"
                     };
                 } else {
                     this.alert = {
-                        title: "Error",
-                        text: "An unknown error occurred."
+                        text: "An unknown error occurred.",
+                        title: "Error"
                     };
                 }
                 this.loading = false;
@@ -305,14 +305,14 @@ export default {
             });
 
             this.modifiedItem = {
-                title: "",
                 description: "",
-                url: "",
+                displayPrice: true,
                 image: "",
                 imageID: null,
                 price: 0,
-                displayPrice: true,
-                priority: "none"
+                priority: "none",
+                title: "",
+                url: ""
             };
 
             this.dialogOpen = false;
@@ -355,27 +355,27 @@ export default {
                     import.meta.env.VITE_APPWRITE_ITEM_COLLECTION,
                     this.item.$id,
                     {
-                        title: this.modifiedItem.title,
                         description: this.modifiedItem.description || null,
-                        url: this.modifiedItem.url || null,
+                        displayPrice: this.modifiedItem.displayPrice,
                         image: this.modifiedItem.image || null,
                         imageID: this.modifiedItem.imageID || null,
+                        list: this.listId,
                         price: parseFloat(this.modifiedItem.price) || 0,
-                        displayPrice: this.modifiedItem.displayPrice,
                         priority: this.modifiedItem.priority,
-                        list: this.listId
+                        title: this.modifiedItem.title,
+                        url: this.modifiedItem.url || null
                     }
                 );
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
-                        title: "Error",
-                        text: e.message
+                        text: e.message,
+                        title: "Error"
                     };
                 } else {
                     this.alert = {
-                        title: "Error",
-                        text: "An unknown error occurred."
+                        text: "An unknown error occurred.",
+                        title: "Error"
                     };
                 }
                 this.loading = false;

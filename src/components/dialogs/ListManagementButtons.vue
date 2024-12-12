@@ -141,33 +141,33 @@ const shareButtonSnackbarOpen = ref(false);
 defineEmits(["newItem", "updateList"]);
 
 const props = defineProps({
-    list: {
-        type: Object,
-        default: () => ({})
-    },
-    variant: {
-        type: String,
-        default: "elevated"
+    class: {
+        default: "",
+        type: String
     },
     currency: {
-        type: String,
-        required: true
+        required: true,
+        type: String
     },
-    quickCreateQueryURL: {
-        type: String,
-        default: ""
-    },
-    class: {
-        type: String,
-        default: ""
-    },
-    wishlistOwner: {
-        type: Boolean,
-        default: false
+    list: {
+        default: () => ({}),
+        type: Object
     },
     listSaved: {
-        type: Boolean,
-        default: false
+        default: false,
+        type: Boolean
+    },
+    quickCreateQueryURL: {
+        default: "",
+        type: String
+    },
+    variant: {
+        default: "elevated",
+        type: String
+    },
+    wishlistOwner: {
+        default: false,
+        type: Boolean
     }
 });
 
@@ -176,8 +176,8 @@ const route = useRoute();
 
 let quickCreateURL = ref("");
 let quickCreateError = ref({
-    title: "",
-    text: ""
+    text: "",
+    title: ""
 });
 
 let quickcreateDialogOpen = ref(false);
@@ -208,23 +208,23 @@ const saveList = async () => {
     if (!auth.user) {
         listSaveLoading.value = false;
         dialogs.create({
-            title: "Log In Required",
-            text: "Log In to save this list for later, as well as to create your own lists!",
-            variant: "info",
-            fullscreen: false,
             actions: [
                 {
-                    text: "Log In",
                     action: "close",
                     color: "primary",
+                    text: "Log In",
                     to: "/dash/login?redirect=" + encodeURIComponent(route.fullPath)
                 },
                 {
-                    text: "Cancel",
                     action: "close",
-                    color: "default"
+                    color: "default",
+                    text: "Cancel"
                 }
-            ]
+            ],
+            fullscreen: true,
+            text: "Log In to save this list for later, as well as to create your own lists!",
+            title: "Log In Required",
+            variant: "info"
         });
         return;
     }
@@ -237,16 +237,16 @@ const saveList = async () => {
         } catch (error) {
             listSaveLoading.value = false;
             dialogs.create({
-                title: "Error",
-                text: "An error occurred while trying to unsave this list. Please try again later. " + error.message,
-                variant: "error",
                 actions: [
                     {
-                        text: "OK",
                         action: "close",
-                        color: "primary"
+                        color: "primary",
+                        text: "OK"
                     }
-                ]
+                ],
+                text: "An error occurred while trying to unsave this list. Please try again later. " + error.message,
+                title: "Error",
+                variant: "error"
             });
         }
     } else {
@@ -258,16 +258,16 @@ const saveList = async () => {
         } catch (error) {
             listSaveLoading.value = false;
             dialogs.create({
-                title: "Error",
-                text: "An error occurred while trying to save this list. Please try again later. " + error.message,
-                variant: "error",
                 actions: [
                     {
-                        text: "OK",
                         action: "close",
-                        color: "primary"
+                        color: "primary",
+                        text: "OK"
                     }
-                ]
+                ],
+                text: "An error occurred while trying to save this list. Please try again later. " + error.message,
+                title: "Error",
+                variant: "error"
             });
         }
     }   
@@ -282,8 +282,8 @@ const quickCreate = async () => {
 
         if (!validURLs || validURLs.length === 0) {
             quickCreateError.value = {
-                title: "Invalid URL",
-                text: "The clipboard does not contain any valid URLs."
+                text: "The clipboard does not contain any valid URLs.",
+                title: "Invalid URL"
             };
             quickcreateDialogOpen.value = true;
         } else {
@@ -291,8 +291,8 @@ const quickCreate = async () => {
         }
     } else {
         quickCreateError.value = {
-            title: "Error",
-            text: "Clipboard read permission denied"
+            text: "Clipboard read permission denied",
+            title: "Error"
         };
         quickcreateDialogOpen.value = true;
     }
@@ -300,8 +300,8 @@ const quickCreate = async () => {
 
 const resetQuickCreateURL = () => {
     quickCreateURL.value = "";
-    if (route.query.quickcreateurl) {
-        const { quickcreateurl, ...remainingQueries } = route.query;
+    const { quickcreateurl, ...remainingQueries } = route.query;
+    if (quickcreateurl) {
         router.replace({ query: remainingQueries });
     }
 };

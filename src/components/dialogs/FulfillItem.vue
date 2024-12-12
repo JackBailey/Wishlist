@@ -120,14 +120,14 @@ export default {
     },
     data() {
         return {
-            name: "",
+            alert: false,
+            auth: useAuthStore(),
             dialogOpen: false,
+            loading: false,
+            mdiAlert,
             mdiGift,
             mdiGiftOff,
-            mdiAlert,
-            alert: false,
-            loading: false,
-            auth: useAuthStore()
+            name: ""
         };
     },
     methods: {
@@ -141,20 +141,20 @@ export default {
                     import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
                     ID.unique(),
                     {
-                        name: this.name !== "" ? this.name : null,
-                        item: this.item.$id
+                        item: this.item.$id,
+                        name: this.name !== "" ? this.name : null
                     }
                 );
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
-                        title: "Error",
-                        text: e.message
+                        text: e.message,
+                        title: "Error"
                     };
                 } else {
                     this.alert = {
-                        title: "Error",
-                        text: "An unknown error occurred."
+                        text: "An unknown error occurred.",
+                        title: "Error"
                     };
                 }
                 this.loading = false;
@@ -178,13 +178,13 @@ export default {
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
-                        title: "Error",
-                        text: e.message
+                        text: e.message,
+                        title: "Error"
                     };
                 } else {
                     this.alert = {
-                        title: "Error",
-                        text: "An unknown error occurred."
+                        text: "An unknown error occurred.",
+                        title: "Error"
                     };
                 }
                 this.loading = false;

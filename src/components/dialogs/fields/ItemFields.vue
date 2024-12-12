@@ -128,22 +128,22 @@ const fileRemoved = () => {
 
 defineProps({
     currency: {
-        type: String,
-        required: true
+        required: true,
+        type: String
     },
     errors: {
-        type: Object,
-        default: () => ({})
+        default: () => ({}),
+        type: Object
     },
     uploadingFile: {
-        type: Boolean,
-        default: false
+        default: false,
+        type: Boolean
     }
 });
 
 const validateUrl = (url) => {
     console.log(url);
-    return url === "" || validation.urlRegex.test(url) ? true : "Invalid URL"
+    return url === "" || validation.urlRegex.test(url) ? true : "Invalid URL";
 };
 </script>
 

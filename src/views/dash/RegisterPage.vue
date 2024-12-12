@@ -61,16 +61,16 @@ export default {
             : "/dash/lists";
         const successRedirect = window.location.origin + redirectPath;
         return {
+            alert: false,
             auth: useAuthStore(),
+            loadingRegistration: false,
             mdiAlert,
             redirectPath,
-            successRedirect,
             registrationDetails: {
                 email: "",
                 password: ""
             },
-            loadingRegistration: false,
-            alert: false
+            successRedirect
         };
     },
     methods: {
@@ -78,24 +78,24 @@ export default {
             this.alert = false;
             if (!this.registrationDetails.name) {
                 this.alert = {
-                    title: "Error",
-                    text: "Please enter a name."
+                    text: "Please enter a name.",
+                    title: "Error"
                 };
                 return;
             }
 
             if (!this.registrationDetails.email) {
                 this.alert = {
-                    title: "Error",
-                    text: "Please enter an email address."
+                    text: "Please enter an email address.",
+                    title: "Error"
                 };
                 return;
             }
 
             if (!this.registrationDetails.password) {
                 this.alert = {
-                    title: "Error",
-                    text: "Please enter a password."
+                    text: "Please enter a password.",
+                    title: "Error"
                 };
                 return;
             }
@@ -104,8 +104,8 @@ export default {
                 this.registrationDetails.password !== this.registrationDetails.passwordConfirmation
             ) {
                 this.alert = {
-                    title: "Error",
-                    text: "Passwords do not match."
+                    text: "Passwords do not match.",
+                    title: "Error"
                 };
                 return;
             }
@@ -121,10 +121,10 @@ export default {
 
                 if (accResp.status === true) {
                     this.alert = {
-                        title: "Success",
+                        icon: mdiInformation,
                         text: "Account created successfully, redirecting you to the login page.",
-                        type: "success",
-                        icon: mdiInformation
+                        title: "Success",
+                        type: "success"
                     };
 
                     this.loadingRegistration = false;
@@ -137,8 +137,8 @@ export default {
                 }
             } catch (error) {
                 this.alert = {
-                    title: "Error",
-                    text: error.message
+                    text: error.message,
+                    title: "Error"
                 };
 
                 this.loadingRegistration = false;

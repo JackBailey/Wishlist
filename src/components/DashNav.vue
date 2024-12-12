@@ -134,17 +134,17 @@ export default {
     },
     data() {
         return {
-            mdiMenu,
+            auth: useAuthStore(),
+            drawer: true,
+            loadingLoginLogout: false,
             mdiAccountCircle,
             mdiCog,
+            mdiFormatListBulleted,
             mdiGift,
             mdiGithub,
-            mdiFormatListBulleted,
             mdiLockReset,
-            auth: useAuthStore(),
-            menu: false,
-            loadingLoginLogout: false,
-            drawer: true
+            mdiMenu,
+            menu: false
         };
     },
     methods: {

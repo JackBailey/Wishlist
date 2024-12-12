@@ -71,23 +71,23 @@ export default {
     },
     data() {
         return {
+            alert: false,
+            dialogOpen: false,
             editedList: {},
             listId: null,
-            dialogOpen: false,
-            mdiPencil,
+            loading: false,
             mdiAlert,
-            alert: false,
-            loading: false
+            mdiPencil
         };
     },
     watch: {
         dialogOpen(open) {
             if (open === true) {
                 this.editedList = {
-                    title: this.list.title,
-                    description: this.list.description,
                     currency: this.list.currency,
-                    shortUrl: this.list.shortUrl
+                    description: this.list.description,
+                    shortUrl: this.list.shortUrl,
+                    title: this.list.title
                 };
                 this.listId = this.list.$id;
             }
@@ -110,8 +110,8 @@ export default {
 
                     if (conflictingDocuments.total !== 0) {
                         this.alert = {
-                            title: "Error",
-                            text: "Short URL already in use."
+                            text: "Short URL already in use.",
+                            title: "Error"
                         };
                         this.loading = false;
                         return;
@@ -119,13 +119,13 @@ export default {
                 } catch (e) {
                     if (e instanceof AppwriteException) {
                         this.alert = {
-                            title: "Error",
-                            text: e.message
+                            text: e.message,
+                            title: "Error"
                         };
                     } else {
                         this.alert = {
-                            title: "Error",
-                            text: "An unknown error occurred."
+                            text: "An unknown error occurred.",
+                            title: "Error"
                         };
                     }
                     this.loading = false;
@@ -143,13 +143,13 @@ export default {
             } catch (e) {
                 if (e instanceof AppwriteException) {
                     this.alert = {
-                        title: "Error",
-                        text: e.message
+                        text: e.message,
+                        title: "Error"
                     };
                 } else {
                     this.alert = {
-                        title: "Error",
-                        text: "An unknown error occurred."
+                        text: "An unknown error occurred.",
+                        title: "Error"
                     };
                 }
                 this.loading = false;
@@ -157,8 +157,8 @@ export default {
             }
 
             this.$emit("updateList", {
-                listId: this.listId,
-                list: this.editedList
+                list: this.editedList,
+                listId: this.listId
             });
 
             this.loading = false;

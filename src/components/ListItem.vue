@@ -124,12 +124,12 @@ import VueMarkdown from "vue-markdown-render";
 
 export default {
     props: {
-        item: {
-            type: Object,
-            required: true
-        },
         currency: {
             type: String,
+            required: true
+        },
+        item: {
+            type: Object,
             required: true
         },
         wishlistOwner: {
@@ -139,24 +139,21 @@ export default {
     },
     components: {
         DeleteItem,
-        ModifyItem,
         FulfillItem,
+        ModifyItem,
         VueMarkdown
     },
     data() {
         return {
+            auth: useAuthStore(),
             convertPriority,
+            currencyStore: useCurrencyStore(),
             mdiGift,
             mdiOpenInNew,
-            mdiWeb,
-            auth: useAuthStore(),
-            currencyStore: useCurrencyStore()
+            mdiWeb
         };
     },
     computed: {
-        spoilSurprises() {
-            return this.auth.userPrefs.spoilSurprises;
-        },
         imageURL() {
             if (this.item.imageID) {
                 try {
@@ -185,6 +182,9 @@ export default {
             } else {
                 return null;
             }
+        },
+        spoilSurprises() {
+            return this.auth.userPrefs.spoilSurprises;
         }
     },
     methods: {

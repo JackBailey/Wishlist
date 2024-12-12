@@ -2,7 +2,7 @@ import "vuetify/styles";
 // import "material-design-icons-iconfont/dist/material-design-icons.css";
 import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 import { createVuetify } from "vuetify";
-import { md3 } from 'vuetify/blueprints'
+import { md3 } from "vuetify/blueprints";
 
 const lightTheme = {
     dark: false,

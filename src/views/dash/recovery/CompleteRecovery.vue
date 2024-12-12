@@ -47,16 +47,16 @@ import { useAuthStore } from "@/stores/auth";
 export default {
     data() {
         return {
+            alert: false,
             auth: useAuthStore(),
+            loadingRecovery: false,
             mdiAlert,
             recoveryDetails: {
                 password: "",
                 passwordConfirmation: "",
-                userId: "",
-                secret: ""
-            },
-            loadingRecovery: false,
-            alert: false
+                secret: "",
+                userId: ""
+            }
         };
     },
     methods: {
@@ -64,8 +64,8 @@ export default {
             this.alert = false;
             if (!this.recoveryDetails.password) {
                 this.alert = {
-                    title: "Error",
-                    text: "Please enter a password."
+                    text: "Please enter a password.",
+                    title: "Error"
                 };
                 return;
             }
@@ -74,8 +74,8 @@ export default {
                 this.recoveryDetails.password !== this.recoveryDetails.passwordConfirmation
             ) {
                 this.alert = {
-                    title: "Error",
-                    text: "Passwords do not match."
+                    text: "Passwords do not match.",
+                    title: "Error"
                 };
                 return;
             }
@@ -90,10 +90,10 @@ export default {
                 );
 
                 this.alert = {
-                    title: "Success",
+                    icon: mdiInformation,
                     text: "Account recovered successfully, redirecting you to the login page.",
-                    type: "success",
-                    icon: mdiInformation
+                    title: "Success",
+                    type: "success"
                 };
 
                 this.loadingRecovery = false;
@@ -105,8 +105,8 @@ export default {
                 }, 2000);
             } catch (error) {
                 this.alert = {
-                    title: "Error",
-                    text: error.message
+                    text: error.message,
+                    title: "Error"
                 };
 
                 this.loadingRecovery = false;

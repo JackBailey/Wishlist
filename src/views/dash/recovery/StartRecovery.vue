@@ -43,17 +43,17 @@ import { useAuthStore } from "@/stores/auth";
 export default {
     data() {
         return {
+            alert: false,
             auth: useAuthStore(),
-            mdiGithub,
+            loadingRecovery: false,
             mdiAlert,
+            mdiGithub,
             methods: import.meta.env.VITE_LOGIN_METHODS
                 ? import.meta.env.VITE_LOGIN_METHODS.split(",")
                 : [],
             recoveryDetails: {
                 email: ""
-            },
-            loadingRecovery: false,
-            alert: false
+            }
         };
     },
     methods: {
@@ -66,14 +66,14 @@ export default {
                     "https://readyto.gift/dash/recovery/complete"
                 );
                 this.alert = {
-                    type: "success",
+                    text: "Recovery email sent",
                     title: "Success",
-                    text: "Recovery email sent"
+                    type: "success"
                 };
             } catch (error) {
                 this.alert = {
-                    title: "Error",
-                    text: error.message
+                    text: error.message,
+                    title: "Error"
                 };
             }
             this.loadingRecovery = false;
