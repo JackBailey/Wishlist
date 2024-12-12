@@ -44,15 +44,63 @@
             variant="flat"
             class="pa-0 mb-4"
         >
-            <template v-slot:title>
-                <h1 class="mb-0">Your lists</h1>
-            </template>
-            <template v-slot:append>
-                <CreateList
-                    @createList="createList"
-                    :disabled="auth.user.emailVerification === false"
-                />
-            </template>
+            <v-card-item class="px-0">
+                <template v-slot:title>
+                    <h1 class="mb-0">Your lists</h1>
+                </template>
+                <template v-slot:append>
+                    <CreateList
+                        @createList="createList"
+                        :disabled="auth.user.emailVerification === false"
+                    />
+                </template>
+            </v-card-item>
+            <v-card-text class="px-0">
+                <div class="sorting">
+                    <v-btn-group
+                        variant="tonal"
+                        divided
+                    >
+                        <v-btn ref="sortTypeButton">
+                            {{ sorting.type.name }}
+                            <v-menu
+                                activator="parent"
+                                location="bottom start"
+                                transition="fade-transition"
+                            >
+                                <v-list
+                                    variant="tonal"
+                                    rounded="xl"
+                                    :items="sorting.typeOptions"
+                                    item-title="name"
+                                    item-value="value"
+                                    class="py-0 mt-2"
+                                    return-object=""
+                                    @update:selected="setSortType"
+                                />
+                            </v-menu>
+                        </v-btn>
+                        <v-btn
+                            :icon="sorting.order === 'asc' ? mdiSortAscending : mdiSortDescending"
+                            @click="toggleSortDirection"
+                        />
+                    </v-btn-group>
+                    <v-select
+                        :items="sorting.typeOptions"
+                        item-title="text"
+                        item-value="value"
+                        v-model="sorting.type"
+                        return-object
+                        hide-details
+                        :menu-props="{
+                            activator: $refs.sortTypeButton,
+                            closeOnClick: true,
+                        }"
+                        v-show="false"
+                    />
+                </div>
+                
+            </v-card-text>
         </v-card>
         <v-card
             variant="tonal"
@@ -79,12 +127,14 @@
                 variant="flat"
                 color="surface"
             >
-                <template v-slot:title>
-                    <h2 class="mb-0">Saved lists</h2>
-                </template>
-                <template v-slot:prepend>
-                    <v-icon>{{ mdiStar }}</v-icon>
-                </template>
+                <v-card-item class="px-0">
+                    <template v-slot:title>
+                        <h2 class="mb-0">Saved lists</h2>
+                    </template>
+                    <template v-slot:prepend>
+                        <v-icon>{{ mdiStar }}</v-icon>
+                    </template>
+                </v-card-item>
             </v-card>
 
             <v-skeleton-loader type="list-item-two-line" />
@@ -92,9 +142,9 @@
             <v-skeleton-loader type="list-item-two-line" />
         </div>
 
-        <v-list v-else-if="!loading && lists?.documents?.length">
+        <v-list v-else-if="!loading && lists?.length">
             <v-card
-                v-for="list in lists.documents"
+                v-for="list in lists"
                 :key="list.$id"
                 :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
                 variant="tonal"
@@ -121,12 +171,14 @@
             color="surface"
             v-if="!loading && savedLists.length"
         >
-            <template v-slot:title>
-                <h2 class="mb-0">Saved lists</h2>
-            </template>
-            <template v-slot:prepend>
-                <v-icon>{{ mdiStar }}</v-icon>
-            </template>
+            <v-card-item class="px-0">
+                <template v-slot:title>
+                    <h2 class="mb-0">Saved lists</h2>
+                </template>
+                <template v-slot:prepend>
+                    <v-icon>{{ mdiStar }}</v-icon>
+                </template>
+            </v-card-item>
         </v-card>
         <v-list
             v-if="!loading && savedLists.length"
@@ -172,7 +224,7 @@
 
 <script>
 import { account, databases } from "@/appwrite";
-import { mdiInformation, mdiStar } from "@mdi/js";
+import { mdiInformation, mdiSortAscending, mdiSortDescending, mdiStar } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
@@ -187,18 +239,63 @@ export default {
     data() {
         return {
             auth: useAuthStore(),
-            mdiInformation,
-            mdiStar,
             lists: [],
-            savedLists: [],
             loading: true,
-            verificationDialog: false,
-            quickCreateURL: false
+            mdiInformation,
+            mdiSortAscending,
+            mdiSortDescending,
+            mdiStar,
+            quickCreateURL: false,
+            savedLists: [],
+            sorting: {
+                order: "asc",
+                type: { name: "Last updated", value: "$updatedAt" },
+                typeOptions: [
+                    { name: "Title", value: "title" },
+                    { name: "Last updated", value: "$updatedAt" },
+                    { name: "Created", value: "$createdAt" }
+                ]
+            },
+            verificationDialog: false
         };
     },
     methods: {
         createList(data) {
             this.lists.documents.push(data.list);
+        },
+        async getLists() {
+            this.loading = true;
+
+            const listQuery = [
+                this.sorting.order === "asc"
+                    ? Query.orderAsc(this.sorting.type.value)
+                    : Query.orderDesc(this.sorting.type.value),
+                Query.or(
+                    [
+                        Query.equal("author", this.auth.user.$id),
+                        this.auth.userPrefs.savedLists?.length ? Query.equal("$id", this.auth.userPrefs.savedLists) : null
+                    ]
+                )
+            ];
+
+            const lists = await databases.listDocuments(
+                import.meta.env.VITE_APPWRITE_DB,
+                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                listQuery
+            );
+
+            this.savedLists = lists.documents.filter(list => this.auth.userPrefs.savedLists.includes(list.$id));
+            this.lists = lists.documents.filter(list => !this.auth.userPrefs.savedLists.includes(list.$id));
+
+            this.loading = false;
+        },
+        setSortType(event) {
+            this.sorting.type = event[0];
+            this.getLists();
+        },
+        toggleSortDirection() {
+            this.sorting.order = this.sorting.order === "asc" ? "desc" : "asc";
+            this.getLists();
         },
         async verifyEmail() {
             try {
@@ -209,32 +306,11 @@ export default {
                 alert(error);
             }
         }
-
     },
     async mounted() {
-        this.lists = await databases.listDocuments(
-            import.meta.env.VITE_APPWRITE_DB,
-            import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-            [
-                Query.equal("author", this.auth.user.$id),
-                Query.orderDesc("$createdAt")
-            ]
-        );
+        await this.getLists();
 
-        if (this.auth.userPrefs.savedLists && this.auth.userPrefs.savedLists.length) {
-            const savedLists = await databases.listDocuments(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                [
-                    Query.equal("$id", this.auth.userPrefs.savedLists)
-                ]
-            );
-
-            this.savedLists = savedLists.documents;
-        }
-
-        this.loading = false;
-
+        // Handle quick create URL query
         const { title, text, url } = this.$route.query;
 
         if (!title && !text && !url) return;
