@@ -31,8 +31,8 @@ if (missingEnvVars.length > 0) {
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue(), vuetify(), sentryVitePlugin({
-        org: "readytogift",
-        project: "javascript-vue"
+        org: "readyto-gift",
+        project: "website"
     })],
 
     resolve: {
