@@ -11,46 +11,12 @@
         class="page-content"
         v-else
     >
-        <v-card
-            class="list-header"
-            variant="tonal"
-        >
-            <template v-slot:title>
-                <h1 class="mb-0">{{ list.title }}</h1>
-            </template>
-            <template v-slot:append>
-                <ListManagementButtons
-                    :list="list"
-                    :currency="list.currency"
-                    :quickCreateQueryURL="quickCreateURL"
-                    :wishlistOwner="wishlistOwner"
-                    :listSaved="listSaved"
-                    @newItem="addItem"
-                    @updateList="updateList"
-                    v-if="!$vuetify.display.mobile"
-                />
-            </template>
-            <v-card-text v-if="list.description">
-                <vue-markdown
-                    :source="list.description"
-                    class="description user-item-markdown"
-                />
-            </v-card-text>
-            <div
-                class="mobile-list-buttons"
-                v-if="$vuetify.display.mobile"
-            >
-                <ListManagementButtons
-                    :list="list"
-                    :currency="list.currency"
-                    :quickCreateQueryURL="quickCreateURL"
-                    :wishlistOwner="wishlistOwner"
-                    :listSaved="listSaved"
-                    @newItem="addItem"
-                    @updateList="updateList"
-                />
-            </div>
-        </v-card>
+        <ListCard
+            :header="true"
+            :list="list"
+            :list-saved="listSaved"
+            :own-list="wishlistOwner"
+        />
         <div class="filters">
             <v-switch
                 label="Show Fulfilled"
@@ -143,19 +109,17 @@
 
 <script>
 import { databases } from "@/appwrite";
+import ListCard from "@/components/ListCard.vue";
 import ListItem from "@/components/ListItem.vue";
-import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
 import { mdiInformation  } from "@mdi/js";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 import { useDialogs } from "@/stores/dialogs";
-import VueMarkdown from "vue-markdown-render";
 export default {
     components: {
-        ListItem,
-        ListManagementButtons,
-        VueMarkdown
+        ListCard,
+        ListItem
     },
     data() {
         return {

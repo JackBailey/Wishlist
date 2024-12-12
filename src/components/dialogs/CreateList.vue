@@ -170,7 +170,7 @@ export default {
                     import.meta.env.VITE_APPWRITE_DB,
                     import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
                     ID.unique(),
-                    { ...this.newList, author: this.auth.user.$id }
+                    { ...this.newList, author: this.auth.user.$id, authorName: this.auth.user.name }
                 );
             } catch (e) {
                 if (e instanceof AppwriteException) {

@@ -143,26 +143,13 @@
         </div>
 
         <v-list v-else-if="!loading && lists?.length">
-            <v-card
+            <ListCard
                 v-for="list in lists"
                 :key="list.$id"
-                :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
-                variant="tonal"
-                class="mb-4"
-            >
-                <template v-slot:title>
-                    <h3>{{ list.title }}</h3>                    
-                </template>
-                <template
-                    v-slot:subtitle
-                    v-if="list.description"
-                >
-                    <VueMarkdown
-                        :source="list.description"
-                        lass="description user-item-markdown"
-                    />
-                </template>
-            </v-card>
+                :list="list"
+                :quickCreateURL="quickCreateURL"
+                :ownList="list.author === auth.user.$id"
+            />
 
         </v-list>
         <v-card
@@ -183,27 +170,13 @@
         <v-list
             v-if="!loading && savedLists.length"
         >
-            <v-card
+            <ListCard
                 v-for="list in savedLists"
                 :key="list.$id"
-                :href="`/list/${list.$id}${quickCreateURL ? `?quickcreateurl=${quickCreateURL}` : ''}`"
-                :title="list.title"
-                variant="tonal"
-                class="mb-4"
-            >
-                <template v-slot:title>
-                    <h3>{{ list.title }}</h3>                    
-                </template>
-                <template
-                    v-slot:subtitle
-                    v-if="list.description"
-                >
-                    <VueMarkdown
-                        :source="list.description"
-                        lass="description user-item-markdown"
-                    />
-                </template>
-            </v-card>
+                :list="list"
+                :quickCreateURL="quickCreateURL"
+                :ownList="list.author === auth.user.$id"
+            />
         </v-list>
 
         <div
@@ -226,15 +199,15 @@
 import { account, databases } from "@/appwrite";
 import { mdiInformation, mdiSortAscending, mdiSortDescending, mdiStar } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
+import ListCard from "@/components/ListCard.vue";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import validation from "@/utils/validation";
-import VueMarkdown from "vue-markdown-render";
 
 export default {
     components: {
         CreateList,
-        VueMarkdown
+        ListCard
     },
     data() {
         return {
@@ -261,7 +234,6 @@ export default {
     },
     methods: {
         createList(data) {
-            // this.lists.push(data.list);
             this.$router.push({
                 name: "list",
                 params: {
@@ -350,5 +322,7 @@ main {
             white-space: pre-wrap;
         }
     }
+
+
 }
 </style>
