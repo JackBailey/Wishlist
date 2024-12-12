@@ -109,7 +109,7 @@
         >
             <v-card-text>
                 <p>
-                    Select a list to add the following item to:
+                    Select or create a list to add the following item to:
                 </p>
                 <strong>URL:</strong> {{ quickCreateURL }}
             </v-card-text>
@@ -248,7 +248,7 @@ export default {
             quickCreateURL: false,
             savedLists: [],
             sorting: {
-                order: "asc",
+                order: "desc",
                 type: { name: "Last updated", value: "$updatedAt" },
                 typeOptions: [
                     { name: "Title", value: "title" },
@@ -261,7 +261,16 @@ export default {
     },
     methods: {
         createList(data) {
-            this.lists.push(data.list);
+            // this.lists.push(data.list);
+            this.$router.push({
+                name: "list",
+                params: {
+                    id: data.list.$id
+                },
+                query: {
+                    quickcreateurl: this.quickCreateURL
+                }
+            });
         },
         async getLists() {
             this.loading = true;
