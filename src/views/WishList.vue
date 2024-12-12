@@ -16,6 +16,8 @@
             :list="list"
             :list-saved="listSaved"
             :own-list="wishlistOwner"
+            @updateList="updateList"
+            @newItem="addItem"
         />
         <div class="filters">
             <v-switch
@@ -202,11 +204,20 @@ export default {
         }
     },
     methods: {
-        updateList(data) {
+        async updateList(data) {
             this.list.title = data.list.title;
             this.list.description = data.list.description;
             this.list.currency = data.list.currency;
             this.list.shortUrl = data.list.shortUrl;
+
+            await databases.updateDocument(
+                import.meta.env.VITE_APPWRITE_DB,
+                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                this.list.$id,
+                {
+                    $updatedAt: new Date()
+                }
+            );
         },
         addItem(data) {
             this.list.items.push(data.item);

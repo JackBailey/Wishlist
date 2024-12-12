@@ -1,6 +1,6 @@
 <template>
     <v-card
-        :href=" header ? false : `/list/${props.list.$id}${quickCreateURL && ownList ? `?quickcreateurl=${props.quickCreateURL}` : ''}`"
+        :href=" header ? undefined : `/list/${props.list.$id}${quickCreateURL && ownList ? `?quickcreateurl=${props.quickCreateURL}` : ''}`"
         :title="props.list.title"
         variant="tonal"
         class="mb-4"
@@ -30,8 +30,8 @@
                 :quickCreateQueryURL="props.quickCreateURL"
                 :wishlistOwner="ownList"
                 :listSaved="props.listSaved"
-                @newItem="addItem"
-                @updateList="updateList"
+                @newItem="(data) => emit('newItem', data)"
+                @updateList="(data) => emit('updateList', data)"
                 v-if="header && !$vuetify.display.mobile"
             />
         </template>
@@ -49,8 +49,8 @@
                     :quickCreateQueryURL="props.quickCreateURL"
                     :wishlistOwner="ownList"
                     :listSaved="props.listSaved"
-                    @newItem="addItem"
-                    @updateList="updateList"
+                    @newItem="(data) => emit('newItem', data)"
+                    @updateList="(data) => emit('updateList', data)"
                     v-if="header && $vuetify.display.mobile"
                 />
             </div>
@@ -60,10 +60,12 @@
 </template>
 
 <script setup>
+import { defineEmits, defineProps } from "vue";
 import { avatars } from "@/appwrite";
-import { defineProps } from "vue";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
 import VueMarkdown from "vue-markdown-render";
+
+const emit = defineEmits(["newItem", "updateList"]);
 
 const props = defineProps({
     buttonProps: {
