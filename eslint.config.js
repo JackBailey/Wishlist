@@ -12,43 +12,18 @@ export default [
     },
     {
         rules: {
+            "array-bracket-spacing": ["error", "never"],
+            "comma-dangle": ["error", "never"],
             indent: ["error", 4],
+            "object-curly-spacing": ["error", "always"],
             quotes: ["error", "double"],
-            "vue/html-indent": ["error", 4],
-            "vue/script-indent": ["error", 4],
-            "vue/html-self-closing": [
-                "error",
-                {
-                    html: {
-                        void: "always",
-                        normal: "never",
-                        component: "always"
-                    }
-                }
-            ],
-            "vue/max-attributes-per-line": [
-                "error",
-                {
-                    singleline: {
-                        max: 1
-                    },
-                    multiline: {
-                        max: 1
-                    }
-                }
-            ],
+            semi: ["error", "always"],
             "sort-imports": [
                 "error",
                 {
-                    memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
                     allowSeparatedGroups: true,
-                    ignoreCase: true
-                }
-            ],
-            "vue/no-deprecated-slot-attribute": [
-                "error",
-                {
-                    ignore: ["md-icon"]
+                    ignoreCase: true,
+                    memberSyntaxSortOrder: ["none", "all", "multiple", "single"]
                 }
             ],
             "vue/first-attribute-linebreak": [
@@ -61,18 +36,59 @@ export default [
             "vue/html-closing-bracket-newline": [
                 "error",
                 {
-                    singleline: "never",
                     multiline: "always",
                     selfClosingTag: {
-                        singleline: "never",
-                        multiline: "always"
+                        multiline: "always",
+                        singleline: "never"
+                    },
+                    singleline: "never"
+                }
+            ],
+            "vue/html-indent": ["error", 4],
+            "vue/html-self-closing": [
+                "error",
+                {
+                    html: {
+                        component: "always",
+                        normal: "never",
+                        void: "always"
                     }
                 }
             ],
-            semi: ["error", "always"],
-            "comma-dangle": ["error", "never"],
-            "object-curly-spacing": ["error", "always"],
-            "array-bracket-spacing": ["error", "never"]
+            "vue/max-attributes-per-line": [
+                "error",
+                {
+                    multiline: {
+                        max: 1
+                    },
+                    singleline: {
+                        max: 1
+                    }
+                }
+            ],
+            "vue/no-deprecated-slot-attribute": [
+                "error",
+                {
+                    ignore: ["md-icon"]
+                }
+            ],
+            "vue/script-indent": ["error", 4]
+        }
+    },
+    {
+        files: ["src/**/*.vue"],
+        rules: {
+            "vue/sort-keys": [
+                "error",
+                "asc",
+                {
+                    caseSensitive: true,
+                    ignoreChildrenOf: ["model", "methods"],
+                    ignoreGrandchildrenOf: ["computed", "directives", "inject", "methods", "props", "watch"],
+                    minKeys: 2,
+                    natural: false
+                }
+            ]
         }
     }
 ];
