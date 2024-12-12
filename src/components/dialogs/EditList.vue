@@ -90,6 +90,8 @@ export default {
                     title: this.list.title
                 };
                 this.listId = this.list.$id;
+            } else {
+                this.$emit("dialogClosed");
             }
         }
     },

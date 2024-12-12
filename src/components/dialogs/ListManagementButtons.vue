@@ -22,6 +22,7 @@
             icon
             variant="outlined"
             v-if="wishlistOwner"
+            v-bind="menuOpen"
         >
             <v-icon :icon="mdiMenuDown" />
 
@@ -29,6 +30,7 @@
                 activator="parent"
                 location="bottom end"
                 transition="fade-transition"
+                v-model="menuOpen"
             >
                 <v-list
                     density="compact"
@@ -39,8 +41,12 @@
                     <EditList
                         :list="list"
                         @updateList="$emit('updateList', $event)"
+                        @dialogClosed="menuOpen = false"
                     />
-                    <DeleteList :list="list" />
+                    <DeleteList
+                        :list="list"
+                        @dialogClosed="menuOpen = false"
+                    />
                 </v-list>
             </v-menu>
         </v-btn>
@@ -137,6 +143,8 @@ const auth = useAuthStore();
 const dialogs = useDialogs();
 
 const shareButtonSnackbarOpen = ref(false);
+
+const menuOpen = ref(false);
 
 defineEmits(["newItem", "updateList"]);
 

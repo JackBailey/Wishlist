@@ -73,6 +73,13 @@ export default {
             mdiDelete
         };
     },
+    watch: {
+        dialogOpen(open) {
+            if (open !== true) {
+                this.$emit("dialogClosed");
+            }
+        }
+    },
     methods: {
         async deleteList() {
             this.loading = true;
@@ -112,7 +119,6 @@ export default {
                 this.loading = false;
                 return;
             }
-
         }
     }
 };
