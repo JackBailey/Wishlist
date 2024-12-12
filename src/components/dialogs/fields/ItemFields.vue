@@ -5,7 +5,7 @@
     >
         <v-text-field
             label="Title"
-            v-model="item.title"
+            v-model.trim="item.title"
             maxlength="128"
             counter
             :autofocus="!item.url"
@@ -13,7 +13,7 @@
         />
         <v-textarea
             label="Description"
-            v-model="item.description"
+            v-model.trim="item.description"
             maxlength="4000"
             counter
             persistent-hint
@@ -23,7 +23,7 @@
         <v-text-field
             type="url"
             label="Website"
-            v-model="item.url"
+            v-model.trim="item.url"
             :prepend-icon="mdiLink"
             :rules="[validateUrl]"
             :error-messages="errors.url"
@@ -32,7 +32,7 @@
             <v-text-field
                 type="url"
                 label="Image"
-                v-model="item.image"
+                v-model.trim="item.image"
                 :prepend-icon="mdiFileLink"
                 persistent-hint
                 hint="This should be a direct link to an image."

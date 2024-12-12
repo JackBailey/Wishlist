@@ -1,14 +1,14 @@
 <template>
     <v-text-field
         label="Title"
-        v-model="list.title"
+        v-model.trim="list.title"
         maxlength="128"
         counter
         autofocus
     />
     <v-textarea
         label="Description"
-        v-model="list.description"
+        v-model.trim="list.description"
         maxlength="4000"
         counter
         hint="This field supports markdown!"
@@ -25,7 +25,7 @@
     />
     <v-text-field
         label="Short URL"
-        v-model="list.shortUrl"
+        v-model.trim="list.shortUrl"
         maxlength="32"
         counter
         persistent-hint

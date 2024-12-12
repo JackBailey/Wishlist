@@ -4,23 +4,23 @@
         <div class="password-register">
             <v-form @submit.prevent="register">
                 <v-text-field
-                    v-model="registrationDetails.name"
+                    v-model.trim="registrationDetails.name"
                     label="Name"
                     type="text"
                     autofocus
                 />
                 <v-text-field
-                    v-model="registrationDetails.email"
+                    v-model.trim="registrationDetails.email"
                     label="Email"
                     type="email"
                 />
                 <v-text-field
-                    v-model="registrationDetails.password"
+                    v-model.trim="registrationDetails.password"
                     label="Password"
                     type="password"
                 />
                 <v-text-field
-                    v-model="registrationDetails.passwordConfirmation"
+                    v-model.trim="registrationDetails.passwordConfirmation"
                     label="Password Confirmation"
                     type="password"
                 />
