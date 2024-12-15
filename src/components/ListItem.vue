@@ -34,6 +34,14 @@
                 @editItem="$emit('editItem', $event)"
                 v-if="wishlistOwner"
             />
+            <MoveItem
+                variant="outlined"
+                :item="item"
+                :list="list"
+                v-if="wishlistOwner"
+                @loadList="$emit('loadList', $event)"
+                @removeItem="$emit('removeItem', $event)"
+            />
             <DeleteItem
                 variant="outlined"
                 :item="item"
@@ -117,6 +125,7 @@ import DeleteItem from "@/components/dialogs/DeleteItem.vue";
 import FulfillItem from "@/components/dialogs/FulfillItem.vue";
 import { ImageFormat } from "appwrite";
 import ModifyItem from "./dialogs/ModifyItem.vue";
+import MoveItem from "@/components/dialogs/MoveItem.vue";
 import { storage } from "@/appwrite";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
@@ -132,6 +141,10 @@ export default {
             type: Object,
             required: true
         },
+        list: {
+            type: Object,
+            required: true
+        },
         wishlistOwner: {
             type: Boolean,
             default: false
@@ -141,6 +154,7 @@ export default {
         DeleteItem,
         FulfillItem,
         ModifyItem,
+        MoveItem,
         VueMarkdown
     },
     data() {

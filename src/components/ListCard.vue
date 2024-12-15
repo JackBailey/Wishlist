@@ -1,9 +1,10 @@
 <template>
     <v-card
-        :href=" header ? undefined : `/list/${props.list.$id}${quickCreateURL && ownList ? `?quickcreateurl=${props.quickCreateURL}` : ''}`"
+        :href=" props.header || props.type === 'selectable' ? undefined : `/list/${props.list.$id}${quickCreateURL && ownList ? `?quickcreateurl=${props.quickCreateURL}` : ''}`"
         :title="props.list.title"
         variant="tonal"
-        class="mb-4"
+        :color="props.selected ? 'primary' : 'default'"
+        :class="['list-card', 'mb-4', props.type]"
     >
         <template v-slot:title>
             <h1 v-if="props.header">{{ props.list.title }}</h1>
@@ -12,7 +13,7 @@
         <template
             v-slot:subtitle
         >
-            <template v-if="!props.ownList">
+            <template v-if="!props.ownList && props.type !== 'selectable'">
                 <img
                     :src="userAvatar(list.authorName)"
                     alt=""
@@ -32,11 +33,11 @@
                 :listSaved="props.listSaved"
                 @newItem="(data) => emit('newItem', data)"
                 @updateList="(data) => emit('updateList', data)"
-                v-if="header && !$vuetify.display.mobile"
+                v-if="props.header && !$vuetify.display.mobile"
             />
         </template>
 
-        <v-card-text v-if="header">
+        <v-card-text v-if="props.header">
             <VueMarkdown
                 v-if="props.list.description"
                 :source="props.list.description"
@@ -51,7 +52,7 @@
                     :listSaved="props.listSaved"
                     @newItem="(data) => emit('newItem', data)"
                     @updateList="(data) => emit('updateList', data)"
-                    v-if="header && $vuetify.display.mobile"
+                    v-if="props.header && $vuetify.display.mobile"
                 />
             </div>
         </v-card-text>
@@ -91,21 +92,16 @@ const props = defineProps({
     quickCreateURL: {
         default: null,
         type: [String, Boolean]
+    },
+    selected: {
+        default: false,
+        type: Boolean
+    },
+    type: {
+        default: "default",
+        type: String
     }
 });
-
-const plugins = [
-    (tokens, idx, options, env, self) => {
-        tokens[idx].attrSet("target", "_blank");
-
-        // Pass the token to the default renderer.
-        return defaultRender(tokens, idx, options, env, self);
-    }
-];
-
-const markdownOptions = {
-    
-};
 
 const userAvatar = (name) => {
     return avatars.getInitials(name, 24, 24);
@@ -113,6 +109,11 @@ const userAvatar = (name) => {
 </script>
 
 <style lang="scss" scoped>
+.list-card {
+    &.selectable {
+        cursor: pointer;
+    }
+}
 :deep(.v-card-title) {
     h1, h3 {
         word-break: break-word;

@@ -69,9 +69,11 @@
                         v-for="item in priceGroup.items"
                         :key="item.$id"
                         :item="item"
+                        :list="list"
                         :wishlistOwner="wishlistOwner"
                         :currency="list.currency"
                         @removeItem="removeItem(item.$id)"
+                        @loadList="loadList($event)"
                         @editItem="editItem($event)"
                         @fulfillItem="fulfillItem($event)"
                         @unfulfillItem="unfulfillItem($event)"
@@ -130,7 +132,6 @@ export default {
             dialogs: useDialogs(),
             fulfillments: [],
             list: false,
-            listId: this.$route.params.id,
             mdiInformation,
             newItem: {
                 description: "",
@@ -288,6 +289,77 @@ export default {
 
                 return dialogResponse === "No";
             }
+        },
+        async loadList(listId) {
+            try {
+                let list = await databases.getDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                    listId
+                );
+
+                let loadedAsAuthor = this.auth.user && list.author === this.auth.user.$id;
+
+                const redirectingToLoginPage = await this.createAvoidSpoilersDialog(list);
+
+                if (redirectingToLoginPage) return;
+
+                window.document.title = list.title + " - Readyto.gift";
+            
+                this.fulfillments = [];
+
+                if (list.items.length) {
+                    this.fulfillments = (await databases.listDocuments(
+                        import.meta.env.VITE_APPWRITE_DB,
+                        import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
+                        [
+                            Query.equal("item", list.items.map((item) => item.$id))
+                        ]
+                    )).documents;
+                }
+
+                list.items = list.items
+                    .sort((a, b) => {
+                        if (this.sort === "price") {
+                            return a.price - b.price;
+                        }
+                        return a.title.localeCompare(b.title);
+                    })
+                    .map((item) => {
+                        item.fulfillment = this.fulfillments.find(
+                            (fulfillment) => {
+                                return fulfillment.item.$id === item.$id;
+                            }
+                        );
+
+                        return item;
+                    });
+    
+                this.list = list;
+                window.addEventListener("appinstalled", () => {
+                    this.pwaPromo = false;
+                });
+
+                this.auth.$subscribe((mutation, state) => {
+                    if (!state.user && loadedAsAuthor) {
+                        this.createAvoidSpoilersDialog(this.list);
+                        loadedAsAuthor = false;
+                    }
+                });
+            } catch (error) {
+                this.dialogs.create({
+                    actions: [
+                        {
+                            action: "close",
+                            color: "primary",
+                            text: "OK"
+                        }
+                    ],
+                    text: "An error occurred while trying to load this list. Please try again later. " + error.message,
+                    title: "Error",
+                    variant: "error"
+                });
+            }
         }
     },
     watch: {
@@ -295,76 +367,8 @@ export default {
             localStorage.setItem("showFulfilled", val);
         }
     },
-    async mounted() {
-        try {
-            let list = await databases.getDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                this.listId
-            );
-
-            let loadedAsAuthor = this.auth.user && list.author === this.auth.user.$id;
-
-            const redirectingToLoginPage = await this.createAvoidSpoilersDialog(list);
-
-            if (redirectingToLoginPage) return;
-
-            window.document.title = list.title + " - Readyto.gift";
-            
-            this.fulfillments = [];
-
-            if (list.items.length) {
-                this.fulfillments = (await databases.listDocuments(
-                    import.meta.env.VITE_APPWRITE_DB,
-                    import.meta.env.VITE_APPWRITE_FULFILLMENT_COLLECTION,
-                    [
-                        Query.equal("item", list.items.map((item) => item.$id))
-                    ]
-                )).documents;
-            }
-
-            list.items = list.items
-                .sort((a, b) => {
-                    if (this.sort === "price") {
-                        return a.price - b.price;
-                    }
-                    return a.title.localeCompare(b.title);
-                })
-                .map((item) => {
-                    item.fulfillment = this.fulfillments.find(
-                        (fulfillment) => {
-                            return fulfillment.item.$id === item.$id;
-                        }
-                    );
-
-                    return item;
-                });
-    
-            this.list = list;
-            window.addEventListener("appinstalled", () => {
-                this.pwaPromo = false;
-            });
-
-            this.auth.$subscribe((mutation, state) => {
-                if (!state.user && loadedAsAuthor) {
-                    this.createAvoidSpoilersDialog(this.list);
-                    loadedAsAuthor = false;
-                }
-            });
-        } catch (error) {
-            this.dialogs.create({
-                actions: [
-                    {
-                        action: "close",
-                        color: "primary",
-                        text: "OK"
-                    }
-                ],
-                text: "An error occurred while trying to load this list. Please try again later. " + error.message,
-                title: "Error",
-                variant: "error"
-            });
-        }
+    mounted() {
+        this.loadList(this.$route.params.id);
     }
 };
 </script>
