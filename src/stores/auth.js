@@ -55,7 +55,10 @@ export const useAuthStore = defineStore({
 
                 if (this.user.name) this.avatar = avatars.getInitials(this.user.name);
                 if (this.user.prefs) {
-                    this.userPrefs = this.user.prefs;
+                    this.userPrefs = {
+                        ...this.userPrefs,
+                        ...this.user.prefs
+                    };
                 }
             } catch {
                 if (import.meta.env.VITE_SENTRY_DSN) {
