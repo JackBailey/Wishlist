@@ -486,6 +486,12 @@ export async function getLinkPreview(text, options) {
 
     clearTimeout(timeoutCounter);
 
+    if (response.status >= 400) {
+        throw new Error(
+            `Failed to retrieve website content, status code: ${response.status}`
+        );
+    }
+
     const headers = {};
     response.headers.forEach((header, key) => {
         headers[key] = header;

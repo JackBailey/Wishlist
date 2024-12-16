@@ -24,7 +24,7 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-            <v-card :title="item ? 'Edit Item' : 'Create Item'">
+            <v-card :title="autofillLoading ? 'Autofilling data...' : item ? 'Edit Item' : 'Create Item'">
                 <v-card-text>
                     <ItemFields
                         v-model:item="modifiedItem"
@@ -218,6 +218,15 @@ export default {
                             this.autofillLoading = false;
                             return;
                         }
+
+                        if (responseData.title === "Access Denied") {
+                            this.errors = {
+                                url: "Access Denied. Please input data manually."
+                            };
+                            this.autofillLoading = false;
+                            return;
+                        }
+
                         if (responseData.title) this.modifiedItem.title = responseData.title;
                         this.modifiedItem.description = responseData.description;
                         this.modifiedItem.url = responseData.url;
