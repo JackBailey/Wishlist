@@ -13,15 +13,32 @@
         <template
             v-slot:subtitle
         >
-            <template v-if="!props.ownList && props.type !== 'selectable'">
-                <img
-                    :src="userAvatar(list.authorName)"
-                    alt=""
-                    class="avatar"
-                />
-                Made by {{ list.authorName }}
-                |</template>
-            Updated: {{ new Date(list.$updatedAt).toLocaleString() }}
+            <div class="chips">
+                <v-chip
+                    v-if="!props.ownList && props.type !== 'selectable'"
+                    :prepend-avatar="userAvatar(list.authorName)"
+                    variant="tonal"
+                    color="primary"
+                    rounded
+                >
+                    {{ list.authorName }}
+                </v-chip>
+                <v-chip
+                    :prepend-icon="mdiFileDocumentMultiple"
+                    variant="tonal"
+                    rounded
+                    v-if="list.itemCount !== null"
+                >  
+                    {{ list.itemCount }} items
+                </v-chip>
+                <v-chip
+                    :prepend-icon="mdiUpdate"
+                    variant="tonal"
+                    rounded
+                >
+                    {{ new Date(list.$updatedAt).toLocaleString() }}
+                </v-chip>
+            </div>
         </template>
 
         <template v-slot:append>
@@ -37,7 +54,7 @@
             />
         </template>
 
-        <v-card-text v-if="props.header">
+        <v-card-text v-if="props.header && (props.list.description || $vuetify.display.mobile)">
             <VueMarkdown
                 v-if="props.list.description"
                 :source="props.list.description"
@@ -62,6 +79,7 @@
 
 <script setup>
 import { defineEmits, defineProps } from "vue";
+import { mdiFileDocumentMultiple, mdiUpdate } from "@mdi/js";
 import { avatars } from "@/appwrite";
 import ListManagementButtons from "@/components/dialogs/ListManagementButtons.vue";
 import VueMarkdown from "vue-markdown-render";
@@ -104,7 +122,7 @@ const props = defineProps({
 });
 
 const userAvatar = (name) => {
-    return avatars.getInitials(name, 24, 24);
+    return avatars.getInitials(name, 32, 32);
 };
 </script>
 
@@ -112,6 +130,11 @@ const userAvatar = (name) => {
 .list-card {
     &.selectable {
         cursor: pointer;
+    }
+    .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 }
 :deep(.v-card-title) {

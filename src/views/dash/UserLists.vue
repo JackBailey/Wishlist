@@ -224,7 +224,8 @@ export default {
                 typeOptions: [
                     { name: "Title", value: "title" },
                     { name: "Last updated", value: "$updatedAt" },
-                    { name: "Created", value: "$createdAt" }
+                    { name: "Created", value: "$createdAt" },
+                    { name: "Item Count", value: "itemCount" }
                 ]
             },
             verificationDialog: false
