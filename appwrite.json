@@ -107,9 +107,38 @@
                     "array": false,
                     "size": 32,
                     "default": null
+                },
+                {
+                    "key": "authorName",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 64,
+                    "default": null
+                },
+                {
+                    "key": "itemCount",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": 0,
+                    "max": 9223372036854775807,
+                    "default": null
                 }
             ],
-            "indexes": []
+            "indexes": [
+                {
+                    "key": "shortUrl",
+                    "type": "unique",
+                    "status": "available",
+                    "attributes": [
+                        "shortUrl"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
+            ]
         },
         {
             "$id": "6679a9ff000f53308164",

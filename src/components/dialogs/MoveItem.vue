@@ -48,14 +48,6 @@
                             />
                         </div>
                         <v-alert
-                            v-if="item.fulfillment"
-                            :icon="mdiAlert"
-                            text="Please unfulfill this item before deleting it."
-                            title="Item is fulfilled"
-                            class="mt-4"
-                            color="primary"
-                        />
-                        <v-alert
                             v-if="alert"
                             type="error"
                             border="start"

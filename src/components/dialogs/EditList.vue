@@ -86,6 +86,7 @@ export default {
                 this.editedList = {
                     currency: this.list.currency,
                     description: this.list.description,
+                    itemCount: this.list.items.length,
                     shortUrl: this.list.shortUrl,
                     title: this.list.title
                 };
@@ -135,8 +136,10 @@ export default {
                 }
             }
 
+            let listResponse;
+
             try {
-                await databases.updateDocument(
+                listResponse = await databases.updateDocument(
                     import.meta.env.VITE_APPWRITE_DB,
                     import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
                     this.listId,
@@ -159,8 +162,7 @@ export default {
             }
 
             this.$emit("updateList", {
-                list: this.editedList,
-                listId: this.listId
+                list: listResponse
             });
 
             this.loading = false;

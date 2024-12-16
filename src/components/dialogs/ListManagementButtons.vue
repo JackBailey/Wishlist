@@ -14,6 +14,7 @@
             :quickCreateURL="quickCreateURL"
             @unsetQuickCreateURL="resetQuickCreateURL"
             @newItem="(data) => $emit('newItem', data)"
+            @updateList="$emit('updateList', $event)"
             v-if="wishlistOwner"
         />
 

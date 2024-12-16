@@ -210,15 +210,8 @@ export default {
             this.list.description = data.list.description;
             this.list.currency = data.list.currency;
             this.list.shortUrl = data.list.shortUrl;
-
-            await databases.updateDocument(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                this.list.$id,
-                {
-                    $updatedAt: new Date()
-                }
-            );
+            this.list.itemCount = data.list.itemCount;
+            this.list.$updatedAt = data.list.$updatedAt;
         },
         addItem(data) {
             this.list.items.push(data.item);
@@ -239,8 +232,19 @@ export default {
                 return item;
             });
         },
-        removeItem(id) {
+        async removeItem(id) {
             this.list.items = this.list.items.filter((item) => item.$id !== id);
+
+            const updatedList = await databases.updateDocument(
+                import.meta.env.VITE_APPWRITE_DB,
+                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                this.list.$id,
+                {
+                    itemCount: this.list.items.length
+                }
+            );
+
+            this.updateList({ list: updatedList });
         },
         fulfillItem(data) {
             this.list.items = this.list.items.map((item) => {

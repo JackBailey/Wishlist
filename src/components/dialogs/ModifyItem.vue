@@ -313,6 +313,35 @@ export default {
                 item: result
             });
 
+            try {
+                const updatedList = await databases.updateDocument(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                    this.listId,
+                    {
+                        itemCount: this.list.items.length
+                    }
+                );
+                
+                this.$emit("updateList", {
+                    list: updatedList
+                });
+            } catch (e) {
+                if (e instanceof AppwriteException) {
+                    this.alert = {
+                        text: e.message,
+                        title: "Error"
+                    };
+                } else {
+                    this.alert = {
+                        text: "An unknown error occurred.",
+                        title: "Error"
+                    };
+                }
+                this.loading = false;
+                return;
+            }
+
             this.modifiedItem = {
                 description: "",
                 displayPrice: true,
