@@ -62,7 +62,7 @@
                         divided
                     >
                         <v-btn ref="sortTypeButton">
-                            {{ sorting.type.name }}
+                            {{ auth.userPrefs.listSorting.type.name }}
                             <v-menu
                                 activator="parent"
                                 location="bottom start"
@@ -81,7 +81,7 @@
                             </v-menu>
                         </v-btn>
                         <v-btn
-                            :icon="sorting.order === 'asc' ? mdiSortAscending : mdiSortDescending"
+                            :icon="auth.newUserPrefs.listSorting.order === 'asc' ? mdiSortAscending : mdiSortDescending"
                             @click="toggleSortDirection"
                         />
                     </v-btn-group>
@@ -89,7 +89,7 @@
                         :items="sorting.typeOptions"
                         item-title="text"
                         item-value="value"
-                        v-model="sorting.type"
+                        v-model="auth.newUserPrefs.listSorting.type"
                         return-object
                         hide-details
                         :menu-props="{
@@ -221,8 +221,6 @@ export default {
             quickCreateURL: false,
             savedLists: [],
             sorting: {
-                order: "desc",
-                type: { name: "Last updated", value: "$updatedAt" },
                 typeOptions: [
                     { name: "Title", value: "title" },
                     { name: "Last updated", value: "$updatedAt" },
@@ -248,9 +246,9 @@ export default {
             this.loading = true;
 
             const listQuery = [
-                this.sorting.order === "asc"
-                    ? Query.orderAsc(this.sorting.type.value)
-                    : Query.orderDesc(this.sorting.type.value),
+                this.auth.userPrefs.listSorting.order === "asc"
+                    ? Query.orderAsc(this.auth.userPrefs.listSorting.type.value)
+                    : Query.orderDesc(this.auth.userPrefs.listSorting.type.value),
                 Query.or(
                     [
                         Query.equal("author", this.auth.user.$id),
@@ -270,13 +268,23 @@ export default {
 
             this.loading = false;
         },
-        setSortType(event) {
-            this.sorting.type = event[0];
-            this.getLists();
+        async setSortType(event) {
+            this.auth.newUserPrefs.listSorting.type = event[0];
+            await this.getLists();
+            try {
+                await this.auth.updatePrefs(this.auth.newUserPrefs);
+            } catch {
+                alert("Failed to update user prefs");
+            }
         },
-        toggleSortDirection() {
-            this.sorting.order = this.sorting.order === "asc" ? "desc" : "asc";
-            this.getLists();
+        async toggleSortDirection() {
+            this.auth.newUserPrefs.listSorting.order = this.auth.newUserPrefs.listSorting.order === "asc" ? "desc" : "asc";
+            await this.getLists();
+            try {
+                await this.auth.updatePrefs(this.auth.newUserPrefs);
+            } catch {
+                alert("Failed to update user prefs");
+            }
         },
         async verifyEmail() {
             try {

@@ -11,12 +11,20 @@ export const useAuthStore = defineStore({
         userPrefs: {
             darkMode: false,
             spoilSurprises: false,
-            savedLists: []
+            savedLists: [],
+            listSorting: {
+                type: { name: "Last updated", value: "$updatedAt" },
+                order: "asc"
+            }
         },
         newUserPrefs: {
             darkMode: false,
             spoilSurprises: false,
-            savedLists: []
+            savedLists: [],
+            listSorting: {
+                type: { name: "Last updated", value: "$updatedAt" },
+                order: "asc"
+            }
         }
     }),
     actions: {
@@ -76,6 +84,14 @@ export const useAuthStore = defineStore({
         setPreviouslyLoggedInUserID(userID) {
             localStorage.setItem("previouslyLoggedInUserID", userID);
             this.previouslyLoggedInUserID = userID;
+        },
+        async updatePrefs(prefs) {
+            try {
+                await account.updatePrefs(prefs);
+                this.userPrefs = prefs;
+            } catch (error) {
+                return error;
+            }
         }
     },
     getters: {
