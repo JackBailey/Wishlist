@@ -11,6 +11,7 @@
         class="page-content"
         v-else
     >
+        <PWAPrompt class="mb-5"/>
         <ListCard
             :header="true"
             :list="list"
@@ -28,7 +29,6 @@
                 v-if="!wishlistOwner"
             />
         </div>
-        <PWAPrompt/>
         <v-alert
             v-if="!wishlistOwner"
             type="info"

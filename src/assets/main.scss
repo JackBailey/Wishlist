@@ -170,6 +170,7 @@
 
 $title-font-family: "Poppins";
 $body-font-family: "Quicksand";
+$overlay-scrim-background: #000;
 
 :root {
     --section-width: clamp(16rem, 90vw, 1200px);
@@ -220,6 +221,12 @@ h6,
     word-wrap: break-word;
     font-family: "Quicksand", Arial, Helvetica, sans-serif;
 }
+
+.v-overlay__scrim {
+    background-color: $overlay-scrim-background !important;
+}
+
+
 
 @media screen and (max-width: 768px) {
     .user-item-markdown {

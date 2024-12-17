@@ -2,7 +2,7 @@
     <v-card
         title="Try the app!"
         variant="tonal"
-        v-if="pwa.deferredPrompt && auth.userPrefs.hidePWAInstallPrompt !== true"
+        v-if="!locallyDismissed && pwa.deferredPrompt && auth.userPrefs.hidePWAInstallPrompt !== true"
     >
         <v-card-text pt="4">
             <p>
@@ -24,9 +24,30 @@
                 </v-btn>
                 <v-btn
                     variant="tonal"
-                    @click="dismiss"
+                    :append-icon="mdiMenuDown"
+                    v-bind="menuOpen"
                 >
-                    Dismiss forever
+                    Dismiss
+
+                    <v-menu
+                        activator="parent"
+                        location="bottom start"
+                        transition="fade-transition"
+                        v-model="menuOpen"
+                    >
+                        <v-list
+                            density="compact"
+                            rounded="lg"
+                            slim
+                        >
+                            <v-list-item @click="dismissForDevice">
+                                For this device
+                            </v-list-item>
+                            <v-list-item @click="dismissForever">
+                                For all devices
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                 </v-btn>
             </div>
         </v-card-text>
@@ -34,6 +55,8 @@
 </template>
 
 <script setup>
+import { mdiMenuDown } from "@mdi/js";
+import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { useDialogs } from "@/stores/dialogs";
 import { usePWA } from "@/stores/pwa";
@@ -41,6 +64,9 @@ import { usePWA } from "@/stores/pwa";
 const auth = useAuthStore();
 const dialogs = useDialogs();
 const pwa = usePWA();
+
+let locallyDismissed = ref(localStorage.getItem("hidePWAInstallPrompt") === "true");
+let menuOpen = ref(false);
 
 const installPWA = () => {
     console.log("installing PWA");
@@ -53,7 +79,7 @@ const installPWA = () => {
     });
 };
 
-const dismiss = async () => {
+const dismissForever = async () => {
     auth.userPrefs.hidePWAInstallPrompt = true;
     await auth.updatePrefs(auth.userPrefs);
     dialogs.create({
@@ -64,8 +90,26 @@ const dismiss = async () => {
                 text: "OK"
             }
         ],
-        text: "The PWA install prompt will no longer show. You can still install the app from your browser's menu.",
+        text: "The PWA install prompt will no longer show for this account. You can still install the app from your browser's menu.",
         title: "Prompt dismissed"
     });
+    menuOpen.value = false;
+};
+
+const dismissForDevice = () => {
+    localStorage.setItem("hidePWAInstallPrompt", true);
+    locallyDismissed.value = true;
+    dialogs.create({
+        actions: [
+            {
+                action: "close",
+                color: "primary",
+                text: "OK"
+            }
+        ],
+        text: "The PWA install prompt will no longer show for this device. You can still install the app from your browser's menu.",
+        title: "Prompt dismissed"
+    });
+    menuOpen.value = false;
 };
 </script>
