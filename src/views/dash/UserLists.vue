@@ -181,7 +181,7 @@
 
         <div
             class="no-items"
-            v-if="!loading && !lists?.documents?.length && !savedLists.length"
+            v-if="!loading && !lists?.length && !savedLists.length"
         >
             <v-spacer height="20" />
             <v-alert
@@ -202,16 +202,19 @@ import CreateList from "@/components/dialogs/CreateList.vue";
 import ListCard from "@/components/ListCard.vue";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
+import { useDialogs } from "@/stores/dialogs";
 import validation from "@/utils/validation";
 
 export default {
     components: {
         CreateList,
-        ListCard
+        ListCard,
+        PWAPrompt
     },
     data() {
         return {
             auth: useAuthStore(),
+            dialogs: useDialogs(),
             lists: [],
             loading: true,
             mdiInformation,
@@ -249,25 +252,47 @@ export default {
             const listQuery = [
                 this.auth.userPrefs.listSorting.order === "asc"
                     ? Query.orderAsc(this.auth.userPrefs.listSorting.type.value)
-                    : Query.orderDesc(this.auth.userPrefs.listSorting.type.value),
-                Query.or(
-                    [
-                        Query.equal("author", this.auth.user.$id),
-                        this.auth.userPrefs.savedLists?.length ? Query.equal("$id", this.auth.userPrefs.savedLists) : null
-                    ]
-                )
+                    : Query.orderDesc(this.auth.userPrefs.listSorting.type.value)
             ];
 
-            const lists = await databases.listDocuments(
-                import.meta.env.VITE_APPWRITE_DB,
-                import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
-                listQuery
-            );
+            const authorQuery = Query.equal("author", this.auth.user.$id);
 
-            this.savedLists = lists.documents.filter(list => this.auth.userPrefs.savedLists.includes(list.$id));
-            this.lists = lists.documents.filter(list => !this.auth.userPrefs.savedLists.includes(list.$id));
+            if (this.auth.userPrefs?.savedLists.length) {
+                listQuery.push(
+                    Query.or([
+                        authorQuery,
+                        Query.equal("$id", this.auth.userPrefs.savedLists)
+                    ])
+                );
+            } else {
+                listQuery.push(authorQuery);
+            }
 
-            this.loading = false;
+            try {
+                const lists = await databases.listDocuments(
+                    import.meta.env.VITE_APPWRITE_DB,
+                    import.meta.env.VITE_APPWRITE_LIST_COLLECTION,
+                    listQuery
+                );
+    
+                this.savedLists = lists.documents.filter(list => this.auth.userPrefs.savedLists.includes(list.$id));
+                this.lists = lists.documents.filter(list => !this.auth.userPrefs.savedLists.includes(list.$id));
+    
+                this.loading = false;
+            } catch(error) {
+                this.dialogs.create({
+                    actions: [
+                        {
+                            action: this.getLists,
+                            closeAfterAction: true,
+                            text: "Retry"
+                        }
+                    ],
+                    text: error,
+                    title: "Failed to load lists"
+                });
+            }
+
         },
         async setSortType(event) {
             this.auth.newUserPrefs.listSorting.type = event[0];
