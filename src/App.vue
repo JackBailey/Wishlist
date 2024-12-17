@@ -18,9 +18,11 @@ import GlobalDialogs from "./components/GlobalDialogs.vue";
 import SiteFooter from "./components/SiteFooter.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
+import { usePWA } from "./stores/pwa";
 
 const auth = useAuthStore();
 const currencyStore = useCurrencyStore();
+const pwa = usePWA();
 
 const router = useRouter();
 
@@ -36,6 +38,16 @@ router.beforeResolve((to, from, next) => {
 
 router.afterEach(() => {
     loading.value = false;
+});
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    pwa.setDeferredPrompt(e);
+});
+
+window.addEventListener("appinstalled", () => {
+    pwa.setAppInstalled(true);
+    console.log("App is installed!");
 });
 
 onMounted(async () => {

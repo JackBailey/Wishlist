@@ -8,7 +8,7 @@
             title="Verification Required"
             text="Please verify your email address to create lists."
             class="mb-4"
-            v-if="auth.user.emailVerification === false"
+            v-if="auth?.user?.emailVerification === false"
         >
             <v-card-actions>
                 <v-btn
@@ -39,6 +39,7 @@
                 </v-dialog>
             </v-card-actions>
         </v-alert>
+        <PWAPrompt/>
         <v-card
             color="surface"
             variant="flat"
@@ -51,7 +52,7 @@
                 <template v-slot:append>
                     <CreateList
                         @createList="createList"
-                        :disabled="auth.user.emailVerification === false"
+                        :disabled="auth?.user?.emailVerification === false"
                     />
                 </template>
             </v-card-item>
@@ -200,6 +201,7 @@ import { account, databases } from "@/appwrite";
 import { mdiInformation, mdiSortAscending, mdiSortDescending, mdiStar } from "@mdi/js";
 import CreateList from "@/components/dialogs/CreateList.vue";
 import ListCard from "@/components/ListCard.vue";
+import PWAPrompt from "@/components/PWAPrompt.vue";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import { useDialogs } from "@/stores/dialogs";

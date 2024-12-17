@@ -123,9 +123,9 @@ export default {
 
                 if (import.meta.env.VITE_SENTRY_DSN) {
                     setSentryUser({
+                        email: accountResp.email,
                         id: accountResp.$id,
-                        username: accountResp.name,
-                        email: accountResp.email
+                        username: accountResp.name
                     });
                 }
 

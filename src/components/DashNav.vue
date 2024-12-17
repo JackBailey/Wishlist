@@ -150,7 +150,8 @@ export default {
     methods: {
         async updatePrefs() {
             if (this.auth.user) {
-                await account.updatePrefs(this.auth.newUserPrefs);
+                const accountResponse = await account.updatePrefs(this.auth.newUserPrefs);
+                this.auth.userPrefs = accountResponse.prefs;
             } else {
                 localStorage.setItem("userPrefs", JSON.stringify(this.auth.newUserPrefs));
             }

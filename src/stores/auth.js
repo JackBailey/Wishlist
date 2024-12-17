@@ -15,7 +15,8 @@ export const useAuthStore = defineStore({
             listSorting: {
                 type: { name: "Last updated", value: "$updatedAt" },
                 order: "asc"
-            }
+            },
+            hidePWAInstallPrompt: false
         },
         newUserPrefs: {
             darkMode: false,
@@ -24,7 +25,8 @@ export const useAuthStore = defineStore({
             listSorting: {
                 type: { name: "Last updated", value: "$updatedAt" },
                 order: "asc"
-            }
+            },
+            hidePWAInstallPrompt: false
         }
     }),
     actions: {

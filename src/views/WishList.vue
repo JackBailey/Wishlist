@@ -28,21 +28,7 @@
                 v-if="!wishlistOwner"
             />
         </div>
-        <v-card
-            title="Try the app!"
-            variant="tonal"
-            class="my-5"
-            v-if="pwaPromo"
-        >
-            <v-card-text pt="4">
-                <p>
-                    Add this website as an app to your home screen for a better experience.
-                </p>
-                <p>
-                    It even allows for sharing links directly to the app to add them to your wishlist!
-                </p>
-            </v-card-text>
-        </v-card>
+        <PWAPrompt/>
         <v-alert
             v-if="!wishlistOwner"
             type="info"
@@ -116,6 +102,7 @@ import { databases } from "@/appwrite";
 import ListCard from "@/components/ListCard.vue";
 import ListItem from "@/components/ListItem.vue";
 import { mdiInformation  } from "@mdi/js";
+import PWAPrompt from "@/components/PWAPrompt.vue";
 import { Query } from "appwrite";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
@@ -123,7 +110,8 @@ import { useDialogs } from "@/stores/dialogs";
 export default {
     components: {
         ListCard,
-        ListItem
+        ListItem,
+        PWAPrompt
     },
     data() {
         return {

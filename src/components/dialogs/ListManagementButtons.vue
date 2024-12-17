@@ -237,7 +237,7 @@ const saveList = async () => {
         });
         return;
     }
-    if (auth.userPrefs.savedLists && auth.userPrefs.savedLists.includes(props.list.$id)) {
+    if (auth.newUserPrefs.savedLists && auth.newUserPrefs.savedLists.includes(props.list.$id)) {
         auth.newUserPrefs.savedLists = auth.newUserPrefs.savedLists.filter((listId) => listId !== props.list.$id);
         try {
             const accountResp = await account.updatePrefs(auth.newUserPrefs);
