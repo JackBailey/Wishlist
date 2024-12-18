@@ -19,10 +19,15 @@ import SiteFooter from "./components/SiteFooter.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCurrencyStore } from "@/stores/currency";
 import { usePWA } from "./stores/pwa";
+import { useTheme } from "vuetify";
+
+
 
 const auth = useAuthStore();
 const currencyStore = useCurrencyStore();
 const pwa = usePWA();
+
+const vuetifyTheme = useTheme();
 
 const router = useRouter();
 
@@ -50,12 +55,17 @@ window.addEventListener("appinstalled", () => {
     console.log("App is installed!");
 });
 
-auth.$subscribe((mutation, state) => {
-    const darkMode = state.userPrefs?.darkMode;
-    if (darkMode)
-        document
-            .querySelector("meta[name='theme-color']")
-            .setAttribute("content", darkMode ? "#AAC7FF" : "#415F91");
+const setThemeColor = () => {
+    document
+        .querySelector("meta[name='theme-color']")
+        .setAttribute("content", vuetifyTheme.themes.value[auth.userPrefs ? "dark" : "light"].colors.primary);
+};
+
+setThemeColor();
+
+auth.$subscribe((mutation) => {
+    if (mutation.events.key !== "userPrefs") return;
+    setThemeColor();
 });
 
 onMounted(async () => {
