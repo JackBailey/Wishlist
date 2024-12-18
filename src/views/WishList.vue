@@ -16,6 +16,7 @@
             :header="true"
             :list="list"
             :list-saved="listSaved"
+            :quickCreateURL="quickCreateURL"
             :own-list="wishlistOwner"
             @updateList="updateList"
             @newItem="addItem"
