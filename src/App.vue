@@ -50,6 +50,14 @@ window.addEventListener("appinstalled", () => {
     console.log("App is installed!");
 });
 
+auth.$subscribe((mutation, state) => {
+    const darkMode = state.userPrefs?.darkMode;
+    if (darkMode)
+        document
+            .querySelector("meta[name='theme-color']")
+            .setAttribute("content", darkMode ? "#AAC7FF" : "#415F91");
+});
+
 onMounted(async () => {
     await auth.init();
     await currencyStore.init();
