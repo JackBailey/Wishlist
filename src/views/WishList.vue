@@ -205,12 +205,13 @@ export default {
         addItem(data) {
             this.list.items.push(data.item);
             this.$nextTick(() => {
-                const newItem = this.$el.querySelector(`[data-item-id="${data.item.$id}"]`);
-                newItem.scrollIntoView({
-                    behavior: "auto",
-                    block: "center",
-                    inline: "center"
-                });
+                setTimeout(() => {
+                    const newItem = this.$el.querySelector(`[data-item-id="${data.item.$id}"]`);
+                    newItem.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                }, 500);
             });
         },
         editItem(data) {
