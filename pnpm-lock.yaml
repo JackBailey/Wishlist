@@ -22,7 +22,7 @@ importers:
         version: 16.4.5
       material:
         specifier: github:treeder/material
-        version: https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603
+        version: https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d
       material-symbols:
         specifier: ^0.27.0
         version: 0.27.0
@@ -74,7 +74,7 @@ importers:
         version: 9.31.0(eslint@9.15.0)
       globals:
         specifier: ^15.6.0
-        version: 15.12.0
+        version: 15.13.0
       node-appwrite:
         specifier: ^14.0.0
         version: 14.1.0
@@ -1156,8 +1156,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@15.12.0:
-    resolution: {integrity: sha512-1+gLErljJFhbOVyaetcwJiJ4+eLe45S2E7P5UiZ9xGfeq3ATQf5DOv9G7MH3gGbKQLkzmNh2DxfZwLdw+j6oTQ==}
+  globals@15.13.0:
+    resolution: {integrity: sha512-49TewVEz0UxZjr1WYYsWpPrhyC/B/pA8Bq0fUmet2n+eR7yn0IvNzNaoBwnK6mdkzcN+se7Ez9zUgULTz2QH4g==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -1375,9 +1375,9 @@ packages:
   material-symbols@0.27.0:
     resolution: {integrity: sha512-nRHpnw2Cz7eNl6GptgHHhkjauL0zvkYsuiqy1HBifOYCY4fdbZ/PwtdZN4RNmwA+9jQPoymvlArVPPX5nYTdZg==}
 
-  material@https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603:
-    resolution: {tarball: https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603}
-    version: 0.0.44
+  material@https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d:
+    resolution: {tarball: https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d}
+    version: 0.0.45
 
   mdurl@1.0.1:
     resolution: {integrity: sha512-/sKlQJCBYVY9Ers9hqzKou4H6V5UWc/M59TH2dvkt+84itfnq7uFOMLpOiOS4ujvHP4etln18fmIxA5R5fll0g==}
@@ -2406,7 +2406,7 @@ snapshots:
 
   '@vue/shared@3.5.13': {}
 
-  '@vuetify/loader-shared@2.0.3(vue@3.5.13)(vuetify@3.7.4(vite-plugin-vuetify@2.0.4)(vue@3.5.13))':
+  '@vuetify/loader-shared@2.0.3(vue@3.5.13)(vuetify@3.7.4)':
     dependencies:
       upath: 2.0.1
       vue: 3.5.13
@@ -2972,7 +2972,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@15.12.0: {}
+  globals@15.13.0: {}
 
   globalthis@1.0.4:
     dependencies:
@@ -3183,7 +3183,7 @@ snapshots:
 
   material-symbols@0.27.0: {}
 
-  material@https://codeload.github.com/treeder/material/tar.gz/40c29103dbca32f6b90bcca9d3d50952123e4603:
+  material@https://codeload.github.com/treeder/material/tar.gz/7b0478e10762fa7395087589871628d6ead42c3d:
     dependencies:
       lit: 3.2.1
       tslib: 2.8.1
@@ -3556,7 +3556,7 @@ snapshots:
 
   vite-plugin-vuetify@2.0.4(vite@5.4.11(sass@1.81.0))(vue@3.5.13)(vuetify@3.7.4):
     dependencies:
-      '@vuetify/loader-shared': 2.0.3(vue@3.5.13)(vuetify@3.7.4(vite-plugin-vuetify@2.0.4)(vue@3.5.13))
+      '@vuetify/loader-shared': 2.0.3(vue@3.5.13)(vuetify@3.7.4)
       debug: 4.3.7
       upath: 2.0.1
       vite: 5.4.11(sass@1.81.0)
