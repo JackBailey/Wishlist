@@ -14,7 +14,7 @@
             rounded="pill"
         >
             <FulfillItem
-                v-if="!wishlistOwner || (wishlistOwner && spoilSurprises && item.fulfillment)"
+                v-if="!wishlistOwner || (wishlistOwner && spoilSurprises)"
                 :item="item"
                 @fulfillItem="$emit('fulfillItem', $event)"
                 @unfulfillItem="$emit('unfulfillItem', item.$id)"
