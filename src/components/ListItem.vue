@@ -106,12 +106,9 @@
                 position="center right"
                 v-if="!$vuetify.display.mobile"
             />
-            <v-img
+            <img
                 :src="imageURL"
                 alt=""
-                height="200"
-                width="300"
-                position="center center"
                 v-else
             />
         </div>
@@ -275,6 +272,18 @@ export default {
             gap: 0.5rem;
         }
     }
+
+    .item-image {
+        .v-img {
+            margin-left: auto;
+        }
+        > img {
+            max-width: 100%;
+            max-height: 100%;
+            margin-left: auto;
+        }
+    }
+
     &[data-fulfilled="true"] {
         opacity: 0.5;
     }
@@ -286,9 +295,13 @@ export default {
         .item-image {
             grid-column: 2;
             grid-row: 1/4;
-            img {
-                max-height: 100%;
-                max-width: 10rem;
+            .v-img {
+                margin: 0 auto;
+                img {
+                    max-height: 100%;
+                    max-width: 10rem;
+                    margin-left: auto;
+                }
             }
         }
     }
